@@ -15,14 +15,14 @@ class InitialSchema < ActiveRecord::Migration
 
     add_index :users, :identity_url, :unique => true
 
-    create_table :subscription_users do |t|
+    create_table :subscribed_users do |t|
       t.integer  :subscription_id, :null => false
       t.integer  :user_id, :null => false
       t.datetime :created_at, :null => false
     end
 
-    add_index :subscription_users, %w(subscription_id user_id), :unique => true
-    add_index :subscription_users, :user_id
+    add_index :subscribed_users, %w(subscription_id user_id), :unique => true
+    add_index :subscribed_users, :user_id
 
     create_table :accounts do |t|
       t.integer :subscription_id, :null => false
@@ -69,7 +69,7 @@ class InitialSchema < ActiveRecord::Migration
   def self.down
     drop_table :subscriptions
     drop_table :users
-    drop_table :subscription_users
+    drop_table :subscribed_users
     drop_table :accounts
     drop_table :buckets
     drop_table :events
