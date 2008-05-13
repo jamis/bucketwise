@@ -53,6 +53,7 @@ class InitialSchema < ActiveRecord::Migration
     add_index :events, %w(subscription_id occurred_on)
     add_index :events, %w(subscription_id actor)
     add_index :events, %w(subscription_id check_number)
+    add_index :events, %w(user_id created_at)
 
     create_table :entries do |t|
       t.integer :event_id, :null => false
