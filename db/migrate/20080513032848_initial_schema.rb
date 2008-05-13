@@ -30,7 +30,7 @@ class InitialSchema < ActiveRecord::Migration
       t.timestamps
     end
 
-    add_index :accounts, :name, :unique => true
+    add_index :accounts, %w(subscription_id name), :unique => true
 
     create_table :buckets do |t|
       t.integer :account_id, :null => false
@@ -50,9 +50,9 @@ class InitialSchema < ActiveRecord::Migration
       t.timestamps
     end
 
-    add_index :events, :occurred_on
-    add_index :events, :actor
-    add_index :events, :check_number
+    add_index :events, %w(subscription_id occurred_on)
+    add_index :events, %w(subscription_id actor)
+    add_index :events, %w(subscription_id check_number)
 
     create_table :entries do |t|
       t.integer :event_id, :null => false
