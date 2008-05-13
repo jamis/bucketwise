@@ -1,0 +1,147 @@
+* {
+  font-family: helvetica, sans-serif;
+}
+
+body {
+  text-align: center;
+}
+
+a {
+  color: #00f;
+  text-decoration: none;
+}
+
+div#container {
+  text-align: left;
+  width: 700px;
+  margin: 0 auto;
+}
+
+.header {
+  border-bottom: 1px solid #ccc;
+}
+
+.header h1 {
+  font-size: 2em;
+  color: #777;
+  margin-bottom: 0;
+}
+
+.header h2 {
+  margin-top: 0.5em;
+  font-size: 1em;
+  color: #aaa;
+  margin-bottom: 0.5em;
+}
+
+.content {
+  margin: 1em;
+}
+
+.content table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+tr.account {
+  line-height: 2em;
+  background: #BFFFBF;
+}
+
+tr.account th {
+  font-weight: bold;
+}
+
+tr.account th a {
+  display: block;
+  color: #000;
+}
+
+tr.account td, tr.account th {
+  padding: 0 0.3em;
+  border-bottom: 1px solid #9c9;
+}
+
+tr.bucket {
+  font-size: 0.9em;
+}
+
+tr.bucket td {
+  padding: 0.25em 0.3em 0.25em 1em;
+}
+
+tr.bucket a {
+  display: block;
+  color: #000;
+}
+
+tr.bucket td.number {
+  opacity: 0.5;
+}
+
+tr.bucket td.more a {
+  color: #00f;
+  display: inline;
+}
+
+tr.even {
+  background: #f7f7f7;
+}
+
+tr.even td {
+  border-bottom: 1px solid #ccc;
+}
+
+tr.bucket td.indent {
+  width: 2em;
+}
+
+td.total {
+  font-weight: bold;
+}
+
+td.number {
+  text-align: right;
+}
+
+td.negative {
+  color: red;
+}
+
+div.transaction {
+  background: #eee;
+  padding: 0.3em 1em;
+}
+
+div.transaction input {
+  font-size: 1em;
+}
+
+div.transaction select {
+  font-size: 1em;
+}
+
+div.transaction fieldset {
+  border: 2px solid #ccc;
+  margin-top: 0.5em;
+  background: white;
+}
+
+div.transaction fieldset legend {
+  color: #777;
+  font-size: 0.9em;
+  font-weight: bold;
+  background: white;
+  padding: 0 0.4em;
+}
+
+div.transaction p {
+  color: #777;
+}
+
+div.transaction strong {
+  font-weight: bold;
+  color: black;
+  background: #ffc;
+  padding: 2px;
+}
