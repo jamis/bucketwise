@@ -4,6 +4,6 @@ class Subscription < ActiveRecord::Base
   has_many :accounts
   has_many :events
 
-  has_many :subscribed_users
-  has_many :users, :through => :subscribed_users
+  has_many :user_subscriptions
+  has_many :users, :through => :user_subscriptions
 end

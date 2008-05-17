@@ -15,14 +15,14 @@ class InitialSchema < ActiveRecord::Migration
 
     add_index :users, :identity_url, :unique => true
 
-    create_table :subscribed_users do |t|
+    create_table :user_subscriptions do |t|
       t.integer  :subscription_id, :null => false
       t.integer  :user_id, :null => false
       t.datetime :created_at, :null => false
     end
 
-    add_index :subscribed_users, %w(subscription_id user_id), :unique => true
-    add_index :subscribed_users, :user_id
+    add_index :user_subscriptions, %w(subscription_id user_id), :unique => true
+    add_index :user_subscriptions, :user_id
 
     create_table :accounts do |t|
       t.integer :subscription_id, :null => false
