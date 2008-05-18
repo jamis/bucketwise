@@ -11,6 +11,16 @@
 
 ActiveRecord::Schema.define(:version => 20080513032848) do
 
+  create_table "account_entries", :force => true do |t|
+    t.integer "event_id",                 :null => false
+    t.integer "account_id",               :null => false
+    t.integer "amount",                   :null => false
+    t.string  "role",       :limit => 20
+  end
+
+  add_index "account_entries", ["account_id"], :name => "index_account_entries_on_account_id"
+  add_index "account_entries", ["event_id"], :name => "index_account_entries_on_event_id"
+
   create_table "accounts", :force => true do |t|
     t.integer  "subscription_id", :null => false
     t.string   "name",            :null => false
@@ -20,6 +30,16 @@ ActiveRecord::Schema.define(:version => 20080513032848) do
 
   add_index "accounts", ["subscription_id", "name"], :name => "index_accounts_on_subscription_id_and_name", :unique => true
 
+  create_table "bucket_entries", :force => true do |t|
+    t.integer "event_id",                :null => false
+    t.integer "bucket_id",               :null => false
+    t.integer "amount",                  :null => false
+    t.string  "role",      :limit => 20
+  end
+
+  add_index "bucket_entries", ["bucket_id"], :name => "index_bucket_entries_on_bucket_id"
+  add_index "bucket_entries", ["event_id"], :name => "index_bucket_entries_on_event_id"
+
   create_table "buckets", :force => true do |t|
     t.integer  "account_id", :null => false
     t.string   "name",       :null => false
@@ -28,17 +48,6 @@ ActiveRecord::Schema.define(:version => 20080513032848) do
   end
 
   add_index "buckets", ["account_id", "name"], :name => "index_buckets_on_account_id_and_name", :unique => true
-
-  create_table "entries", :force => true do |t|
-    t.integer "event_id",   :null => false
-    t.integer "account_id"
-    t.integer "bucket_id"
-    t.integer "amount",     :null => false
-  end
-
-  add_index "entries", ["bucket_id"], :name => "index_entries_on_bucket_id"
-  add_index "entries", ["account_id"], :name => "index_entries_on_account_id"
-  add_index "entries", ["event_id"], :name => "index_entries_on_event_id"
 
   create_table "events", :force => true do |t|
     t.integer  "subscription_id", :null => false
@@ -56,20 +65,20 @@ ActiveRecord::Schema.define(:version => 20080513032848) do
   add_index "events", ["subscription_id", "actor"], :name => "index_events_on_subscription_id_and_actor"
   add_index "events", ["subscription_id", "occurred_on"], :name => "index_events_on_subscription_id_and_occurred_on"
 
-  create_table "subscribed_users", :force => true do |t|
-    t.integer  "subscription_id", :null => false
-    t.integer  "user_id",         :null => false
-    t.datetime "created_at",      :null => false
-  end
-
-  add_index "subscribed_users", ["user_id"], :name => "index_subscribed_users_on_user_id"
-  add_index "subscribed_users", ["subscription_id", "user_id"], :name => "index_subscribed_users_on_subscription_id_and_user_id", :unique => true
-
   create_table "subscriptions", :force => true do |t|
     t.integer "owner_id", :null => false
   end
 
   add_index "subscriptions", ["owner_id"], :name => "index_subscriptions_on_owner_id"
+
+  create_table "user_subscriptions", :force => true do |t|
+    t.integer  "subscription_id", :null => false
+    t.integer  "user_id",         :null => false
+    t.datetime "created_at",      :null => false
+  end
+
+  add_index "user_subscriptions", ["user_id"], :name => "index_user_subscriptions_on_user_id"
+  add_index "user_subscriptions", ["subscription_id", "user_id"], :name => "index_user_subscriptions_on_subscription_id_and_user_id", :unique => true
 
   create_table "users", :force => true do |t|
     t.string   "name",         :null => false
