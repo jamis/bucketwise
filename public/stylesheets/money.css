@@ -136,7 +136,10 @@ div.transaction fieldset legend {
 }
 
 div.transaction p {
-  color: #777;
+}
+
+div.transaction p small {
+  color: #c75;
 }
 
 div.transaction strong {
