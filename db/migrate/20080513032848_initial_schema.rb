@@ -46,7 +46,6 @@ class InitialSchema < ActiveRecord::Migration
       t.integer :user_id, :null => false
       t.date    :occurred_on, :null => false
       t.string  :actor, :null => false
-      t.string  :payment_method
       t.integer :check_number
       t.timestamps
     end
