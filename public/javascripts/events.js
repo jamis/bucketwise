@@ -14,22 +14,24 @@ var Events = {
     }
   },
 
-  updateBucketsFor: function(select, section, selected) {
+  updateBucketsFor: function(section, selected) {
+    var acctSelect = $('account_for_' + section);
     var bucketSelect = $('bucket_for_' + section);
+
     for(var i = 0; i < bucketSelect.options.length; i++) {
       bucketSelect.options[0] = null;
     }
 
-    if(select.selectedIndex == 0) {
+    if(acctSelect.selectedIndex == 0) {
       bucketSelect.disabled = true;
       bucketSelect.options[0] = new Option("-- Select an account --", "");
     } else {
       bucketSelect.disabled = false;
 
       i = 0;
-      var acctId = parseInt(select.options[select.selectedIndex].value);
-      Events.buckets[acctId].each(function(option) {
-        bucketSelect.options[i++] = new Option(option[0], option[1]);
+      var acctId = parseInt(acctSelect.options[acctSelect.selectedIndex].value);
+      Events.accounts[acctId].buckets.each(function(bucket) {
+        bucketSelect.options[i++] = new Option(bucket.name, bucket.id);
       })
 
       bucketSelect.options[i++] = new Option("-- More than one --", "+")
@@ -41,6 +43,32 @@ var Events = {
             bucketSelect.selectedIndex = i;
             break;
           }
+        }
+      }
+    }
+  },
+
+  handleAccountChange: function(select, section) {
+    $(section + '.multiple_buckets').hide();
+    $(section + '.single_bucket').show();
+
+    Events.updateBucketsFor(section);
+
+    if(section == 'payment_source') {
+      $('check_options').hide();
+      $('credit_options').hide();
+
+      if(select.selectedIndex > 0) {
+        var acctId = parseInt(select.options[select.selectedIndex].value);
+        var account = Events.accounts[acctId];
+
+        switch(account.role) {
+          case 'credit-card':
+            $('credit_options').show();
+            break;
+          case 'checking':
+            $('check_options').show();
+            break;
         }
       }
     }
@@ -59,8 +87,8 @@ var Events = {
 
       var name = prompt('Name your new bucket:');
       var value = "!" + name;
-      Events.buckets[acctId].push([name, value]);
-      Events.updateBucketsFor(acctSelect, section, value);
+      Events.accounts[acctId].buckets.push({'id':value,'name':name});
+      Events.updateBucketsFor(section, value);
     }
   }
 }
