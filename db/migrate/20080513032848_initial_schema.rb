@@ -27,6 +27,7 @@ class InitialSchema < ActiveRecord::Migration
     create_table :accounts do |t|
       t.integer :subscription_id, :null => false
       t.string  :name, :null => false
+      t.string  :role
       t.timestamps
     end
 
