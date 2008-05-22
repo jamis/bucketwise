@@ -1,33 +1,40 @@
 var Events = {
   updateBucketsFor: function(section, reset) {
     var acctSelect = $('account_for_' + section);
+    var disabled = acctSelect.selectedIndex == 0;
+    var acctId = disabled ? null : parseInt(acctSelect.options[acctSelect.selectedIndex].value);
 
     Events.getBucketSelects(section).each(function(bucketSelect) {
-      var selected = bucketSelect.options[bucketSelect.selectedIndex].value;
-      for(var i = 0; i < bucketSelect.options.length; i++) {
-        bucketSelect.options[0] = null;
-      }
-
-      if(acctSelect.selectedIndex == 0) {
-        bucketSelect.disabled = true;
-        bucketSelect.options[0] = new Option("-- Select an account --", "");
-      } else {
-        bucketSelect.disabled = false;
-
-        i = 0;
-        var acctId = parseInt(acctSelect.options[acctSelect.selectedIndex].value);
-        Events.accounts[acctId].buckets.each(function(bucket) {
-          bucketSelect.options[i++] = new Option(bucket.name, bucket.id);
-        })
-
-        if(bucketSelect.hasClassName("splittable")) {
-          bucketSelect.options[i++] = new Option("-- More than one --", "+")
-        }
-
-        bucketSelect.options[i++] = new Option("-- Add a new bucket --", "++")
-        if(!reset) Events.selectBucket(bucketSelect, selected);
-      }
+      Events.populateBucket(bucketSelect, acctId, {'reset':reset, 'disabled':disabled});
     });
+  },
+
+  populateBucket: function(select, acctId, options) {
+    options = options || {};
+
+    var selected = select.options[select.selectedIndex].value;
+    for(var i = 0; i < select.options.length; i++) {
+      select.options[0] = null;
+    }
+
+    if(options['disabled']) {
+      select.disabled = true;
+      select.options[0] = new Option("-- Select an account --", "");
+    } else {
+      select.disabled = false;
+
+      i = 0;
+      Events.accounts[acctId].buckets.each(function(bucket) {
+        select.options[i++] = new Option(bucket.name, bucket.id);
+      })
+
+      if(select.hasClassName("splittable")) {
+        select.options[i++] = new Option("-- More than one --", "+");
+      }
+
+      select.options[i++] = new Option("-- Add a new bucket --", "++");
+      if(!options['reset']) Events.selectBucket(select, selected);
+    }
   },
 
   handleAccountChange: function(select, section) {
@@ -92,10 +99,19 @@ var Events = {
     return $$('#' + section + ' select.bucket_for_' + section);
   },
 
-  addLineItemTo: function(section) {
+  addLineItemTo: function(section, populate) {
     var ol = $(section + ".line_items");
     var li = document.createElement("li");
     li.innerHTML = $('template.' + section).innerHTML;
     ol.appendChild(li);
+    if(populate) {
+      var acctSelect = $('account_for_' + section);
+      var acctId = parseInt(acctSelect.options[acctSelect.selectedIndex].value);
+      Events.populateBucket(li.down("select"), acctId);
+    }
+  },
+
+  removeLineItem: function(li) {
+    li.remove();
   }
 }

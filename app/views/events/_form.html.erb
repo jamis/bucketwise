@@ -7,12 +7,14 @@
     $<%= text_field_tag "event[entry][][amount]", "", :size => 8 %>
     was drawn from
     <%= select_bucket(:payment_source, :splittable => false) %>
+    <%= link_to_function "[x]", "Events.removeLineItem(this.up('li'))" %>
   </span>
 
   <span id="template.credit_options">
     $<%= text_field_tag "event[entry][][amount]", "", :size => 8 %>
     will be repaid from
     <%= select_bucket(:credit_options, :splittable => false) %>
+    <%= link_to_function "[x]", "Events.removeLineItem(this.up('li'))" %>
   </span>
 </div>
 
@@ -41,7 +43,7 @@
       <p>This expense drew from multiple buckets. <span id="payment_source.unassigned"><strong>$75.14</strong> remains unassigned.</span></p>
       <ol id="payment_source.line_items">
       </ol>
-      <p><a href="">More buckets, please!</a></p>
+      <p><%= link_to_function "More buckets, please!", "Events.addLineItemTo('payment_source', true)" %></p>
     </div>
   </fieldset>
 
@@ -58,7 +60,7 @@
       <p>Multiple buckets will be used to repay this credit. <span id="credit_options.unassigned"><strong>$75.14</strong> remains unassigned.</span></p>
       <ol id="credit_options.line_items">
       </ol>
-      <p><a href="">More buckets, please!</a></p>
+      <p><%= link_to_function "More buckets, please!", "Events.addLineItemTo('credit_options', true)" %></p>
     </div>
   </fieldset>
 
