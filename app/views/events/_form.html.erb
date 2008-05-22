@@ -6,13 +6,13 @@
   <span id="template.payment_source">
     $<%= text_field_tag "event[entry][][amount]", "", :size => 8 %>
     was drawn from
-    <%= select_bucket(:payment_source) %>
+    <%= select_bucket(:payment_source, :splittable => false) %>
   </span>
 
   <span id="template.credit_options">
     $<%= text_field_tag "event[entry][][amount]", "", :size => 8 %>
     will be repaid from
-    <%= select_bucket(:credit_options) %>
+    <%= select_bucket(:credit_options, :splittable => false) %>
   </span>
 </div>
 
@@ -25,7 +25,7 @@
     <p><strong>Who</strong> received the payment? <%= form.text_field :actor, :size => 30 %></p>
   </fieldset>
 
-  <fieldset>
+  <fieldset id="payment_source">
     <legend>Payment Source</legend>
 
     <p>

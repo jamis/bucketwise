@@ -21,9 +21,10 @@ module EventsHelper
       :onchange => "Events.handleAccountChange(this, '#{section}')"
   end
 
-  def select_bucket(section)
+  def select_bucket(section, options={})
     select_tag "event[entry][][bucket_id]", "<option>-- Select an account --</option>",
-      :class => "bucket_for_#{section}", :disabled => true,
+      :class => ["bucket_for_#{section}", options.fetch(:splittable, true) ? "splittable" : nil].compact.join(" "),
+      :disabled => true,
       :onchange => "Events.handleBucketChange(this, '#{section}')"
   end
 end

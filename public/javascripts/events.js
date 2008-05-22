@@ -1,24 +1,9 @@
 var Events = {
-  selectPaymentType: function() {
-    $('check_options').hide();
-    $('credit_options').hide();
-
-    select = $('event_payment_method');
-    switch(select.options[select.selectedIndex].value) {
-      case 'check':
-        $('check_options').show();
-        break;
-      case 'credit':
-        $('credit_options').show();
-        break;
-    }
-  },
-
-  updateBucketsFor: function(section, selected) {
+  updateBucketsFor: function(section, reset) {
     var acctSelect = $('account_for_' + section);
-    var bucketSelects = $$('.bucket_for_' + section);
 
-    bucketSelects.each(function(bucketSelect) {
+    Events.getBucketSelects(section).each(function(bucketSelect) {
+      var selected = bucketSelect.options[bucketSelect.selectedIndex].value;
       for(var i = 0; i < bucketSelect.options.length; i++) {
         bucketSelect.options[0] = null;
       }
@@ -35,26 +20,22 @@ var Events = {
           bucketSelect.options[i++] = new Option(bucket.name, bucket.id);
         })
 
-        bucketSelect.options[i++] = new Option("-- More than one --", "+")
-        bucketSelect.options[i++] = new Option("-- Add a new bucket --", "++")
-
-        if(selected) {
-          for(i = 0; i < bucketSelect.options.length; i++) {
-            if(bucketSelect.options[i].value == selected) {
-              bucketSelect.selectedIndex = i;
-              break;
-            }
-          }
+        if(bucketSelect.hasClassName("splittable")) {
+          bucketSelect.options[i++] = new Option("-- More than one --", "+")
         }
+
+        bucketSelect.options[i++] = new Option("-- Add a new bucket --", "++")
+        if(!reset) Events.selectBucket(bucketSelect, selected);
       }
     });
   },
 
   handleAccountChange: function(select, section) {
     $(section + '.multiple_buckets').hide();
+    $(section + '.line_items').innerHTML = "";
     $(section + '.single_bucket').show();
 
-    Events.updateBucketsFor(section);
+    Events.updateBucketsFor(section, true);
 
     if(section == 'payment_source') {
       $('check_options').hide();
@@ -84,6 +65,7 @@ var Events = {
       Events.addLineItemTo(section);
       $(section + '.multiple_buckets').show();
       $(section + '.single_bucket').hide();
+      Events.updateBucketsFor(section);
 
     } else if(selected == '++') {
       var acctSelect = $('account_for_' + section);
@@ -92,8 +74,22 @@ var Events = {
       var name = prompt('Name your new bucket:');
       var value = "!" + name;
       Events.accounts[acctId].buckets.push({'id':value,'name':name});
-      Events.updateBucketsFor(section, value);
+      Events.updateBucketsFor(section);
+      Events.selectBucket(select, value);
     }
+  },
+
+  selectBucket: function(select, value) {
+    for(var i = 0; i < select.options.length; i++) {
+      if(select.options[i].value == value) {
+        select.selectedIndex = i;
+        break;
+      }
+    }
+  },
+
+  getBucketSelects: function(section) {
+    return $$('#' + section + ' select.bucket_for_' + section);
   },
 
   addLineItemTo: function(section) {
