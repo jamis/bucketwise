@@ -12,15 +12,18 @@ module EventsHelper
   end
 
   def select_account(section)
+    accounts = subscription.accounts.to_a
+    accounts = accounts.select { |a| yield a } if block_given?
+
     select_tag "event[entry][][account_id]", 
-      options_for_select([["", ""]] + subscription.accounts.map { |acct| [acct.name, acct.id] }),
+      options_for_select([["", ""]] + accounts.map { |acct| [acct.name, acct.id] }),
       :id => "account_for_#{section}",
       :onchange => "Events.handleAccountChange(this, '#{section}')"
   end
 
   def select_bucket(section)
     select_tag "event[entry][][bucket_id]", "<option>-- Select an account --</option>",
-      :id => "bucket_for_#{section}", :disabled => true,
+      :class => "bucket_for_#{section}", :disabled => true,
       :onchange => "Events.handleBucketChange(this, '#{section}')"
   end
 end

@@ -2,6 +2,20 @@
   Events.accounts = { <%= accounts_and_buckets_as_javascript %> };
 </script>
 
+<div id="templates" style="display: none">
+  <span id="template.payment_source">
+    $<%= text_field_tag "event[entry][][amount]", "", :size => 8 %>
+    was drawn from
+    <%= select_bucket(:payment_source) %>
+  </span>
+
+  <span id="template.credit_options">
+    $<%= text_field_tag "event[entry][][amount]", "", :size => 8 %>
+    will be repaid from
+    <%= select_bucket(:credit_options) %>
+  </span>
+</div>
+
 <% remote_form_for(:event, @event, :url => events_path) do |form| %>
   <fieldset>
     <legend>General Information</legend>
@@ -14,20 +28,18 @@
   <fieldset>
     <legend>Payment Source</legend>
 
-    <p><strong>Which account</strong> was this drawn from? <%= select_account(:payment_source) %></p>
-
-    <div id="check_options" style="display: none">
-      <p>What was the <strong>check number</strong>? <%= form.text_field :check_number, :size => 6 %><br />
-        <small>If you did not use a check for this expense, you may leave this field blank.</small></p>
-    </div>
+    <p>
+      <strong>Which account</strong> was this drawn from? <%= select_account(:payment_source) %>
+      <span id="check_options" style="display: none">
+        <strong>Check #</strong><%= form.text_field :check_number, :size => 6 %>
+      </span>
+    </p>
 
     <p id="payment_source.single_bucket"><strong>Which bucket</strong> was this drawn from? <%= select_bucket(:payment_source) %></p>
 
     <div id="payment_source.multiple_buckets" style="display: none">
       <p>This expense drew from multiple buckets. <span id="payment_source.unassigned"><strong>$75.14</strong> remains unassigned.</span></p>
-      <ol>
-        <li>$<input type="text" size="8"> was drawn from <select><option>Groceries</option><option>Household</option><option>Books</option><option>Auto:Fuel</option><option>Baby Supplies</option><option>&mdash; Add a new bucket &mdash;</option></select></li>
-        <li>$<input type="text" size="8"> was drawn from <select><option>Groceries</option><option>Household</option><option>Books</option><option>Auto:Fuel</option><option>Baby Supplies</option><option>&mdash; Add a new bucket &mdash;</option></select></li>
+      <ol id="payment_source.line_items">
       </ol>
       <p><a href="">More buckets, please!</a></p>
     </div>
@@ -36,7 +48,7 @@
   <fieldset id="credit_options" style="display: none">
     <legend>Repayment Options</legend>
 
-    <p><strong>Which account</strong> will be used to <strong>repay this credit</strong>? <%= select_account(:credit_options) %></p>
+    <p><strong>Which account</strong> will be used to <strong>repay this credit</strong>? <%= select_account(:credit_options) { |a| a.role == "checking" } %></p>
     <p id="credit_options.single_bucket">
       <strong>Which bucket</strong> will be used to <strong>repay this credit</strong>? <%= select_bucket(:credit_options) %><br />
       <small>Money from this bucket will be transferred to an "Aside" bucket, to be used later to pay off this credit.</small>
@@ -44,9 +56,7 @@
 
     <div id="credit_options.multiple_buckets" style="display: none">
       <p>Multiple buckets will be used to repay this credit. <span id="credit_options.unassigned"><strong>$75.14</strong> remains unassigned.</span></p>
-      <ol>
-        <li>$<input type="text" size="8"> will be repaid from <select><option>Groceries</option><option>Household</option><option>Books</option><option>Auto:Fuel</option><option>Baby Supplies</option><option>&mdash; More than one &mdash;</option><option>&mdash; Add a new bucket &mdash;</option></select></li>
-        <li>$<input type="text" size="8"> will be repaid from <select><option>Groceries</option><option>Household</option><option>Books</option><option>Auto:Fuel</option><option>Baby Supplies</option><option>&mdash; More than one &mdash;</option><option>&mdash; Add a new bucket &mdash;</option></select></li>
+      <ol id="credit_options.line_items">
       </ol>
       <p><a href="">More buckets, please!</a></p>
     </div>
