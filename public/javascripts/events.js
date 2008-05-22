@@ -64,6 +64,12 @@ var Events = {
     }
   },
 
+  bucketComparer: function(a, b) {
+    if(a.name == b.name) return 0;
+    if(a.name < b.name) return -1;
+    return 1;
+  },
+
   handleBucketChange: function(select, section) {
     var selected = select.options[select.selectedIndex].value;
 
@@ -81,6 +87,7 @@ var Events = {
       var name = prompt('Name your new bucket:');
       var value = "!" + name;
       Events.accounts[acctId].buckets.push({'id':value,'name':name});
+      Events.accounts[acctId].buckets.sort(Events.bucketComparer);
       Events.updateBucketsFor(section);
       Events.selectBucket(select, value);
     }

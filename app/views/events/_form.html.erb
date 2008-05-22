@@ -64,5 +64,5 @@
     </div>
   </fieldset>
 
-  <p><input type="submit" value="Record this expense"> or <a href="javascript:$('new_expense').hide(); $('data').show()">cancel</a></p>
+  <p><input type="submit" value="Record this expense"> or <%= link_to_function "cancel", "$('new_expense').hide(); $('data').show()" %></p>
 <% end %>
