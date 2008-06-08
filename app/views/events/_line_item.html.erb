@@ -1,0 +1,9 @@
+<%= hidden_field_tag "event[entry][][role]", role %>
+$<%= text_field_tag "event[entry][][amount]", "", :size => 8, :class => "number", :onchange => "Events.updateUnassignedFor('#{section}')" %>
+<% if section == :payment_source %>
+  was drawn from
+<% elsif section == :credit_options %>
+  will be repaid from
+<% end %>
+<%= select_bucket(section, :splittable => false) %>
+<%= link_to_function "[x]", "Events.removeLineItem(this.up('li'))" %>

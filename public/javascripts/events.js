@@ -120,5 +120,46 @@ var Events = {
 
   removeLineItem: function(li) {
     li.remove();
+    Events.updateUnassigned();
+  },
+
+  updateUnassigned: function() {
+    Events.updateUnassignedFor('payment_source');
+    Events.updateUnassignedFor('credit_options');
+  },
+
+  updateUnassignedFor: function(section) {
+    var total = Money.parse('expense_total');
+    var unassigned = total;
+
+    var line_items = $(section + ".line_items");
+    line_items.select("input[type=text]").each(function(field) {
+      var value = Money.parse(field);
+      unassigned -= value;
+    });
+
+    if(unassigned > 0) {
+      $(section + ".unassigned").innerHTML = "<strong>$" + Money.dollars(unassigned) + "</strong> of $" + Money.dollars(total) + " remains unallocated.";
+    } else if(unassigned < 0) {
+      $(section + ".unassigned").innerHTML = "You've overallocated <strong>$" + Money.dollars(unassigned) + "</strong>.";
+    } else {
+      $(section + ".unassigned").innerHTML = "";
+    }
+  },
+
+  serialize: function(parent) {
+    var data = "";
+    Form.getElements(parent).each(function(field) {
+      if(data.length > 0) data = data + "&";
+      data = data + encodeURIComponent(field.name) + "=" + encodeURIComponent($F(field));
+    });
+    return data;
+  },
+
+  submit: function(form) {
+    var data = Events.serialize('general_information') +
+      Events.serialize('payment_source');
+
+    alert(data);
   }
 }

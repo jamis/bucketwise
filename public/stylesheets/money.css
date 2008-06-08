@@ -148,3 +148,7 @@ div.transaction strong {
   background: #ffc;
   padding: 2px;
 }
+
+input.number {
+  text-align: right;
+}

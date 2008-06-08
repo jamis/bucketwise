@@ -4,26 +4,20 @@
 
 <div id="templates" style="display: none">
   <span id="template.payment_source">
-    $<%= text_field_tag "event[entry][][amount]", "", :size => 8 %>
-    was drawn from
-    <%= select_bucket(:payment_source, :splittable => false) %>
-    <%= link_to_function "[x]", "Events.removeLineItem(this.up('li'))" %>
+    <%= render :partial => "events/line_item", :locals => { :role => nil, :section => :payment_source } %>
   </span>
 
   <span id="template.credit_options">
-    $<%= text_field_tag "event[entry][][amount]", "", :size => 8 %>
-    will be repaid from
-    <%= select_bucket(:credit_options, :splittable => false) %>
-    <%= link_to_function "[x]", "Events.removeLineItem(this.up('li'))" %>
+    <%= render :partial => "events/line_item", :locals => { :role => "aside", :section => :credit_options } %>
   </span>
 </div>
 
-<% remote_form_for(:event, @event, :url => events_path) do |form| %>
-  <fieldset>
+<% form_for(:event, @event, :url => events_path, :html => { :onsubmit => "Events.submit(this); return false" }) do |form| %>
+  <fieldset id="general_information">
     <legend>General Information</legend>
 
     <p><strong>When</strong> did this expense occur? <%= form.text_field :occurred_on, :size => 10 %></p>
-    <p><strong>How much</strong> was paid? $<%= form.text_field :amount, :size => 8 %></p>
+    <p><strong>How much</strong> was paid? $<%= form.text_field :amount, :size => 8, :id => "expense_total", :class => "number", :onchange => "Events.updateUnassigned()" %></p>
     <p><strong>Who</strong> received the payment? <%= form.text_field :actor, :size => 30 %></p>
   </fieldset>
 
@@ -40,7 +34,7 @@
     <p id="payment_source.single_bucket"><strong>Which bucket</strong> was this drawn from? <%= select_bucket(:payment_source) %></p>
 
     <div id="payment_source.multiple_buckets" style="display: none">
-      <p>This expense drew from multiple buckets. <span id="payment_source.unassigned"><strong>$75.14</strong> remains unassigned.</span></p>
+      <p>This expense drew from multiple buckets. <span id="payment_source.unassigned"></span></p>
       <ol id="payment_source.line_items">
       </ol>
       <p><%= link_to_function "More buckets, please!", "Events.addLineItemTo('payment_source', true)" %></p>
@@ -57,7 +51,7 @@
     </p>
 
     <div id="credit_options.multiple_buckets" style="display: none">
-      <p>Multiple buckets will be used to repay this credit. <span id="credit_options.unassigned"><strong>$75.14</strong> remains unassigned.</span></p>
+      <p>Multiple buckets will be used to repay this credit. <span id="credit_options.unassigned"></span></p>
       <ol id="credit_options.line_items">
       </ol>
       <p><%= link_to_function "More buckets, please!", "Events.addLineItemTo('credit_options', true)" %></p>
