@@ -85,11 +85,15 @@ var Events = {
       var acctId = parseInt(acctSelect.options[acctSelect.selectedIndex].value);
 
       var name = prompt('Name your new bucket:');
-      var value = "!" + name;
-      Events.accounts[acctId].buckets.push({'id':value,'name':name});
-      Events.accounts[acctId].buckets.sort(Events.bucketComparer);
-      Events.updateBucketsFor(section);
-      Events.selectBucket(select, value);
+      if(name) {
+        var value = "!" + name + ":" + acctId;
+        Events.accounts[acctId].buckets.push({'id':value,'name':name});
+        Events.accounts[acctId].buckets.sort(Events.bucketComparer);
+        Events.updateBucketsFor(section);
+        Events.selectBucket(select, value);
+      } else {
+        select.selectedIndex = 0;
+      }
     }
   },
 
@@ -150,16 +154,30 @@ var Events = {
   serialize: function(parent) {
     var data = "";
     Form.getElements(parent).each(function(field) {
-      if(data.length > 0) data = data + "&";
-      data = data + encodeURIComponent(field.name) + "=" + encodeURIComponent($F(field));
+      if(!field.name.blank()) {
+        if(data.length > 0) data = data + "&";
+        data = data + encodeURIComponent(field.name) + "=" + encodeURIComponent($F(field));
+      }
     });
     return data;
   },
 
   submit: function(form) {
-    var data = Events.serialize('general_information') +
-      Events.serialize('payment_source');
+    try {
+      var data = Events.serialize(form);
+      alert(data);
+    } catch(e) {
+      alert(e);
+    }
+  },
 
-    alert(data);
+  cancel: function() {
+    $('event_form').reset();
+
+    Events.handleAccountChange($('account_for_credit_options'), 'credit_options');
+    Events.handleAccountChange($('account_for_payment_source'), 'payment_source');
+
+    $('new_expense').hide();
+    $('data').show();
   }
 }
