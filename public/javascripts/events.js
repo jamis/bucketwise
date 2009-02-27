@@ -191,7 +191,10 @@ var Events = {
     Events.serializeSection(request, 'payment_source');
 
     if($('credit_options').visible()) {
-      Events.serializeSection(request, 'credit_options');
+      Events.serializeSection(request, 'credit_options', {skip_account_item: true});
+      var account_id = parseInt($F('account_for_credit_options'));
+      var debit = Money.parse('expense_total');
+      Events.addBucketItem(request, account_id, Events.accounts[account_id]['aside'], debit, 'aside');
     }
 
     return Events.buildQueryStringFor(request);
@@ -203,15 +206,18 @@ var Events = {
     });
   },
 
-  serializeSection: function(request, section) {
+  serializeSection: function(request, section, options) {
+    options = options || {};
     var account_id = $F('account_for_' + section);
-    var expense = -Money.parse($F('expense_total'));
+    var expense = -Money.parse('expense_total');
 
-    Events.addAccountItem(request, account_id, expense);
+    if(!options['skip_account_item']) {
+      Events.addAccountItem(request, account_id, expense);
+    }
 
     if($(section + '.single_bucket').visible()) {
       var bucket_id = $F($(section + '.single_bucket').down('select'));
-      Events.addBucketItem(request, account_id, bucket_id, expense);
+      Events.addBucketItem(request, account_id, bucket_id, expense, section);
     } else {
       Events.addBucketLineItems(request, account_id, section);
     }
@@ -222,8 +228,8 @@ var Events = {
     Events.appendValue(request, 'event[account_items]', item);
   },
 
-  addBucketItem: function(request, account_id, bucket_id, amount) {
-    var item = { account_id: account_id, bucket_id: bucket_id, amount: amount };
+  addBucketItem: function(request, account_id, bucket_id, amount, role) {
+    var item = { account_id: account_id, bucket_id: bucket_id, amount: amount, role: role };
     Events.appendValue(request, 'event[bucket_items]', item);
   },
 
@@ -234,8 +240,8 @@ var Events = {
   addBucketLineItems: function(request, account_id, section) {
     $(section + '.line_items').select('li').each(function(row) {
       bucket_id = $F(row.down('select'));
-      amount = -Money.parse($F(row.down('input[type=text]')));
-      Events.addBucketItem(request, account_id, bucket_id, amount);
+      amount = -Money.parse(row.down('input[type=text]'));
+      Events.addBucketItem(request, account_id, bucket_id, amount, section);
     });
   },
 
