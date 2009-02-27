@@ -4,15 +4,15 @@
 
 <div id="templates" style="display: none">
   <span id="template.payment_source">
-    <%= render :partial => "events/line_item", :locals => { :role => nil, :section => :payment_source } %>
+    <%= render :partial => "events/line_item", :locals => { :section => :payment_source } %>
   </span>
 
   <span id="template.credit_options">
-    <%= render :partial => "events/line_item", :locals => { :role => "aside", :section => :credit_options } %>
+    <%= render :partial => "events/line_item", :locals => { :section => :credit_options } %>
   </span>
 </div>
 
-<% form_for(:event, @event, :url => events_path, :html => { :onsubmit => "Events.submit(this); return false" }) do |form| %>
+<% form_for(:event, @event, :url => events_path, :html => { :id => "event_form", :onsubmit => "Events.submit(this); return false" }) do |form| %>
   <fieldset id="general_information">
     <legend>General Information</legend>
 
@@ -58,5 +58,5 @@
     </div>
   </fieldset>
 
-  <p><input type="submit" value="Record this expense"> or <%= link_to_function "cancel", "$('new_expense').hide(); $('data').show()" %></p>
+  <p><input type="submit" value="Record this expense"> or <%= link_to_function "cancel", "Events.cancel()" %></p>
 <% end %>

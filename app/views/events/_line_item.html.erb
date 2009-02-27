@@ -1,5 +1,4 @@
-<%= hidden_field_tag "event[entry][][role]", role %>
-$<%= text_field_tag "event[entry][][amount]", "", :size => 8, :class => "number", :onchange => "Events.updateUnassignedFor('#{section}')" %>
+$<%= text_field_tag "event[#{section}][][amount]", "", :size => 8, :class => "number", :onchange => "Events.updateUnassignedFor('#{section}')" %>
 <% if section == :payment_source %>
   was drawn from
 <% elsif section == :credit_options %>

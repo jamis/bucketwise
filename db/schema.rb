@@ -44,6 +44,7 @@ ActiveRecord::Schema.define(:version => 20080513032848) do
   create_table "buckets", :force => true do |t|
     t.integer  "account_id", :null => false
     t.string   "name",       :null => false
+    t.string   "role"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -55,7 +56,6 @@ ActiveRecord::Schema.define(:version => 20080513032848) do
     t.integer  "user_id",         :null => false
     t.date     "occurred_on",     :null => false
     t.string   "actor",           :null => false
-    t.string   "payment_method"
     t.integer  "check_number"
     t.datetime "created_at"
     t.datetime "updated_at"
