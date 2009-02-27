@@ -187,6 +187,10 @@ var Events = {
     request.set('event[account_items]', []);
     request.set('event[bucket_items]', []);
 
+    if($('event_check_number').visible()) {
+      request.set('event[check_number]', $F('event_check_number'));
+    }
+
     Events.serializeGeneralInformation(request);
     Events.serializeSection(request, 'payment_source');
 
