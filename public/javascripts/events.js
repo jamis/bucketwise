@@ -264,7 +264,6 @@ var Events = {
       var action = form.readAttribute('action');
 
       options.parameters = Events.serialize(form);
-alert(options.parameters);
 
       if (form.hasAttribute('method') && !options.method)
         options.method = form.method;
