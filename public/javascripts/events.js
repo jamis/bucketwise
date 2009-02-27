@@ -264,6 +264,12 @@ alert(options.parameters);
     }
   },
 
+  revealExpenseForm: function() {
+    $('links').hide();
+    $('data').hide();
+    $('new_expense').show();
+  },
+
   cancel: function() {
     $('event_form').reset();
 
@@ -272,5 +278,6 @@ alert(options.parameters);
 
     $('new_expense').hide();
     $('data').show();
+    $('links').show();
   }
 }

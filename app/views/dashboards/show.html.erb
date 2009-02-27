@@ -1,6 +1,5 @@
 <div class="header">
-  <h1>Buckets</h1>
-  <h2>Record a new <%= link_to_function "expense", "$('data').hide(); $('new_expense').show()" %> or <a href="">deposit</a></h2>
+  <h2 id="links">Record a new <%= link_to_function "expense", "Events.revealExpenseForm()" %> or <a href="">deposit</a></h2>
 </div>
 
 <div class="transaction" id="new_expense" style="display: none">

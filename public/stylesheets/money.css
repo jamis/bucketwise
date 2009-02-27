@@ -4,11 +4,26 @@
 
 body {
   text-align: center;
+  margin: 0;
 }
 
 a {
   color: #00f;
   text-decoration: none;
+}
+
+div#header {
+  background: #5f9;
+  border-bottom: 1px solid #0a4;
+}
+
+div#header h1 {
+  font-size: 2em;
+  text-align: left;
+  width: 700px;
+  color: #073;
+  margin: 0 auto;
+  padding: 0.5em 0 0 0;
 }
 
 div#container {
@@ -19,12 +34,6 @@ div#container {
 
 .header {
   border-bottom: 1px solid #ccc;
-}
-
-.header h1 {
-  font-size: 2em;
-  color: #777;
-  margin-bottom: 0;
 }
 
 .header h2 {
