@@ -187,6 +187,8 @@ var Events = {
     request.set('event[account_items]', []);
     request.set('event[bucket_items]', []);
 
+    Events.serializeAuthenticityToken(request);
+
     if($('event_check_number').visible()) {
       request.set('event[check_number]', $F('event_check_number'));
     }
@@ -202,6 +204,11 @@ var Events = {
     }
 
     return Events.buildQueryStringFor(request);
+  },
+
+  serializeAuthenticityToken: function(request) {
+    var field = $('event_form').down('input[name=authenticity_token]');
+    request.set('authenticity_token', $F(field));
   },
 
   serializeGeneralInformation: function(request) {
