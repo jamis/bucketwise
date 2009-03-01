@@ -86,7 +86,7 @@ var Events = {
 
       var name = prompt('Name your new bucket:');
       if(name) {
-        var value = "!" + name + ":" + acctId;
+        var value = "!" + name;
         Events.accounts[acctId].buckets.push({'id':value,'name':name});
         Events.accounts[acctId].buckets.sort(Events.bucketComparer);
         Events.updateBucketsFor(section);
