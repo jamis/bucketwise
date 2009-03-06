@@ -9,6 +9,20 @@
 <div id="data" class="content">
   <table class="entries">
     <tr><th colspan="5">Recent Transactions</th></tr>
+    <% @subscription.events.recent.each do |event| %>
+      <tr class="<%= cycle('odd', 'even') %>">
+        <td class="date"><%= event.occurred_on.strftime("%Y-%m-%d") %></td>
+        <td class="expand"><a href="#">[+]</a></td>
+        <td><%=h event.actor %></td>
+        <td class="number"><%= event.balance > 0 ? format_amount(event.balance) : "" %></td>
+        <td class="negative number"><%= event.balance < 0 ? format_amount(event.balance) : "" %></td>
+      </tr>
+    <% end%>
+  </table>
+
+  <!--
+  <table class="entries">
+    <tr><th colspan="5">Recent Transactions</th></tr>
     <tr class="odd">
       <td class="date">2009-02-22</td>
       <td class="expand"><a href="#">[+]</a></td>
@@ -105,6 +119,7 @@
       <td class="negative number"></td>
     </tr>
   </table>
+  -->
 
   <table>
     <% @subscription.accounts.each do |account| %>

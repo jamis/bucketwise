@@ -3,6 +3,6 @@ class Bucket < ActiveRecord::Base
   has_many :line_items
 
   def balance
-    line_items.sum(:amount) || 0
+    @balance ||= line_items.sum(:amount) || 0
   end
 end

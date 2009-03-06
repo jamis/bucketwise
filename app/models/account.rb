@@ -20,7 +20,7 @@ class Account < ActiveRecord::Base
   after_create :create_default_buckets
 
   def balance
-    account_items.sum(:amount) || 0
+    @balance ||= account_items.sum(:amount) || 0
   end
 
   protected

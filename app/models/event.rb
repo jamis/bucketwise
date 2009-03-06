@@ -9,6 +9,10 @@ class Event < ActiveRecord::Base
 
   after_create :realize_line_items
 
+  def balance
+    @balance ||= account_items.sum(:amount) || 0
+  end
+
   def line_items=(list)
     if list.any? { |item| item.is_a?(Hash) }
       @line_items_to_realize = list

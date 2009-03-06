@@ -50,7 +50,7 @@ ActiveRecord::Schema.define(:version => 20080513032848) do
     t.datetime "updated_at"
   end
 
-  add_index "events", ["user_id", "created_at"], :name => "index_events_on_user_id_and_created_at"
+  add_index "events", ["subscription_id", "created_at"], :name => "index_events_on_subscription_id_and_created_at"
   add_index "events", ["subscription_id", "check_number"], :name => "index_events_on_subscription_id_and_check_number"
   add_index "events", ["subscription_id", "actor"], :name => "index_events_on_subscription_id_and_actor"
   add_index "events", ["subscription_id", "occurred_on"], :name => "index_events_on_subscription_id_and_occurred_on"
