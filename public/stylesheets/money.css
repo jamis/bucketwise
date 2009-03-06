@@ -133,6 +133,14 @@ td.expand {
   text-align: center;
 }
 
+td.expanding {
+  background-color: #f77;
+}
+
+td.expanding * {
+  visibility: none;
+}
+
 table.entries th {
   line-height: 2em;
   background: #BFFFBF;
@@ -145,25 +153,21 @@ table.entries tr td {
 }
 
 table.entries tr.zoomed {
-  border: 2px solid #aca;
-  border-bottom: none
-}
-
-table.entries tr.zoomed {
-  border-bottom: 2px solid #aca;
+  background: #ffa;
 }
 
 table.entries td.zoom {
   padding: 0;
-  border: 0;
+  background: #cc7;
+  border-top: 3px solid #777;
 }
 
 td.zoom table {
-  border: 2px solid #aca;
-  border-top: 1px solid #aca;
-  background: #dfd;
+  border-right: 3px solid #777;
+  border-bottom: 3px solid #777;
+  background: #ffd;
   width: auto;
-  margin: 0 7.5em;
+  margin: -3px 0 1em 7.5em;
   font-size: 80%;
 }
 
@@ -176,7 +180,7 @@ td.zoom tr.odd td {
 }
 
 td.zoom tr.even td {
-  background: #aea;
+  background: #eea;
   border: none;
 }
 

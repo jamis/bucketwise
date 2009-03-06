@@ -289,5 +289,15 @@ var Events = {
     $('new_expense').hide();
     $('data').show();
     $('links').show();
+  },
+
+  expand: function(id) {
+    $('expand_event_' + id).addClassName('expanding');
+    $('event_' + id).addClassName('zoomed');
+  },
+
+  collapse: function(id) {
+    $('event_' + id).removeClassName('zoomed');
+    $('zoomed_event_' + id).remove();
   }
 }

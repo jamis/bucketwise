@@ -1,5 +1,19 @@
 class EventsController < ApplicationController
-  def create
-    @event = Event.create(params[:event])
+  before_filter :find_event, :except => %w(create)
+
+  def show
   end
+
+  def create
+    @event = subscription.events.create(params[:event])
+  end
+
+  protected
+
+    attr_reader :event
+    helper_method :event
+
+    def find_event
+      @event = subscription.events.find(params[:id])
+    end
 end
