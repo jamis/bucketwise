@@ -11,15 +11,14 @@
 
 ActiveRecord::Schema.define(:version => 20080513032848) do
 
-  create_table "account_entries", :force => true do |t|
-    t.integer "event_id",                 :null => false
-    t.integer "account_id",               :null => false
-    t.integer "amount",                   :null => false
-    t.string  "role",       :limit => 20
+  create_table "account_items", :force => true do |t|
+    t.integer "event_id",   :null => false
+    t.integer "account_id", :null => false
+    t.integer "amount",     :null => false
   end
 
-  add_index "account_entries", ["account_id"], :name => "index_account_entries_on_account_id"
-  add_index "account_entries", ["event_id"], :name => "index_account_entries_on_event_id"
+  add_index "account_items", ["account_id"], :name => "index_account_items_on_account_id"
+  add_index "account_items", ["event_id"], :name => "index_account_items_on_event_id"
 
   create_table "accounts", :force => true do |t|
     t.integer  "subscription_id", :null => false
@@ -30,16 +29,6 @@ ActiveRecord::Schema.define(:version => 20080513032848) do
   end
 
   add_index "accounts", ["subscription_id", "name"], :name => "index_accounts_on_subscription_id_and_name", :unique => true
-
-  create_table "bucket_entries", :force => true do |t|
-    t.integer "event_id",                :null => false
-    t.integer "bucket_id",               :null => false
-    t.integer "amount",                  :null => false
-    t.string  "role",      :limit => 20
-  end
-
-  add_index "bucket_entries", ["bucket_id"], :name => "index_bucket_entries_on_bucket_id"
-  add_index "bucket_entries", ["event_id"], :name => "index_bucket_entries_on_event_id"
 
   create_table "buckets", :force => true do |t|
     t.integer  "account_id", :null => false
@@ -65,6 +54,18 @@ ActiveRecord::Schema.define(:version => 20080513032848) do
   add_index "events", ["subscription_id", "check_number"], :name => "index_events_on_subscription_id_and_check_number"
   add_index "events", ["subscription_id", "actor"], :name => "index_events_on_subscription_id_and_actor"
   add_index "events", ["subscription_id", "occurred_on"], :name => "index_events_on_subscription_id_and_occurred_on"
+
+  create_table "line_items", :force => true do |t|
+    t.integer "event_id",                 :null => false
+    t.integer "account_id",               :null => false
+    t.integer "bucket_id",                :null => false
+    t.integer "amount",                   :null => false
+    t.string  "role",       :limit => 20
+  end
+
+  add_index "line_items", ["bucket_id"], :name => "index_line_items_on_bucket_id"
+  add_index "line_items", ["account_id"], :name => "index_line_items_on_account_id"
+  add_index "line_items", ["event_id"], :name => "index_line_items_on_event_id"
 
   create_table "subscriptions", :force => true do |t|
     t.integer "owner_id", :null => false

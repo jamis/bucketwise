@@ -8,11 +8,20 @@ class Account < ActiveRecord::Base
     def aside
       detect { |bucket| bucket.role == "aside" }
     end
+
+    def default
+      detect { |bucket| bucket.role == "default" }
+    end
   end
 
-  has_many :entries, :class_name => "AccountEntry"
+  has_many :line_items
+  has_many :account_items
 
   after_create :create_default_buckets
+
+  def balance
+    account_items.sum(:amount) || 0
+  end
 
   protected
 

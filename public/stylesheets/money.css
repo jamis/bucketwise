@@ -50,6 +50,11 @@ div#container {
 .content table {
   width: 100%;
   border-collapse: collapse;
+  margin-bottom: 2em;
+}
+
+td {
+  text-align: left;
 }
 
 tr.account {
@@ -97,10 +102,6 @@ tr.even {
   background: #f7f7f7;
 }
 
-tr.even td {
-  border-bottom: 1px solid #ccc;
-}
-
 tr.bucket td.indent {
   width: 2em;
 }
@@ -111,10 +112,72 @@ td.total {
 
 td.number {
   text-align: right;
+  width: 1px;
+  padding-left: 0.5em;
 }
 
 td.negative {
   color: red;
+}
+
+td.date {
+  width: 1px;
+  padding-left: 0.3em;
+  padding-right: 0.5em;
+  opacity: 0.5;
+}
+
+td.expand {
+  width: 1px;
+  padding-right: 0.3em;
+  text-align: center;
+}
+
+table.entries th {
+  line-height: 2em;
+  background: #BFFFBF;
+  padding: 0 0.3em;
+  border-bottom: 1px solid #9c9;
+}
+
+table.entries tr td {
+  padding: 0.2em 0.4em;
+}
+
+table.entries tr.zoomed {
+  border: 2px solid #aca;
+  border-bottom: none
+}
+
+table.entries tr.zoomed {
+  border-bottom: 2px solid #aca;
+}
+
+table.entries td.zoom {
+  padding: 0;
+  border: 0;
+}
+
+td.zoom table {
+  border: 2px solid #aca;
+  border-top: 1px solid #aca;
+  background: #dfd;
+  width: auto;
+  margin: 0 7.5em;
+  font-size: 80%;
+}
+
+td.zoom td {
+  padding: 0 1em;
+}
+
+td.zoom tr.odd td {
+  border: none;
+}
+
+td.zoom tr.even td {
+  background: #aea;
+  border: none;
 }
 
 div.transaction {

@@ -56,25 +56,26 @@ class InitialSchema < ActiveRecord::Migration
     add_index :events, %w(subscription_id check_number)
     add_index :events, %w(user_id created_at)
 
-    create_table :account_entries do |t|
+    create_table :line_items do |t|
       t.integer :event_id, :null => false
       t.integer :account_id, :null => false
-      t.integer :amount, :null => false # cents
-      t.string  :role, :limit => 20
-    end
-
-    add_index :account_entries, :event_id
-    add_index :account_entries, :account_id
-
-    create_table :bucket_entries do |t|
-      t.integer :event_id, :null => false
       t.integer :bucket_id, :null => false
       t.integer :amount, :null => false # cents
       t.string  :role, :limit => 20
     end
 
-    add_index :bucket_entries, :event_id
-    add_index :bucket_entries, :bucket_id
+    add_index :line_items, :event_id
+    add_index :line_items, :account_id
+    add_index :line_items, :bucket_id
+
+    create_table :account_items do |t|
+      t.integer  :event_id, :null => false
+      t.integer  :account_id, :null => false
+      t.integer  :amount, :null => false # cents
+    end
+
+    add_index :account_items, :event_id
+    add_index :account_items, :account_id
   end
 
   def self.down
@@ -84,7 +85,7 @@ class InitialSchema < ActiveRecord::Migration
     drop_table :accounts
     drop_table :buckets
     drop_table :events
-    drop_table :account_entries
-    drop_table :bucket_entries
+    drop_table :line_items
+    drop_table :account_items
   end
 end
