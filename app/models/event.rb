@@ -31,8 +31,10 @@ class Event < ActiveRecord::Base
         @line_items_to_realize.each do |item|
           account = subscription.accounts.find(item[:account_id])
 
-          if item[:bucket_id] =~ /^!(.*)/
-            item[:bucket_id] = account.buckets.create(:name => $1).id
+          if item[:bucket_id] =~ /^n:(.*)/
+            item[:bucket_id] = account.buckets.find_or_create_by_name($1).id
+          elsif item[:bucket_id] =~ /^r:(.*)/
+            item[:bucket_id] = account.buckets.for_role($1).id
           else
             account.buckets.find(item[:bucket_id])
           end

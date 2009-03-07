@@ -90,7 +90,8 @@ var Events = {
 
       var name = prompt('Name your new bucket:');
       if(name) {
-        var value = "!" + name;
+        // FIXME: make sure 'name' is not empty, and is not already taken
+        var value = "n:" + name;
         Events.accounts[acctId].buckets.push({'id':value,'name':name});
         Events.accounts[acctId].buckets.sort(Events.bucketComparer);
         Events.updateBucketsFor(section);
@@ -181,44 +182,93 @@ var Events = {
       } else {
         qs += encodeURIComponent(pair.key) + "=" + encodeURIComponent(pair.value);
       }
+
     });
 
     return qs;
   },
 
-  serialize: function(parent) {
-    var request = new Hash();
+  buildXMLStringFor: function(request) {
+    var xml = "";
 
-    request.set('event[account_items]', []);
-    request.set('event[bucket_items]', []);
+    for(var key in request) {
+      tag = key.replace("_", "-");
+      xml += Events.buildXMLFor(tag, request[key]);
+    }
+
+    return xml;
+  },
+
+  buildXMLFor: function(tag, value) {
+    var xml = "";
+
+    if(Object.isArray(value)) {
+      xml += "<" + tag + "s type='array'>";
+      value.each(function(element) {
+        xml += Events.buildXMLFor(tag, element);
+      });
+      xml += "</" + tag + "s>";
+    } else if(typeof value == "object") {
+      xml += "<" + tag + ">" + Events.buildXMLStringFor(value) + "</" + tag + ">";
+    } else {
+      xml += "<" + tag + ">" + value + "</" + tag + ">";
+    }
+
+    return xml;
+  },
+
+  serialize: function(parent) {
+    var request = {};
+
+    request['event'] = {};
+    request['event']['line_item'] = [];
 
     Events.serializeAuthenticityToken(request);
 
     if($('event_check_number').visible()) {
-      request.set('event[check_number]', $F('event_check_number'));
+      request['event']['check_number'] = $F('event_check_number');
     }
 
     Events.serializeGeneralInformation(request);
     Events.serializeSection(request, 'payment_source');
 
     if($('credit_options').visible()) {
-      Events.serializeSection(request, 'credit_options', {skip_account_item: true});
+      Events.serializeSection(request, 'credit_options');
       var account_id = parseInt($F('account_for_credit_options'));
       var debit = Money.parse('expense_total');
-      Events.addBucketItem(request, account_id, Events.accounts[account_id]['aside'], debit, 'aside');
+      Events.addLineItem(request, account_id, 'r:aside', debit, 'aside');
     }
 
-    return Events.buildQueryStringFor(request);
+    return {'request':request};
   },
 
   serializeAuthenticityToken: function(request) {
     var field = $('event_form').down('input[name=authenticity_token]');
-    request.set('authenticity_token', $F(field));
+    request['authenticity_token'] = $F(field);
+  },
+
+  addToRequest: function(request, name, value) {
+    if(name.match(/^\w+$/)) {
+      request[name] = value;
+    } else {
+      var parts = name.replace("][", ",").replace("[", ",").replace("]", "").split(/,/);
+      var n = 0;
+
+      while(n < parts.length-1) {
+        var part = parts[n];
+        request[part] = request[part] || {};
+        request = request[part];
+        n++;
+      }
+
+      request[parts[n]] = value;
+    }
   },
 
   serializeGeneralInformation: function(request) {
     Form.getElements('general_information').each(function(field) {
-      if(!field.name.blank()) request.set(field.name, field.value);
+      if(!field.name.blank() && field.name != "event[amount]")
+        Events.addToRequest(request, field.name, field.value);
     });
   },
 
@@ -227,37 +277,24 @@ var Events = {
     var account_id = $F('account_for_' + section);
     var expense = -Money.parse('expense_total');
 
-    if(!options['skip_account_item']) {
-      Events.addAccountItem(request, account_id, expense);
-    }
-
     if($(section + '.single_bucket').visible()) {
       var bucket_id = $F($(section + '.single_bucket').down('select'));
-      Events.addBucketItem(request, account_id, bucket_id, expense, section);
+      Events.addLineItem(request, account_id, bucket_id, expense, section);
     } else {
-      Events.addBucketLineItems(request, account_id, section);
+      Events.addLineItems(request, account_id, section);
     }
   },
 
-  addAccountItem: function(request, account_id, amount) {
-    var item = { account_id: account_id, amount: amount };
-    Events.appendValue(request, 'event[account_items]', item);
-  },
-
-  addBucketItem: function(request, account_id, bucket_id, amount, role) {
+  addLineItem: function(request, account_id, bucket_id, amount, role) {
     var item = { account_id: account_id, bucket_id: bucket_id, amount: amount, role: role };
-    Events.appendValue(request, 'event[bucket_items]', item);
+    request['event']['line_item'].push(item);
   },
 
-  appendValue: function(request, key, value) {
-    request.get(key).push(value);
-  },
-
-  addBucketLineItems: function(request, account_id, section) {
+  addLineItems: function(request, account_id, section) {
     $(section + '.line_items').select('li').each(function(row) {
       bucket_id = $F(row.down('select'));
       amount = -Money.parse(row.down('input[type=text]'));
-      Events.addBucketItem(request, account_id, bucket_id, amount, section);
+      Events.addLineItem(request, account_id, bucket_id, amount, section);
     });
   },
 
@@ -268,10 +305,12 @@ var Events = {
       var options = {};
       var action = form.readAttribute('action');
 
-      options.parameters = Events.serialize(form);
+      options.postBody = Events.buildXMLStringFor(Events.serialize(form));
 
       if (form.hasAttribute('method') && !options.method)
         options.method = form.method;
+
+      options.contentType = "application/xml";
 
       return new Ajax.Request(action, options);
     } catch(e) {

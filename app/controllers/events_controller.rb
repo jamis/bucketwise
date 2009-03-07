@@ -5,7 +5,7 @@ class EventsController < ApplicationController
   end
 
   def create
-    @event = subscription.events.create(params[:event])
+    @event = subscription.events.create(params[:event].merge(:user_id => user.id))
   end
 
   protected
