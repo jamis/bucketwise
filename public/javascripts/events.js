@@ -3,9 +3,11 @@ var Events = {
     var acctSelect = $('account_for_' + section);
     var disabled = acctSelect.selectedIndex == 0;
     var acctId = disabled ? null : parseInt(acctSelect.options[acctSelect.selectedIndex].value);
+    var skipAside = section == 'credit_options';
 
     Events.getBucketSelects(section).each(function(bucketSelect) {
-      Events.populateBucket(bucketSelect, acctId, {'reset':reset, 'disabled':disabled});
+      Events.populateBucket(bucketSelect, acctId,
+        {'reset':reset, 'disabled':disabled, 'skipAside':skipAside});
     });
   },
 
@@ -25,7 +27,9 @@ var Events = {
 
       i = 0;
       Events.accounts[acctId].buckets.each(function(bucket) {
-        select.options[i++] = new Option(bucket.name, bucket.id);
+        if(bucket.role != 'aside' || !options.skipAside) {
+          select.options[i++] = new Option(bucket.name, bucket.id);
+        }
       })
 
       if(select.hasClassName("splittable")) {
@@ -118,7 +122,8 @@ var Events = {
     if(populate) {
       var acctSelect = $('account_for_' + section);
       var acctId = parseInt(acctSelect.options[acctSelect.selectedIndex].value);
-      Events.populateBucket(li.down("select"), acctId);
+      Events.populateBucket(li.down("select"), acctId,
+        {'skipAside':(section=='credit_options')});
     }
   },
 
