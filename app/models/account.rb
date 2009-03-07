@@ -6,7 +6,8 @@ class Account < ActiveRecord::Base
 
   has_many :buckets do
     def aside
-      detect { |bucket| bucket.role == "aside" }
+      detect { |bucket| bucket.role == "aside" } ||
+        create(:name => ASIDE_BUCKET_NAME, :role => "aside")
     end
 
     def default
@@ -27,6 +28,5 @@ class Account < ActiveRecord::Base
 
     def create_default_buckets
       buckets.create(:name => DEFAULT_BUCKET_NAME, :role => "default")
-      buckets.create(:name => ASIDE_BUCKET_NAME, :role => "aside")
     end
 end
