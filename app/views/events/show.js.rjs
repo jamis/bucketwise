@@ -1,4 +1,2 @@
-page[dom_id(event)].add_class_name('zoomed')
-page[dom_id(event, :expand)].remove_class_name('expanding')
-page[dom_id(event, :expand)].replace_html(link_to_function("[-]", "Events.collapse(#{event.id})"))
+page.events.expanded(event.id)
 page.insert_html :after, dom_id(event), :partial => "events/expand"

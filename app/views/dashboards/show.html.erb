@@ -12,114 +12,16 @@
     <% subscription.events.recent.each do |event| %>
       <tr id="<%= dom_id(event) %>" class="<%= cycle('odd', 'even') %>">
         <td class="date"><%= event.occurred_on.strftime("%Y-%m-%d") %></td>
-        <td id="<%= dom_id(event, :expand) %>" class="expand"><%= link_to_remote "[+]", :url => event_path(event), :method => :get, :before => "Events.expand(#{event.id})" %></td>
+        <td id="<%= dom_id(event, :expand) %>" class="expand">
+          <%= link_to_remote "[+]", :url => event_path(event), :method => :get, :before => "Events.expand(#{event.id})", :html => { :class => "expand" } %>
+          <%= link_to_function "[-]", "Events.collapse(#{event.id})", :class => "collapse" %>
+        </td>
         <td><%=h event.actor %></td>
         <td class="number"><%= event.balance > 0 ? format_amount(event.balance) : "" %></td>
         <td class="negative number"><%= event.balance < 0 ? format_amount(event.balance) : "" %></td>
       </tr>
     <% end%>
   </table>
-
-  <!--
-  <table class="entries">
-    <tr><th colspan="5">Recent Transactions</th></tr>
-    <tr class="odd">
-      <td class="date">2009-02-22</td>
-      <td class="expand"><a href="#">[+]</a></td>
-      <td>Costco</td>
-      <td class="number"></td>
-      <td class="negative number">$14.37</td>
-    </tr>
-    <tr class="even">
-      <td class="date">2009-02-22</td>
-      <td class="expand"><a href="#">[+]</a></td>
-      <td>Transfer</td>
-      <td class="number">$2,500.00</td>
-      <td class="negative number">$2,500.00</td>
-    </tr>
-    <tr class="odd zoomed">
-      <td class="date">2009-02-22</td>
-      <td class="expand"><a href="#">[-]</a></td>
-      <td>Reallocation</td>
-      <td class="number"></td>
-      <td class="negative number"></td>
-    </tr>
-    <tr class="zoom">
-      <td class="zoom" colspan="5">
-        <table>
-          <tr class="odd">
-            <td><a href="#">Checking</a></td>
-            <td><a href="#">Groceries</a></td>
-            <td class="number"></td>
-            <td class="negative number">$150.00</td>
-          </tr>
-          <tr class="even">
-            <td><a href="#">Checking</a></td>
-            <td><a href="#">Auto</a></td>
-            <td class="number">$75.00</td>
-            <td class="negative number"></td>
-          </tr>
-          <tr class="odd">
-            <td><a href="#">Checking</a></td>
-            <td><a href="#">Medical</a></td>
-            <td class="number">$75.00</td>
-            <td class="negative number"></td>
-          </tr>
-        </table>
-      </td>
-    </tr>
-    <tr class="even zoomed">
-      <td class="date">2009-02-22</td>
-      <td class="expand"><a href="#">[-]</a></td>
-      <td>Chevron</td>
-      <td class="number"></td>
-      <td class="negative number">$48.18</td>
-    </tr>
-    <tr class="zoom">
-      <td class="zoom" colspan="5">
-        <table>
-          <tr class="odd">
-            <td><a href="#">Checking</a></td>
-            <td><a href="#">Groceries</a></td>
-            <td class="number"></td>
-            <td class="negative number">$11.91</td>
-          </tr>
-          <tr class="even">
-            <td><a href="#">Checking</a></td>
-            <td><a href="#">Auto:Fuel</a></td>
-            <td class="number"></td>
-            <td class="negative number">$28.07</td>
-          </tr>
-          <tr class="odd">
-            <td><a href="#">Checking</a></td>
-            <td><a href="#">Dining</a></td>
-            <td class="number"></td>
-            <td class="negative number">$8.20</td>
-          </tr>
-          <tr class="even">
-            <td><a href="#">Checking</a></td>
-            <td><a href="#">Aside</a></td>
-            <td class="number">$48.18</td>
-            <td class="negative number"></td>
-          </tr>
-          <tr class="odd">
-            <td><a href="#">Mastercard</a></td>
-            <td><a href="#">General</a></td>
-            <td class="number"></td>
-            <td class="negative number">$48.18</td>
-          </tr>
-        </table>
-      </td>
-    </tr>
-    <tr class="odd">
-      <td class="date">2009-02-22</td>
-      <td class="expand"><a href="#">[+]</a></td>
-      <td>Deposit</td>
-      <td class="number">$200.00</td>
-      <td class="negative number"></td>
-    </tr>
-  </table>
-  -->
 
   <table>
     <% subscription.accounts.each do |account| %>

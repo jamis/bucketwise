@@ -141,6 +141,18 @@ td.expanding * {
   visibility: none;
 }
 
+td.expand a.collapse {
+  display: none;
+}
+
+td.expanding a {
+  display: none;
+}
+
+td.expanded a.expand {
+  display: none;
+}
+
 table.entries th {
   line-height: 2em;
   background: #BFFFBF;
@@ -176,12 +188,10 @@ td.zoom td {
 }
 
 td.zoom tr.odd td {
-  border: none;
 }
 
 td.zoom tr.even td {
   background: #eea;
-  border: none;
 }
 
 div.transaction {

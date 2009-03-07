@@ -292,11 +292,16 @@ var Events = {
   },
 
   expand: function(id) {
-    $('expand_event_' + id).addClassName('expanding');
+    $('expand_event_' + id).className = "expanding";
     $('event_' + id).addClassName('zoomed');
   },
 
+  expanded: function(id) {
+    $('expand_event_' + id).className = "expanded";
+  },
+
   collapse: function(id) {
+    $('expand_event_' + id).className = "expand";
     $('event_' + id).removeClassName('zoomed');
     $('zoomed_event_' + id).remove();
   }
