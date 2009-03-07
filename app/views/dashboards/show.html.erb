@@ -7,34 +7,15 @@
 </div>
 
 <div id="data" class="content">
-  <table class="entries">
-    <tr><th colspan="5">Recent Transactions</th></tr>
-    <% subscription.events.recent.each do |event| %>
-      <tr id="<%= dom_id(event) %>" class="<%= cycle('odd', 'even') %>">
-        <td class="date"><%= event.occurred_on.strftime("%Y-%m-%d") %></td>
-        <td id="<%= dom_id(event, :expand) %>" class="expand">
-          <%= link_to_remote "[+]", :url => event_path(event), :method => :get, :before => "Events.expand(#{event.id})", :html => { :class => "expand" } %>
-          <%= link_to_function "[-]", "Events.collapse(#{event.id})", :class => "collapse" %>
-        </td>
-        <td><%=h event.actor %></td>
-        <td class="number"><%= event.balance > 0 ? format_amount(event.balance) : "" %></td>
-        <td class="negative number"><%= event.balance < 0 ? format_amount(event.balance) : "" %></td>
-      </tr>
-    <% end%>
+  <h2>Recent transactions</h2>
+
+  <table class="entries" id="recent_entries">
+    <%= render :partial => "events/event", :collection => subscription.events.recent %>
   </table>
 
-  <table>
-    <% subscription.accounts.each do |account| %>
-      <tr class="account">
-        <th><%= link_to(account.name, account) %></th>
-        <%= balance_cell(account, "total") %>
-      </tr>
-      <% reset_cycle; account.buckets.each do |bucket| %>
-        <tr class="bucket <%= cycle('odd', 'even') %>">
-          <td><%= link_to(bucket.name, bucket) %></td>
-          <%= balance_cell(bucket) %>
-        </tr>
-      <% end %>
-    <% end %>
+  <h2>Accounts summary</h2>
+
+  <table id="accounts_summary">
+    <%= render :partial => "accounts/account", :collection => subscription.accounts %>
   </table>
 </div>

@@ -1,0 +1,6 @@
+page['recent_entries'].replace_html :partial => "events/event",
+  :collection => subscription.events.recent
+page['accounts_summary'].replace_html :partial => "accounts/account",
+  :collection => subscription.accounts
+page.events.reset
+page.visual_effect :highlight, dom_id(@event)

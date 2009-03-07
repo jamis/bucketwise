@@ -47,6 +47,14 @@ div#container {
   margin: 1em;
 }
 
+.content h2 {
+  margin: 0 -0.5em 0.5em -0.5em;
+  padding: 0.2em 0.5em;
+  background: #bfb;
+  border-bottom: 1px solid #9c9;
+  font-size: 1.2em;
+}
+
 .content table {
   width: 100%;
   border-collapse: collapse;
@@ -59,7 +67,7 @@ td {
 
 tr.account {
   line-height: 2em;
-  background: #BFFFBF;
+  background: #bfb;
 }
 
 tr.account th {
@@ -155,7 +163,7 @@ td.expanded a.expand {
 
 table.entries th {
   line-height: 2em;
-  background: #BFFFBF;
+  background: #bfb;
   padding: 0 0.3em;
   border-bottom: 1px solid #9c9;
 }

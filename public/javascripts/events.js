@@ -320,18 +320,19 @@ var Events = {
 
   revealExpenseForm: function() {
     $('links').hide();
-    $('data').hide();
     $('new_expense').show();
   },
 
-  cancel: function() {
+  reset: function() {
     $('event_form').reset();
 
     Events.handleAccountChange($('account_for_credit_options'), 'credit_options');
     Events.handleAccountChange($('account_for_payment_source'), 'payment_source');
+  },
 
+  cancel: function() {
+    Events.reset();
     $('new_expense').hide();
-    $('data').show();
     $('links').show();
   },
 
