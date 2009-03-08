@@ -10,15 +10,31 @@
   <span id="template.credit_options">
     <%= render :partial => "events/line_item", :locals => { :section => :credit_options } %>
   </span>
+
+  <span id="template.deposit">
+    <%= render :partial => "events/line_item", :locals => { :section => :deposit } %>
+  </span>
 </div>
 
 <% form_for(:event, event_for_form, :url => events_path, :html => { :id => "event_form", :onsubmit => "Events.submit(this); return false" }) do |form| %>
   <fieldset id="general_information">
     <legend>General Information</legend>
 
-    <p><strong>When</strong> did this expense occur? <%= form.text_field :occurred_on, :size => 10 %></p>
-    <p><strong>How much</strong> was paid? $<%= text_field_tag :amount, "", :size => 8, :id => "expense_total", :class => "number", :onchange => "Events.updateUnassigned()" %></p>
-    <p><strong>Who</strong> received the payment? <%= form.text_field :actor, :size => 30 %></p>
+    <p>
+      <span class="expense_label"><strong>When</strong> did this expense occur?</span>
+      <span class="deposit_label"><strong>When</strong> did this deposit occur?</span>
+      <%= form.text_field :occurred_on, :size => 10 %>
+    </p>
+    <p>
+      <span class="expense_label"><strong>How much</strong> was paid?</span>
+      <span class="deposit_label"><strong>How much</strong> was deposited?</span>
+      $<%= text_field_tag :amount, "", :size => 8, :id => "expense_total", :class => "number", :onchange => "Events.updateUnassigned()" %>
+    </p>
+    <p>
+      <span class="expense_label"><strong>Who</strong> received the payment?</span>
+      <span class="deposit_label"><strong>What</strong> was this deposit for?</span>
+      <%= form.text_field :actor, :size => 30 %>
+      </p>
   </fieldset>
 
   <fieldset id="payment_source">
@@ -55,6 +71,23 @@
       <ol id="credit_options.line_items">
       </ol>
       <p><%= link_to_function "More buckets, please!", "Events.addLineItemTo('credit_options', true)" %></p>
+    </div>
+  </fieldset>
+
+  <fieldset id="deposit" style="display: none">
+    <legend>Deposit Information</legend>
+
+    <p>
+      <strong>Which account</strong> was this deposited to? <%= select_account(:deposit) %>
+    </p>
+
+    <p id="deposit.single_bucket"><strong>Which bucket</strong> was this deposited to? <%= select_bucket(:deposit) %></p>
+
+    <div id="deposit.multiple_buckets" style="display: none">
+      <p>This deposit was to multiple buckets. <span id="deposit.unassigned"></span></p>
+      <ol id="deposit.line_items">
+      </ol>
+      <p><%= link_to_function "More buckets, please!", "Events.addLineItemTo('deposit', true)" %></p>
     </div>
   </fieldset>
 

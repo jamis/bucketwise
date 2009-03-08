@@ -1,8 +1,8 @@
 <div class="header">
-  <h2 id="links">Record a new <%= link_to_function "expense", "Events.revealExpenseForm()" %> or <a href="">deposit</a></h2>
+  <h2 id="links">Record a new <%= link_to_function "expense", "Events.revealExpenseForm()" %> or <%= link_to_function "deposit", "Events.revealDepositForm()" %></h2>
 </div>
 
-<div class="transaction" id="new_expense" style="display: none">
+<div class="transaction" id="new_event" style="display: none">
   <%= render :partial => "events/form" %>
 </div>
 

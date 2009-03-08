@@ -199,28 +199,28 @@ var Events = {
     request['event'] = {};
     request['event']['line_item'] = [];
 
-    Events.serializeAuthenticityToken(request);
-
     if($('event_check_number').visible()) {
       request['event']['check_number'] = $F('event_check_number');
     }
 
     Events.serializeGeneralInformation(request);
-    Events.serializeSection(request, 'payment_source');
+
+    if($('payment_source').visible()) {
+      Events.serializeSection(request, 'payment_source', {expense:true});
+    }
 
     if($('credit_options').visible()) {
-      Events.serializeSection(request, 'credit_options');
+      Events.serializeSection(request, 'credit_options', {expense:true});
       var account_id = parseInt($F('account_for_credit_options'));
       var debit = Money.parse('expense_total');
       Events.addLineItem(request, account_id, 'r:aside', debit, 'aside');
     }
 
-    return {'request':request};
-  },
+    if($('deposit').visible()) {
+      Events.serializeSection(request, 'deposit', {expense:false})
+    }
 
-  serializeAuthenticityToken: function(request) {
-    var field = $('event_form').down('input[name=authenticity_token]');
-    request['authenticity_token'] = $F(field);
+    return request;
   },
 
   addToRequest: function(request, name, value) {
@@ -243,7 +243,7 @@ var Events = {
 
   serializeGeneralInformation: function(request) {
     Form.getElements('general_information').each(function(field) {
-      if(!field.name.blank())
+      if(!field.name.blank() && field.name != "amount")
         Events.addToRequest(request, field.name, field.value);
     });
   },
@@ -251,13 +251,13 @@ var Events = {
   serializeSection: function(request, section, options) {
     options = options || {};
     var account_id = $F('account_for_' + section);
-    var expense = -Money.parse('expense_total');
+    var expense = (options.expense ? -1 : 1) * Money.parse('expense_total');
 
     if($(section + '.single_bucket').visible()) {
       var bucket_id = $F($(section + '.single_bucket').down('select'));
       Events.addLineItem(request, account_id, bucket_id, expense, section);
     } else {
-      Events.addLineItems(request, account_id, section);
+      Events.addLineItems(request, account_id, section, options);
     }
   },
 
@@ -266,10 +266,11 @@ var Events = {
     request['event']['line_item'].push(item);
   },
 
-  addLineItems: function(request, account_id, section) {
+  addLineItems: function(request, account_id, section, options) {
+    options = options || {};
     $(section + '.line_items').select('li').each(function(row) {
       bucket_id = $F(row.down('select'));
-      amount = -Money.parse(row.down('input[type=text]'));
+      amount = (options.expense ? -1 : 1) * Money.parse(row.down('input[type=text]'));
       Events.addLineItem(request, account_id, bucket_id, amount, section);
     });
   },
@@ -294,9 +295,26 @@ var Events = {
     }
   },
 
-  revealExpenseForm: function() {
+  revealBasicForm: function() {
     $('links').hide();
-    $('new_expense').show();
+    $('new_event').show();
+    $('payment_source').hide();
+    $('credit_options').hide();
+    $('deposit').hide();
+  },
+
+  revealExpenseForm: function() {
+    Events.revealBasicForm();
+    $$('.expense_label').invoke('show');
+    $$('.deposit_label').invoke('hide');
+    $('payment_source').show();
+  },
+
+  revealDepositForm: function() {
+    Events.revealBasicForm();
+    $$('.expense_label').invoke('hide');
+    $$('.deposit_label').invoke('show');
+    $('deposit').show();
   },
 
   reset: function() {
@@ -304,11 +322,12 @@ var Events = {
 
     Events.handleAccountChange($('account_for_credit_options'), 'credit_options');
     Events.handleAccountChange($('account_for_payment_source'), 'payment_source');
+    Events.handleAccountChange($('account_for_deposit'), 'deposit');
   },
 
   cancel: function() {
     Events.reset();
-    $('new_expense').hide();
+    $('new_event').hide();
     $('links').show();
   },
 
