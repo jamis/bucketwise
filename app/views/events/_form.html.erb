@@ -12,12 +12,12 @@
   </span>
 </div>
 
-<% form_for(:event, @event, :url => events_path, :html => { :id => "event_form", :onsubmit => "Events.submit(this); return false" }) do |form| %>
+<% form_for(:event, event_for_form, :url => events_path, :html => { :id => "event_form", :onsubmit => "Events.submit(this); return false" }) do |form| %>
   <fieldset id="general_information">
     <legend>General Information</legend>
 
     <p><strong>When</strong> did this expense occur? <%= form.text_field :occurred_on, :size => 10 %></p>
-    <p><strong>How much</strong> was paid? $<%= form.text_field :amount, :size => 8, :id => "expense_total", :class => "number", :onchange => "Events.updateUnassigned()" %></p>
+    <p><strong>How much</strong> was paid? $<%= text_field_tag :amount, "", :size => 8, :id => "expense_total", :class => "number", :onchange => "Events.updateUnassigned()" %></p>
     <p><strong>Who</strong> received the payment? <%= form.text_field :actor, :size => 30 %></p>
   </fieldset>
 

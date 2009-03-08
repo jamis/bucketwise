@@ -83,6 +83,7 @@ var Events = {
       $(section + '.multiple_buckets').show();
       $(section + '.single_bucket').hide();
       Events.updateBucketsFor(section);
+      $(section + '.multiple_buckets').down('input').activate();
 
     } else if(selected == '++') {
       var acctSelect = $('account_for_' + section);
@@ -161,31 +162,6 @@ var Events = {
     } else {
       $(section + ".unassigned").innerHTML = "";
     }
-  },
-
-  buildQueryStringFor: function(request) {
-    var qs = "";
-
-    $H(request).each(function(pair) {
-      if(qs.length > 0) qs += "&";
-
-      if(pair.value && typeof pair.value == "object") {
-        n = 0;
-        pair.value.each(function(item) {
-          $H(item).each(function(ipair) {
-            if(qs.length > 0) qs += "&";
-            qs += encodeURIComponent(pair.key + "[" + n + "][" + ipair.key + "]") + "=" +
-              encodeURIComponent(ipair.value);
-          });
-          n++;
-        });
-      } else {
-        qs += encodeURIComponent(pair.key) + "=" + encodeURIComponent(pair.value);
-      }
-
-    });
-
-    return qs;
   },
 
   buildXMLStringFor: function(request) {
@@ -267,7 +243,7 @@ var Events = {
 
   serializeGeneralInformation: function(request) {
     Form.getElements('general_information').each(function(field) {
-      if(!field.name.blank() && field.name != "event[amount]")
+      if(!field.name.blank())
         Events.addToRequest(request, field.name, field.value);
     });
   },

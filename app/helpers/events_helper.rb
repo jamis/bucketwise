@@ -27,4 +27,8 @@ module EventsHelper
       :disabled => true,
       :onchange => "Events.handleBucketChange(this, '#{section}')"
   end
+
+  def event_for_form
+    @event || Event.new(:occurred_on => Date.today)
+  end
 end
