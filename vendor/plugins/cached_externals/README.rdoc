@@ -1,0 +1,65 @@
+= Cached Externals
+
+This Capistrano extension provides yet another way to manage your application's external dependencies.
+
+External dependencies are a necessary evil. If you're doing Rails development, you'll automatically be dependent on the Rails framework itself, at the very least, and you probably have a handful or two of plugins that you're using as well. Traditionally, the solution to these has been to either install those dependencies globally (which breaks down when you have multiple apps that need different versions of Rails or the plugins), or to bundle them into your application directly via freeze:gems or the like (which tends to bloat your repository).
+
+Now, bloating a repository is, in itself, not a big deal. However, when it comes time to deploy your application, more data in the repository means more data to check out, resulting in longer deploy times. Some deployment strategies (like remote_cache) can help, but you're _still_ going to be copying all of that data every time you deploy your application.
+
+One solution is to use a deployment strategy like FastRemoteCache (http://github.com/37signals/fast_remote_cache), which employs hard-links instead of copying files. But your deploys will go _even faster_ if you didn't have to worry about moving or linking all the files in your external dependencies.
+
+That's where this Cached Externals plugin comes in. It capitalizes on one key concept: your external dependencies are unlikely to change frequently. Because they don't change frequently, it makes more sense to just check them out once, and simply refer to that checkout via symlinks.
+
+This means your deploys only have to add a single symbolic link for each external dependency, which can mean orders of magnitude less work for a deploy to do.
+
+== Dependencies
+
+* Capistrano 2 or later (http://www.capify.org)
+
+== Assumptions
+
+The Cached Externals plugin assumes that your external dependencies are under version control somewhere, and the repositories are accessible both locally and from your deployment targets.
+
+== Usage
+
+When using this with Rails applications, all you need to do is install this as a plugin in your application. Make sure your Capfile has a line like the following:
+
+  Dir['vendor/plugins/*/recipes/*.rb'].each { |plugin| load(plugin) }
+
+It should be just before the line that loads the 'config/deploy' file. If that line is not there, add it (or rerun "capify .").
+
+If you are not using this with a Rails application, you'll need to explicitly load recipes/cached_externals.rb in your Capfile.
+
+Next, tell Capistrano about your external dependencies. This is done via a YAML file: config/externals.yml. It describes a hash of path names that describe the external repository. For example:
+
+  ---
+  vendor/rails:
+    :type: git
+    :repository: git://github.com/rails/rails.git
+    :revision: f2d8d13c6495f2a9b3bbf3b50d869c0e5b25c207
+  vendor/plugins/exception_notification:
+    :type: git
+    :repository: git://github.com/rails/exception_notification.git
+    :revision: ed0b914ff493f9137abc4f68ee08e3c3cd7a3211
+
+Specify as many as you like. Although it is best to specify an exact revision, you can also give any revision identifier that capistrano understands (git branches, HEAD, etc.). If you do, though, Capistrano will have to resolve those pseudo-revision identifiers every time, which can slow things down a little.
+
+Once you've got your externals.yml in place, you'll need to clear away the cruft. For example, if you were going to put vendor/rails as a cached external dependency, you'd need to first remove vendor/rails from your working copy. After clearing away all of the in-repository copies of your external dependencies, you just tell capistrano to load up the cached copies:
+
+  cap local externals:setup
+
+That will cause Capistrano to read your externals.yml, checkout your dependencies, and create symlinks to them. When run locally like that, the dependencies will be checked out to ../shared/externals (e.g., up a directory from your project root).
+
+Any time you update your config/externals.yml, you'll need to rerun that command. If an external hasn't changed revision, Capistrano will notice that and will not check it out again--only those that have changed will be updated.
+
+When you deploy your application, these externals will be checked out into #{shared_path}/externals, and again, nothing will be checked out if the dependency's revision matches what has already been cached.
+
+== Tips
+
+For the fastest possible deploys, always give an exact revision identifier. This way, Capistrano may not have to query the dependency's repository at all, if nothing has changed.
+
+Also, if you're using git, it can be a pain to change branches with this plugin, because different branches may have different dependencies, or (even worse) the same dependency but at different revisions. This plugin provides a Rake task, "git:hooks:install", that installs a couple of git hook scripts: post-checkout and post-merge. (If you already have scripts defined for those, back them up before running this task, because they'll get clobbered!) These hooks will then make it so that any time you switch branches, or do a "git pull" or "git merge", the "cap local externals:setup" task will also get run, keeping your external dependencies in sync.
+
+== License
+
+This code is released under the MIT license, and is copyright (c) 2008 by 37signals, LLC. Please see the accompanying LICENSE file for the full text of the license.
