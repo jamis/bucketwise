@@ -3,17 +3,11 @@
 </script>
 
 <div id="templates" style="display: none">
-  <span id="template.payment_source">
-    <%= render :partial => "events/line_item", :locals => { :section => :payment_source } %>
-  </span>
-
-  <span id="template.credit_options">
-    <%= render :partial => "events/line_item", :locals => { :section => :credit_options } %>
-  </span>
-
-  <span id="template.deposit">
-    <%= render :partial => "events/line_item", :locals => { :section => :deposit } %>
-  </span>
+  <% %w(payment_source credit_options deposit transfer_from transfer_to).each do |section| %>
+    <span id="template.<%= section %>">
+      <%= render :partial => "events/line_item", :locals => { :section => section } %>
+    </span>
+  <% end %>
 </div>
 
 <% form_for(:event, event_for_form, :url => events_path, :html => { :id => "event_form", :onsubmit => "Events.submit(this); return false" }) do |form| %>
@@ -23,18 +17,24 @@
     <p>
       <span class="expense_label"><strong>When</strong> did this expense occur?</span>
       <span class="deposit_label"><strong>When</strong> did this deposit occur?</span>
+      <span class="transfer_label"><strong>When</strong> did this transfer occur?</span>
       <%= form.text_field :occurred_on, :size => 10 %>
     </p>
     <p>
       <span class="expense_label"><strong>How much</strong> was paid?</span>
       <span class="deposit_label"><strong>How much</strong> was deposited?</span>
+      <span class="transfer_label"><strong>How much</strong> was transferred?</span>
       $<%= text_field_tag :amount, "", :size => 8, :id => "expense_total", :class => "number", :onchange => "Events.updateUnassigned()" %>
     </p>
     <p>
       <span class="expense_label"><strong>Who</strong> received the payment?</span>
       <span class="deposit_label"><strong>What</strong> was this deposit for?</span>
+      <span class="transfer_label"><strong>What</strong> was this transfer for?</span>
       <%= form.text_field :actor, :size => 30 %>
-      </p>
+    </p>
+    <p id="check_options" style="display: none">
+      <strong>Check number</strong> (if any): <%= form.text_field :check_number, :size => 6 %>
+    </p>
   </fieldset>
 
   <fieldset id="payment_source">
@@ -42,9 +42,6 @@
 
     <p>
       <strong>Which account</strong> was this drawn from? <%= select_account(:payment_source) %>
-      <span id="check_options" style="display: none">
-        <strong>Check #</strong><%= form.text_field :check_number, :size => 6 %>
-      </span>
     </p>
 
     <p id="payment_source.single_bucket"><strong>Which bucket</strong> was this drawn from? <%= select_bucket(:payment_source) %></p>
@@ -91,5 +88,39 @@
     </div>
   </fieldset>
 
-  <p><input type="submit" value="Record this expense"> or <%= link_to_function "cancel", "Events.cancel()" %></p>
+  <fieldset id="transfer_from" style="display: none">
+    <legend>Transfer Source</legend>
+
+    <p>
+      <strong>Which account</strong> were funds transferred <strong>from</strong>? <%= select_account(:transfer_from) %>
+    </p>
+
+    <p id="transfer_from.single_bucket"><strong>Which bucket</strong> were funds transferred from? <%= select_bucket(:transfer_from) %></p>
+
+    <div id="transfer_from.multiple_buckets" style="display: none">
+      <p>This transfer pulled from multiple buckets. <span id="transfer_from.unassigned"></span></p>
+      <ol id="transfer_from.line_items">
+      </ol>
+      <p><%= link_to_function "More buckets, please!", "Events.addLineItemTo('transfer_from', true)" %></p>
+    </div>
+  </fieldset>
+
+  <fieldset id="transfer_to" style="display: none">
+    <legend>Transfer Destination</legend>
+
+    <p>
+      <strong>Which account</strong> were funds transferred <strong>to</strong>? <%= select_account(:transfer_to) %>
+    </p>
+
+    <p id="transfer_to.single_bucket"><strong>Which bucket</strong> were funds transferred to? <%= select_bucket(:transfer_to) %></p>
+
+    <div id="transfer_to.multiple_buckets" style="display: none">
+      <p>This transfer targetted from multiple buckets. <span id="transfer_to.unassigned"></span></p>
+      <ol id="transfer_to.line_items">
+      </ol>
+      <p><%= link_to_function "More buckets, please!", "Events.addLineItemTo('transfer_to', true)" %></p>
+    </div>
+  </fieldset>
+
+  <p><input type="submit" value="Record this transaction"> or <%= link_to_function "cancel", "Events.cancel()" %></p>
 <% end %>

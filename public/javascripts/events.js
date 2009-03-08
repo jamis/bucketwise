@@ -220,6 +220,14 @@ var Events = {
       Events.serializeSection(request, 'deposit', {expense:false})
     }
 
+    if($('transfer_from').visible()) {
+      Events.serializeSection(request, 'transfer_from', {expense:true})
+    }
+
+    if($('transfer_to').visible()) {
+      Events.serializeSection(request, 'transfer_to', {expense:false})
+    }
+
     return request;
   },
 
@@ -298,31 +306,42 @@ var Events = {
   revealBasicForm: function() {
     $('links').hide();
     $('new_event').show();
+    $$('.expense_label').invoke('hide');
+    $$('.deposit_label').invoke('hide');
+    $$('.transfer_label').invoke('hide');
     $('payment_source').hide();
     $('credit_options').hide();
     $('deposit').hide();
+    $('transfer_from').hide();
+    $('transfer_to').hide();
   },
 
   revealExpenseForm: function() {
     Events.revealBasicForm();
     $$('.expense_label').invoke('show');
-    $$('.deposit_label').invoke('hide');
     $('payment_source').show();
   },
 
   revealDepositForm: function() {
     Events.revealBasicForm();
-    $$('.expense_label').invoke('hide');
     $$('.deposit_label').invoke('show');
     $('deposit').show();
+  },
+
+  revealTransferForm: function() {
+    Events.revealBasicForm();
+    $$('.transfer_label').invoke('show');
+    $('transfer_from').show();
+    $('transfer_to').show();
   },
 
   reset: function() {
     $('event_form').reset();
 
-    Events.handleAccountChange($('account_for_credit_options'), 'credit_options');
-    Events.handleAccountChange($('account_for_payment_source'), 'payment_source');
-    Events.handleAccountChange($('account_for_deposit'), 'deposit');
+    ['credit_options', 'payment_source', 'deposit', 'transfer_from', 'transfer_to'].each(
+      function(section) {
+        Events.handleAccountChange($('account_for_' + section), section);
+      })
   },
 
   cancel: function() {

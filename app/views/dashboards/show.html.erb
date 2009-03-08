@@ -1,5 +1,10 @@
 <div class="header">
-  <h2 id="links">Record a new <%= link_to_function "expense", "Events.revealExpenseForm()" %> or <%= link_to_function "deposit", "Events.revealDepositForm()" %></h2>
+  <h2 id="links">
+    Record a new
+    <%= link_to_function "expense", "Events.revealExpenseForm()" %>,
+    <%= link_to_function "deposit", "Events.revealDepositForm()" %>, or
+    <%= link_to_function "transfer", "Events.revealTransferForm()" %>
+  </h2>
 </div>
 
 <div class="transaction" id="new_event" style="display: none">
