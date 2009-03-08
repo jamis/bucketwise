@@ -41,6 +41,14 @@ var Events = {
     }
   },
 
+  sectionWantsCreditOptions: function(section) {
+    return section == 'payment_source';
+  },
+
+  sectionWantsCheckOptions: function(section) {
+    return (section == 'payment_source' || section == 'transfer_from' || section == 'deposit');
+  },
+
   handleAccountChange: function(select, section) {
     $(section + '.multiple_buckets').hide();
     $(section + '.line_items').innerHTML = "";
@@ -48,22 +56,22 @@ var Events = {
 
     Events.updateBucketsFor(section, true);
 
-    if(section == 'payment_source') {
-      $('check_options').hide();
-      $('credit_options').hide();
+    if(Events.sectionWantsCreditOptions(section)) $('credit_options').hide();
+    if(Events.sectionWantsCheckOptions(section)) $(section + '.check_options').hide();
 
-      if(select.selectedIndex > 0) {
-        var acctId = parseInt(select.options[select.selectedIndex].value);
-        var account = Events.accounts[acctId];
+    if(select.selectedIndex > 0) {
+      var acctId = parseInt(select.options[select.selectedIndex].value);
+      var account = Events.accounts[acctId];
 
-        switch(account.role) {
-          case 'credit-card':
+      switch(account.role) {
+        case 'credit-card':
+          if(Events.sectionWantsCreditOptions(section))
             $('credit_options').show();
-            break;
-          case 'checking':
-            $('check_options').show();
-            break;
-        }
+          break;
+        case 'checking':
+          if(Events.sectionWantsCheckOptions(section))
+            $(section + '.check_options').show();
+          break;
       }
     }
   },
@@ -199,10 +207,6 @@ var Events = {
     request['event'] = {};
     request['event']['line_item'] = [];
 
-    if($('event_check_number').visible()) {
-      request['event']['check_number'] = $F('event_check_number');
-    }
-
     Events.serializeGeneralInformation(request);
 
     if($('payment_source').visible()) {
@@ -260,6 +264,10 @@ var Events = {
     options = options || {};
     var account_id = $F('account_for_' + section);
     var expense = (options.expense ? -1 : 1) * Money.parse('expense_total');
+
+    if(Events.sectionWantsCheckOptions(section) && $(section + '.check_options').visible()) {
+      request['event']['check_number'] = $F($(section + '.check_options').down('input'));
+    }
 
     if($(section + '.single_bucket').visible()) {
       var bucket_id = $F($(section + '.single_bucket').down('select'));
