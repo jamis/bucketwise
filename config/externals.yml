@@ -1,0 +1,4 @@
+vendor/rails:
+  :type: git
+  :repository: git://github.com/rails/rails.git
+  :revision: v2.3.1
