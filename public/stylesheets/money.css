@@ -55,6 +55,14 @@ div#container {
   font-size: 1.2em;
 }
 
+#links a.highlight {
+  padding: 0.5em 0.2em;
+  background: #5f9;
+  color: #073;
+  border: 1px solid #0a4;
+  border-top: 1px solid #5f9;
+}
+
 .content table {
   width: 100%;
   border-collapse: collapse;

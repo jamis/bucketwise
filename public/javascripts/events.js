@@ -311,8 +311,17 @@ var Events = {
     }
   },
 
+  highlightLink: function(id) {
+    $('links').select('a').each(function(link) {
+      if(link.id == id) {
+        link.addClassName('highlight');
+      } else {
+        link.removeClassName('highlight');
+      }
+    })
+  },
+
   revealBasicForm: function() {
-    $('links').hide();
     $('new_event').show();
     $$('.expense_label').invoke('hide');
     $$('.deposit_label').invoke('hide');
@@ -322,21 +331,25 @@ var Events = {
     $('deposit').hide();
     $('transfer_from').hide();
     $('transfer_to').hide();
+    $('event_occurred_on').activate();
   },
 
   revealExpenseForm: function() {
+    Events.highlightLink('expense_link');
     Events.revealBasicForm();
     $$('.expense_label').invoke('show');
     $('payment_source').show();
   },
 
   revealDepositForm: function() {
+    Events.highlightLink('deposit_link');
     Events.revealBasicForm();
     $$('.deposit_label').invoke('show');
     $('deposit').show();
   },
 
   revealTransferForm: function() {
+    Events.highlightLink('transfer_link');
     Events.revealBasicForm();
     $$('.transfer_label').invoke('show');
     $('transfer_from').show();
@@ -353,9 +366,9 @@ var Events = {
   },
 
   cancel: function() {
+    Events.highlightLink("");
     Events.reset();
     $('new_event').hide();
-    $('links').show();
   },
 
   expand: function(id) {

@@ -1,5 +1,5 @@
 # This file is auto-generated from the current state of the database. Instead of editing this file, 
-# please use the migrations feature of ActiveRecord to incrementally modify your database, and
+# please use the migrations feature of Active Record to incrementally modify your database, and
 # then regenerate this schema definition.
 #
 # Note that this schema.rb definition is the authoritative source for your database schema. If you need
@@ -50,9 +50,9 @@ ActiveRecord::Schema.define(:version => 20080513032848) do
     t.datetime "updated_at"
   end
 
-  add_index "events", ["subscription_id", "created_at"], :name => "index_events_on_subscription_id_and_created_at"
-  add_index "events", ["subscription_id", "check_number"], :name => "index_events_on_subscription_id_and_check_number"
   add_index "events", ["subscription_id", "actor"], :name => "index_events_on_subscription_id_and_actor"
+  add_index "events", ["subscription_id", "check_number"], :name => "index_events_on_subscription_id_and_check_number"
+  add_index "events", ["subscription_id", "created_at"], :name => "index_events_on_subscription_id_and_created_at"
   add_index "events", ["subscription_id", "occurred_on"], :name => "index_events_on_subscription_id_and_occurred_on"
 
   create_table "line_items", :force => true do |t|
@@ -63,8 +63,8 @@ ActiveRecord::Schema.define(:version => 20080513032848) do
     t.string  "role",       :limit => 20
   end
 
-  add_index "line_items", ["bucket_id"], :name => "index_line_items_on_bucket_id"
   add_index "line_items", ["account_id"], :name => "index_line_items_on_account_id"
+  add_index "line_items", ["bucket_id"], :name => "index_line_items_on_bucket_id"
   add_index "line_items", ["event_id"], :name => "index_line_items_on_event_id"
 
   create_table "subscriptions", :force => true do |t|
@@ -79,8 +79,8 @@ ActiveRecord::Schema.define(:version => 20080513032848) do
     t.datetime "created_at",      :null => false
   end
 
-  add_index "user_subscriptions", ["user_id"], :name => "index_user_subscriptions_on_user_id"
   add_index "user_subscriptions", ["subscription_id", "user_id"], :name => "index_user_subscriptions_on_subscription_id_and_user_id", :unique => true
+  add_index "user_subscriptions", ["user_id"], :name => "index_user_subscriptions_on_user_id"
 
   create_table "users", :force => true do |t|
     t.string   "name",         :null => false
