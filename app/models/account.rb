@@ -30,6 +30,17 @@ class Account < ActiveRecord::Base
     @balance ||= account_items.sum(:amount) || 0
   end
 
+  def available_balance
+    @available_balance ||= balance - unavailable_balance
+  end
+
+  def unavailable_balance
+    @unavailable_balance ||= begin
+      aside = buckets.detect { |bucket| bucket.role == 'aside' }
+      aside && aside.balance > 0 ? aside.balance : 0
+    end
+  end
+
   protected
 
     def create_default_buckets

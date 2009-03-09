@@ -132,6 +132,11 @@ td.number {
   padding-left: 0.5em;
 }
 
+span.real_balance {
+  font-size: 80%;
+  color: #999;
+}
+
 td.negative {
   color: red;
 }
