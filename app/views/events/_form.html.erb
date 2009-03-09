@@ -11,6 +11,10 @@
 </div>
 
 <% form_for(:event, event_for_form, :url => events_path, :html => { :id => "event_form", :onsubmit => "Events.submit(this); return false" }) do |form| %>
+  <div id="success_notice" class="notice" style="display: none;">
+    <p>Your transaction has been recorded. You may enter another one, or <%= link_to_function "close this form", "Events.cancel()" %>.</p>
+  </div>
+
   <fieldset id="general_information">
     <legend>General Information</legend>
 

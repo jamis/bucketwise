@@ -220,6 +220,21 @@ div.transaction {
   padding: 0.3em 1em;
 }
 
+div.transaction div.notice {
+  padding: 0 1em;
+  border: 2px solid #050;
+  background: #9f9;
+  color: #050;
+}
+
+div.transaction div.notice p {
+  margin: 0.5em 0;
+  padding-left: 24px;
+  background-image: url("/images/success16.png");
+  background-repeat: no-repeat;
+  background-position: left middle;
+}
+
 div.transaction input {
   font-size: 1em;
 }

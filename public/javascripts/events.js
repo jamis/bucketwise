@@ -143,6 +143,7 @@ var Events = {
   },
 
   updateUnassigned: function() {
+    $('success_notice').hide();
     Events.updateUnassignedFor('payment_source');
     Events.updateUnassignedFor('credit_options');
   },
@@ -323,6 +324,7 @@ var Events = {
 
   revealBasicForm: function() {
     $('new_event').show();
+    $('success_notice').hide();
     $$('.expense_label').invoke('hide');
     $$('.deposit_label').invoke('hide');
     $$('.transfer_label').invoke('hide');
