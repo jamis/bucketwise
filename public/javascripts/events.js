@@ -146,6 +146,9 @@ var Events = {
     $('success_notice').hide();
     Events.updateUnassignedFor('payment_source');
     Events.updateUnassignedFor('credit_options');
+    Events.updateUnassignedFor('deposit');
+    Events.updateUnassignedFor('transfer_from');
+    Events.updateUnassignedFor('transfer_to');
   },
 
   computeUnassignedFor: function(section) {
