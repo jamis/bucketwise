@@ -2,3 +2,7 @@ vendor/rails:
   :type: git
   :repository: git://github.com/rails/rails.git
   :revision: v2.3.1
+vendor/plugins/project_search:
+  :type: git
+  :repository: git://github.com/37signals/project_search.git
+  :revision: 5d243711fbbd69ac08ba86418316bd15cffa0642
