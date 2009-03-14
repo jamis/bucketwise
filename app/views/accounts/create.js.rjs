@@ -1,3 +1,8 @@
+if @account.balance != 0
+  page['recent_entries'].replace_html :partial => "events/event",
+    :collection => subscription.events.recent
+end
+
 page['accounts_summary'].replace_html :partial => "accounts/account",
   :collection => subscription.accounts(:reload)
 page.accounts.hide_form

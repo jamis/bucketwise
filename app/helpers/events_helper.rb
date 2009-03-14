@@ -11,6 +11,14 @@ module EventsHelper
     end
   end
 
+  def links_to_accounts_for_event(event)
+    links = event.account_items.map do |item|
+      link_to(h(item.account.name), item.account)
+    end
+
+    links.join(", ")
+  end
+
   def select_account(section)
     accounts = subscription.accounts.to_a
     accounts = accounts.select { |a| yield a } if block_given?

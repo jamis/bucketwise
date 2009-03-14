@@ -89,8 +89,18 @@ div#container {
   margin-bottom: 2em;
 }
 
-td {
+td, th {
   text-align: left;
+  vertical-align: top;
+}
+
+.account_links {
+  font-size: 90%;
+  opacity: 0.5;
+}
+
+.zoomed .account_links {
+  display: none;
 }
 
 tr.account {

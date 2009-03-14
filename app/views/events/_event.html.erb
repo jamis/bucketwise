@@ -6,7 +6,10 @@
           :html => { :class => "expand" } %>
     <%= link_to_function "[-]", "Events.collapse(#{event.id})", :class => "collapse" %>
   </td>
-  <td><%=h event.actor %></td>
+  <td>
+    <%=h event.actor %><br />
+    <span class="account_links"><%= links_to_accounts_for_event(event) %></span>
+  </td>
   <td class="number"><%= event.balance > 0 ? format_amount(event.balance) : "" %></td>
   <td class="negative number"><%= event.balance < 0 ? format_amount(event.balance) : "" %></td>
 </tr>
