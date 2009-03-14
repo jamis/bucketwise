@@ -32,9 +32,9 @@ class Event < ActiveRecord::Base
           account = subscription.accounts.find(item[:account_id])
 
           if item[:bucket_id] =~ /^n:(.*)/
-            item[:bucket_id] = account.buckets.find_or_create_by_name($1).id
+            item[:bucket_id] = account.buckets.find_or_create_by_name(:name => $1, :author => user).id
           elsif item[:bucket_id] =~ /^r:(.*)/
-            item[:bucket_id] = account.buckets.for_role($1).id
+            item[:bucket_id] = account.buckets.for_role($1, user).id
           else
             account.buckets.find(item[:bucket_id])
           end

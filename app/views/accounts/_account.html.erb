@@ -1,4 +1,4 @@
-<tr class="account">
+<tr class="account" id="<%= dom_id(account) %>">
   <th><%= link_to(account.name, account) %></th>
   <%= balance_cell(account, "total") %>
 </tr>

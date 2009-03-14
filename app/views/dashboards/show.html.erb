@@ -7,7 +7,7 @@
   </h2>
 </div>
 
-<div class="transaction" id="new_event" style="display: none">
+<div class="transaction form" id="new_event" style="display: none">
   <%= render :partial => "events/form" %>
 </div>
 
@@ -18,7 +18,11 @@
     <%= render :partial => "events/event", :collection => subscription.events.recent %>
   </table>
 
-  <h2>Accounts summary</h2>
+  <h2 id="accounts_summary_header"><span class="actions"><%= link_to_function "Add an account", "Accounts.revealForm()" %></span>Accounts summary</h2>
+  <div id="new_account" class="form" style="display: none">
+    <%= render :partial => "accounts/form" %>
+  </div>
+
 
   <table id="accounts_summary">
     <%= render :partial => "accounts/account", :collection => subscription.accounts %>

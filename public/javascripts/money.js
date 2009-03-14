@@ -7,8 +7,14 @@ var Money = {
     return Math.floor(Math.abs(dollars) * 100);
   },
 
-  parse: function(field) {
-    var result = Money.cents(parseFloat($F(field)));
-    return isNaN(result) ? 0 : result;
+  parse: function(field, keepNegative) {
+    var value = $F(field).gsub(/[^-+\d.]/, "");
+    var raw = parseFloat(value);
+    var sign = 1;
+
+    if(raw < 0 && keepNegative) sign = -1;
+
+    var result = Money.cents(raw);
+    return isNaN(result) ? 0 : (sign * result);
   }
 }

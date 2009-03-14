@@ -1,0 +1,4 @@
+page['accounts_summary'].replace_html :partial => "accounts/account",
+  :collection => subscription.accounts(:reload)
+page.accounts.hide_form
+page.visual_effect :highlight, dom_id(@account)

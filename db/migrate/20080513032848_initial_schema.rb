@@ -26,6 +26,7 @@ class InitialSchema < ActiveRecord::Migration
 
     create_table :accounts do |t|
       t.integer :subscription_id, :null => false
+      t.integer :user_id, :null => false
       t.string  :name, :null => false
       t.string  :role
       t.timestamps
@@ -35,6 +36,7 @@ class InitialSchema < ActiveRecord::Migration
 
     create_table :buckets do |t|
       t.integer :account_id, :null => false
+      t.integer :user_id, :null => false
       t.string  :name, :null => false
       t.string  :role
       t.timestamps

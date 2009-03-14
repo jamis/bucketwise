@@ -14,7 +14,7 @@ module DashboardsHelper
       content = "<span class='real_balance'>(" << format_amount(real_balance) << ")</span> #{content}"
     end
 
-    content_tag("td", content, :class => classes.join(" "), :style => "white-space: nowrap")
+    content_tag("td", content, :class => classes.join(" "))
   end
 
   def format_amount(amount)

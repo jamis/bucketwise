@@ -22,6 +22,7 @@ ActiveRecord::Schema.define(:version => 20080513032848) do
 
   create_table "accounts", :force => true do |t|
     t.integer  "subscription_id", :null => false
+    t.integer  "user_id",         :null => false
     t.string   "name",            :null => false
     t.string   "role"
     t.datetime "created_at"
@@ -32,6 +33,7 @@ ActiveRecord::Schema.define(:version => 20080513032848) do
 
   create_table "buckets", :force => true do |t|
     t.integer  "account_id", :null => false
+    t.integer  "user_id",    :null => false
     t.string   "name",       :null => false
     t.string   "role"
     t.datetime "created_at"

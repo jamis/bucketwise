@@ -55,6 +55,26 @@ div#container {
   font-size: 1.2em;
 }
 
+.content h2.anchor {
+  margin-bottom: 0;
+}
+
+.content h2 span.actions {
+  float: right;
+  font-size: 80%;
+  font-weight: normal;
+  margin-top: 0.25em;
+}
+
+.content h2 span.actions a {
+  opacity: 0.5;
+  text-decoration: underline;
+}
+
+.content h2 span.actions a:hover {
+  opacity: 1.0;
+}
+
 #links a.highlight {
   padding: 0.5em 0.2em;
   background: #5f9;
@@ -130,6 +150,7 @@ td.number {
   text-align: right;
   width: 1px;
   padding-left: 0.5em;
+  white-space: nowrap;
 }
 
 span.real_balance {
@@ -215,9 +236,53 @@ td.zoom tr.even td {
   background: #eea;
 }
 
-div.transaction {
+.form {
   background: #eee;
   padding: 0.3em 1em;
+}
+
+.form input {
+  font-size: 1em;
+}
+
+.form select {
+  font-size: 1em;
+}
+
+.form fieldset {
+  border: 2px solid #ccc;
+  margin-top: 0.5em;
+  background: white;
+}
+
+.form fieldset legend {
+  color: #777;
+  font-size: 0.9em;
+  font-weight: bold;
+  background: white;
+  padding: 0 0.4em;
+}
+
+.form p {
+}
+
+.form .instructions {
+  font-size: 90%;
+  border: 1px solid #ccc;
+  background: #cfc;
+  padding: 0 1em;
+  color: #070;
+}
+
+.form p small {
+  color: #c75;
+}
+
+.form strong {
+  font-weight: bold;
+  color: black;
+  background: #ffc;
+  padding: 2px;
 }
 
 div.transaction div.notice {
@@ -235,40 +300,24 @@ div.transaction div.notice p {
   background-position: left middle;
 }
 
-div.transaction input {
-  font-size: 1em;
+div#new_account {
+  width: 30em;
+  margin: 0 auto;
 }
 
-div.transaction select {
-  font-size: 1em;
+div#new_account input.text {
+  display: block;
+  font-size: 1.2em;
+  font-weight: bold;
+  color: #007;
+  padding: 0.1em;
+  margin: 0.25em;
+  width: 95%;
 }
 
-div.transaction fieldset {
-  border: 2px solid #ccc;
-  margin-top: 0.5em;
-  background: white;
-}
-
-div.transaction fieldset legend {
-  color: #777;
+div#new_account div.role {
+  margin: 0.25em;
   font-size: 0.9em;
-  font-weight: bold;
-  background: white;
-  padding: 0 0.4em;
-}
-
-div.transaction p {
-}
-
-div.transaction p small {
-  color: #c75;
-}
-
-div.transaction strong {
-  font-weight: bold;
-  color: black;
-  background: #ffc;
-  padding: 2px;
 }
 
 input.number {
