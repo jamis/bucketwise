@@ -3,7 +3,7 @@ module EventsHelper
     subscription.accounts.inject("") do |memo, account|
       memo << "," unless memo.blank?
       memo << account.id.to_s << ":{id:#{account.id},name:#{account.name.to_json},role:#{account.role.to_json},buckets:["
-      memo << account.buckets.inject("") do |m, bucket|
+      memo << account.buckets.sort_by(&:name).inject("") do |m, bucket|
         m << "," unless m.blank?
         m << "{id:#{bucket.id},name:#{bucket.name.to_json},role:#{bucket.role.to_json}}"
       end
