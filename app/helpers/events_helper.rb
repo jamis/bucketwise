@@ -19,6 +19,15 @@ module EventsHelper
     links.join(", ")
   end
 
+  def form_sections
+    %w(general
+       payment_source
+       credit_options
+       deposit
+       transfer_from
+       transfer_to)
+  end
+
   def select_account(section)
     accounts = subscription.accounts.to_a
     accounts = accounts.select { |a| yield a } if block_given?

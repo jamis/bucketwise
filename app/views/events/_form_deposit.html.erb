@@ -1,0 +1,19 @@
+<fieldset id="deposit" style="display: none">
+  <legend>Deposit Information</legend>
+
+  <p>
+    <strong>Which account</strong> was this deposited to? <%= select_account(:deposit) %>
+    <span id="deposit.check_options" style="display: none">
+      <strong>Check #</strong><%= form.text_field :check_number, :size => 6 %>
+    </span>
+  </p>
+
+  <p id="deposit.single_bucket"><strong>Which bucket</strong> was this deposited to? <%= select_bucket(:deposit) %></p>
+
+  <div id="deposit.multiple_buckets" style="display: none">
+    <p>This deposit was to multiple buckets. <span id="deposit.unassigned"></span></p>
+    <ol id="deposit.line_items">
+    </ol>
+    <p><%= link_to_function "More buckets, please!", "Events.addLineItemTo('deposit', true)" %></p>
+  </div>
+</fieldset>

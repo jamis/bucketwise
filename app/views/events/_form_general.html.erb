@@ -1,0 +1,22 @@
+<fieldset id="general_information">
+  <legend>General Information</legend>
+
+  <p>
+    <span class="expense_label"><strong>When</strong> did this expense occur?</span>
+    <span class="deposit_label"><strong>When</strong> did this deposit occur?</span>
+    <span class="transfer_label"><strong>When</strong> did this transfer occur?</span>
+    <%= form.text_field :occurred_on, :size => 10 %>
+  </p>
+  <p>
+    <span class="expense_label"><strong>How much</strong> was paid?</span>
+    <span class="deposit_label"><strong>How much</strong> was deposited?</span>
+    <span class="transfer_label"><strong>How much</strong> was transferred?</span>
+    $<%= text_field_tag :amount, "", :size => 8, :id => "expense_total", :class => "number", :onchange => "Events.updateUnassigned()" %>
+  </p>
+  <p>
+    <span class="expense_label"><strong>Who</strong> received the payment?</span>
+    <span class="deposit_label"><strong>What</strong> was this deposit for?</span>
+    <span class="transfer_label"><strong>What</strong> was this transfer for?</span>
+    <%= form.text_field :actor, :size => 30 %>
+  </p>
+</fieldset>
