@@ -5,7 +5,7 @@
 <% reset_cycle %>
 <%= render(account.buckets.recent) %>
 <% if account.buckets.length > 5 %>
-  <tr class="bucket <%= cycle('odd', 'even') %>">
+  <tr class="bucket">
     <td colspan="2" class="more">
       &rarr;
       <%= link_to "See all #{account.buckets.length} buckets", account_buckets_path(account) %>

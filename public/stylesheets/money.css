@@ -143,6 +143,11 @@ tr.bucket td.number {
   opacity: 0.5;
 }
 
+tr.bucket td.more {
+  border-top: 1px dotted #ccc;
+  padding-left: 0;
+}
+
 tr.bucket td.more a {
   color: #00f;
   display: inline;
