@@ -1,12 +1,12 @@
 module DashboardsHelper
-  def balance_cell(account_or_bucket, extra_classes=nil)
+  def balance_cell(account_or_bucket, options={})
     balance = real_balance = account_or_bucket.balance
     if account_or_bucket.respond_to?(:available_balance)
       balance = account_or_bucket.available_balance
     end
 
     classes = %w(number)
-    classes += Array(extra_classes) if extra_classes
+    classes += Array(options[:classes]) if options[:classes]
     classes << "negative" if balance < 0
 
     content = format_amount(balance)
@@ -14,7 +14,7 @@ module DashboardsHelper
       content = "<span class='real_balance'>(" << format_amount(real_balance) << ")</span> #{content}"
     end
 
-    content_tag("td", content, :class => classes.join(" "))
+    content_tag(options.fetch(:tag, "td"), content, :class => classes.join(" "))
   end
 
   def format_amount(amount)

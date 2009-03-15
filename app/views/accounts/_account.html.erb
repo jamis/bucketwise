@@ -1,10 +1,18 @@
 <tr class="account" id="<%= dom_id(account) %>">
   <th><%= link_to(account.name, account) %></th>
-  <%= balance_cell(account, "total") %>
+  <%= balance_cell(account, :classes => "total") %>
 </tr>
-<% reset_cycle; account.buckets.each do |bucket| %>
+<% reset_cycle; account.buckets.recent.each do |bucket| %>
   <tr class="bucket <%= cycle('odd', 'even') %>">
     <td><%= link_to(bucket.name, bucket) %></td>
     <%= balance_cell(bucket) %>
+  </tr>
+<% end %>
+<% if account.buckets.length > 5 %>
+  <tr class="bucket <%= cycle('odd', 'even') %>">
+    <td colspan="2" class="more">
+      &rarr;
+      <%= link_to "See all #{account.buckets.length} buckets", account_buckets_path(account) %>
+    </td>
   </tr>
 <% end %>

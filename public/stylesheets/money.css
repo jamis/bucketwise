@@ -75,6 +75,10 @@ div#container {
   opacity: 1.0;
 }
 
+.content h2 span.balance {
+  float: right;
+}
+
 #links a.highlight {
   padding: 0.5em 0.2em;
   background: #5f9;
@@ -168,7 +172,7 @@ span.real_balance {
   color: #999;
 }
 
-td.negative {
+.negative {
   color: red;
 }
 

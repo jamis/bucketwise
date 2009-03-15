@@ -1,0 +1,10 @@
+<div id="data" class="content">
+  <h2>
+    <%= balance_cell(account, :classes => %w(total balance), :tag => "span") %>
+    <%=h account.name %>
+  </h2>
+
+  <table class="entries">
+    <%= render :partial => "account_items/account_item", :collection => @items %>
+  </table>
+</div>

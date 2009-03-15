@@ -12,12 +12,13 @@
 ActiveRecord::Schema.define(:version => 20080513032848) do
 
   create_table "account_items", :force => true do |t|
-    t.integer "event_id",   :null => false
-    t.integer "account_id", :null => false
-    t.integer "amount",     :null => false
+    t.integer "event_id",    :null => false
+    t.integer "account_id",  :null => false
+    t.integer "amount",      :null => false
+    t.date    "occurred_on", :null => false
   end
 
-  add_index "account_items", ["account_id"], :name => "index_account_items_on_account_id"
+  add_index "account_items", ["account_id", "occurred_on"], :name => "index_account_items_on_account_id_and_occurred_on"
   add_index "account_items", ["event_id"], :name => "index_account_items_on_event_id"
 
   create_table "accounts", :force => true do |t|
@@ -41,6 +42,7 @@ ActiveRecord::Schema.define(:version => 20080513032848) do
   end
 
   add_index "buckets", ["account_id", "name"], :name => "index_buckets_on_account_id_and_name", :unique => true
+  add_index "buckets", ["account_id", "updated_at"], :name => "index_buckets_on_account_id_and_updated_at"
 
   create_table "events", :force => true do |t|
     t.integer  "subscription_id", :null => false
@@ -58,15 +60,16 @@ ActiveRecord::Schema.define(:version => 20080513032848) do
   add_index "events", ["subscription_id", "occurred_on"], :name => "index_events_on_subscription_id_and_occurred_on"
 
   create_table "line_items", :force => true do |t|
-    t.integer "event_id",                 :null => false
-    t.integer "account_id",               :null => false
-    t.integer "bucket_id",                :null => false
-    t.integer "amount",                   :null => false
-    t.string  "role",       :limit => 20
+    t.integer "event_id",                  :null => false
+    t.integer "account_id",                :null => false
+    t.integer "bucket_id",                 :null => false
+    t.integer "amount",                    :null => false
+    t.string  "role",        :limit => 20
+    t.date    "occurred_on",               :null => false
   end
 
   add_index "line_items", ["account_id"], :name => "index_line_items_on_account_id"
-  add_index "line_items", ["bucket_id"], :name => "index_line_items_on_bucket_id"
+  add_index "line_items", ["bucket_id", "occurred_on"], :name => "index_line_items_on_bucket_id_and_occurred_on"
   add_index "line_items", ["event_id"], :name => "index_line_items_on_event_id"
 
   create_table "subscriptions", :force => true do |t|
