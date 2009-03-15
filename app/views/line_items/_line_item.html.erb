@@ -1,0 +1,12 @@
+<tr id="<%= dom_id(line_item.event) %>" class="<%= cycle('odd', 'even') %>">
+  <td class="date"><%= line_item.occurred_on.strftime("%Y-%m-%d") %></td>
+  <td id="<%= dom_id(line_item.event, :expand) %>" class="expand">
+    <%= link_to_remote "[+]", :url => event_path(line_item.event), :method => :get,
+          :before => "Events.expand(#{line_item.event_id})",
+          :html => { :class => "expand" } %>
+    <%= link_to_function "[-]", "Events.collapse(#{line_item.event_id})", :class => "collapse" %>
+  </td>
+  <td><%=h line_item.event.actor %></td>
+  <td class="number"><%= line_item.amount > 0 ? format_amount(line_item.amount) : "" %></td>
+  <td class="negative number"><%= line_item.amount < 0 ? format_amount(line_item.amount) : "" %></td>
+</tr>
