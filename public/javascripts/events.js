@@ -389,5 +389,13 @@ var Events = {
     $('expand_event_' + id).className = "expand";
     $('event_' + id).removeClassName('zoomed');
     $('zoomed_event_' + id).remove();
+  },
+
+  onMouseOver: function(id) {
+    $('event_' + id).addClassName("hover");
+  },
+
+  onMouseOut: function(id) {
+    $('event_' + id).removeClassName("hover");
   }
 }

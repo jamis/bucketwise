@@ -1,0 +1,17 @@
+<tr id="<%= dom_id(event) %>" class="<%= cycle('odd', 'even') %>" onmouseover="Events.onMouseOver(<%= event.id %>)" onmouseout="Events.onMouseOut(<%= event.id %>)">
+  <td class="date"><%= event.occurred_on.strftime("%Y-%m-%d") %></td>
+  <td id="<%= dom_id(event, :expand) %>" class="expand">
+    <%= link_to_remote "[+]", :url => event_path(event), :method => :get,
+          :before => "Events.expand(#{event.id})",
+          :html => { :class => "expand" } %>
+    <%= link_to_function "[-]", "Events.collapse(#{event.id})", :class => "collapse" %>
+  </td>
+  <td>
+    <%=h event.actor %>
+    <% if account_links %>
+      <br /><span class="account_links"><%= links_to_accounts_for_event(event) %></span>
+    <% end %>
+  </td>
+  <td class="number"><%= amount > 0 ? format_amount(amount) : "" %></td>
+  <td class="negative number"><%= amount < 0 ? format_amount(amount) : "" %></td>
+</tr>

@@ -235,6 +235,14 @@ table.entries td.zoom {
   border-top: 3px solid #777;
 }
 
+table.entries tr.odd.hover td {
+  background: #ffe;
+}
+
+table.entries tr.even.hover td {
+  background: #eed;
+}
+
 td.zoom table {
   border-right: 3px solid #777;
   border-bottom: 3px solid #777;

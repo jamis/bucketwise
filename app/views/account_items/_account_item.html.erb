@@ -1,12 +1,5 @@
-<tr id="<%= dom_id(account_item.event) %>" class="<%= cycle('odd', 'even') %>">
-  <td class="date"><%= account_item.occurred_on.strftime("%Y-%m-%d") %></td>
-  <td id="<%= dom_id(account_item.event, :expand) %>" class="expand">
-    <%= link_to_remote "[+]", :url => event_path(account_item.event), :method => :get,
-          :before => "Events.expand(#{account_item.event_id})",
-          :html => { :class => "expand" } %>
-    <%= link_to_function "[-]", "Events.collapse(#{account_item.event_id})", :class => "collapse" %>
-  </td>
-  <td><%=h account_item.event.actor %></td>
-  <td class="number"><%= account_item.amount > 0 ? format_amount(account_item.amount) : "" %></td>
-  <td class="negative number"><%= account_item.amount < 0 ? format_amount(account_item.amount) : "" %></td>
-</tr>
+<%= render :partial => "events/row",
+      :locals => {
+        :event         => account_item.event,
+        :amount        => account_item.amount,
+        :account_links => false } %>
