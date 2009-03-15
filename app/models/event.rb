@@ -39,13 +39,13 @@ class Event < ActiveRecord::Base
             account.buckets.find(item[:bucket_id])
           end
 
-          item = line_items.create(item)
+          item = line_items.create(item.merge(:occurred_on => occurred_on))
           summaries[item.account_id] += item.amount
         end
 
         summaries.each do |account_id, amount|
-          next if amount == 0
-          account_items.create(:account_id => account_id, :amount => amount)
+          account_items.create(:account_id => account_id,
+            :amount => amount, :occurred_on => occurred_on)
         end
 
         @line_items_to_realize = nil
