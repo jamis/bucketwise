@@ -1,6 +1,6 @@
 <div id="data" class="content">
   <h2>
-    <%= balance_cell(bucket, :classes => %w(total balance), :tag => "span") %>
+    <%= balance_cell(bucket, :classes => %w(total balance), :tag => "span", :id => "balance") %>
     <%= link_to(h(bucket.account.name), bucket.account) %>: <%=h bucket.name %>
   </h2>
 

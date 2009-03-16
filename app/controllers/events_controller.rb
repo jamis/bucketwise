@@ -8,6 +8,10 @@ class EventsController < ApplicationController
     @event = subscription.events.create(params[:event].merge(:user_id => user.id))
   end
 
+  def destroy
+    event.destroy
+  end
+
   protected
 
     attr_reader :event

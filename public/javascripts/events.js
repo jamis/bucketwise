@@ -403,5 +403,20 @@ var Events = {
   onMouseOut: function(id) {
     $('event_' + id).removeClassName("hover");
     $('nubbin_event_' + id).hide();
+  },
+
+  destroy: function(id) {
+    var table = $('event_' + id).up('table');
+    $('event_' + id).remove();
+    if($('zoomed_event_' + id)) $('zoomed_event_' + id).remove();
+    var i = 1;
+    table.select('tr').each(function(row) {
+      row.removeClassName('odd').removeClassName('even');
+      if(i % 2 == 0)
+        row.addClassName('even');
+      else
+        row.addClassName('odd');
+      i++;
+    })
   }
 }

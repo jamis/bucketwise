@@ -22,4 +22,9 @@ class ApplicationController < ActionController::Base
     def find_user
       @user = @subscription.owner
     end
+
+    def current_location
+      controller_name
+    end
+    helper_method :current_location
 end

@@ -18,4 +18,12 @@ class AccountsController < ApplicationController
     def find_account
       @account = subscription.accounts.find(params[:id])
     end
+
+    def current_location
+      if account
+        "accounts/%d" % account.id
+      else
+        super
+      end
+    end
 end

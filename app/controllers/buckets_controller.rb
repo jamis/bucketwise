@@ -23,4 +23,12 @@ class BucketsController < ApplicationController
       @bucket = Bucket.find(params[:id])
       @account = subscription.accounts.find(@bucket.account_id)
     end
+
+    def current_location
+      if bucket
+        "buckets/%d" % bucket.id
+      else
+        super
+      end
+    end
 end
