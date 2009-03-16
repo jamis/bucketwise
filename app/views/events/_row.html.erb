@@ -1,10 +1,13 @@
 <tr id="<%= dom_id(event) %>" class="<%= cycle('odd', 'even') %>" onmouseover="Events.onMouseOver(<%= event.id %>)" onmouseout="Events.onMouseOut(<%= event.id %>)">
-  <td class="date"><%= event.occurred_on.strftime("%Y-%m-%d") %></td>
-  <td id="<%= dom_id(event, :expand) %>" class="expand">
-    <%= link_to_remote "[+]", :url => event_path(event), :method => :get,
-          :before => "Events.expand(#{event.id})",
-          :html => { :class => "expand" } %>
-    <%= link_to_function "[-]", "Events.collapse(#{event.id})", :class => "collapse" %>
+  <td class="date">
+    <div id="<%= dom_id(event, :nubbin) %>" style="display: none" class="nubbin">
+      <a href="#">&#x270e;</a> |
+      <a href="#">&#x2716;</a> |
+      <%= link_to_remote "&#x24d8;", :url => event_path(event), :method => :get, :before => "Events.expand(#{event.id})", :html => { :class => "zoom" } %>
+      <span class="zooming">&#x231b;</span>
+      <%= link_to_function "&#x2713;", "Events.collapse(#{event.id})", :class => "zoomed" %>
+    </div>
+    <%= event.occurred_on.strftime("%Y-%m-%d") %>
   </td>
   <td>
     <%=h event.actor %>

@@ -107,6 +107,22 @@ td, th {
   display: none;
 }
 
+.nubbin .zooming, .nubbin .zoomed {
+  display: none;
+}
+
+.zooming .nubbin .zoom, .zoomed .nubbin .zoom {
+  display: none;
+}
+
+.zooming .nubbin .zooming {
+  display: inline;
+}
+
+.zoomed .nubbin .zoomed {
+  display: inline;
+}
+
 tr.account {
   line-height: 2em;
   background: #bfb;
@@ -349,4 +365,10 @@ div#new_account div.role {
 
 input.number {
   text-align: right;
+}
+
+.nubbin {
+  position: absolute;
+  padding: 0.1em 0.5em;
+  border-right: 1px solid #555;
 }

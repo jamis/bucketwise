@@ -1,5 +1,5 @@
 <tr class="zoom" id="<%= dom_id(event, :zoomed) %>">
-  <td class="zoom" colspan="5">
+  <td class="zoom" colspan="4">
     <table>
       <% reset_cycle('expanded'); event.line_items.each do |item| %>
         <tr class="<%= cycle('odd', 'even', :name => 'expanded') %>">

@@ -377,25 +377,31 @@ var Events = {
   },
 
   expand: function(id) {
-    $('expand_event_' + id).className = "expanding";
-    $('event_' + id).addClassName('zoomed');
+    if($('zoomed_event_' + id)) return false;
+    $('event_' + id).addClassName('zooming');
   },
 
   expanded: function(id) {
-    $('expand_event_' + id).className = "expanded";
+    $('event_' + id).removeClassName('zooming');
+    $('event_' + id).addClassName('zoomed');
   },
 
   collapse: function(id) {
-    $('expand_event_' + id).className = "expand";
     $('event_' + id).removeClassName('zoomed');
     $('zoomed_event_' + id).remove();
   },
 
   onMouseOver: function(id) {
     $('event_' + id).addClassName("hover");
+    var nubbin = $('nubbin_event_' + id);
+    var offset = nubbin.parentNode.cumulativeOffset();
+
+    nubbin.show();
+    nubbin.style.left = (offset.left - nubbin.getWidth()) + "px";
   },
 
   onMouseOut: function(id) {
     $('event_' + id).removeClassName("hover");
+    $('nubbin_event_' + id).hide();
   }
 }
