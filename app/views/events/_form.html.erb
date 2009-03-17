@@ -15,8 +15,10 @@
     <p>Your transaction has been recorded. You may enter another one, or <%= link_to_function "close this form", "Events.cancel()" %>.</p>
   </div>
 
+  <%= render :partial => "events/form_general", :locals => { :form => form } %>
+
   <% form_sections.each do |section| %>
-    <%= render :partial => "events/form_#{section}", :locals => { :form => form } %>
+    <%= render_event_form_section(form, section) %>
   <% end %>
 
   <p><input type="submit" value="Record this transaction"> or <%= link_to_function "cancel", "Events.cancel()" %></p>

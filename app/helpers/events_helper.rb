@@ -20,29 +20,25 @@ module EventsHelper
   end
 
   def form_sections
-    %w(general
-       payment_source
+    %w(payment_source
        credit_options
        deposit
        transfer_from
        transfer_to)
   end
 
-  def select_account(section)
-    accounts = subscription.accounts.to_a
-    accounts = accounts.select { |a| yield a } if block_given?
-
-    account = @event && @event.account_for(section)
-    selection = account ? account.id : nil
-
-    select_tag "event[#{section}][][account_id]", 
-      options_for_select([["", ""]] + accounts.map { |acct| [acct.name, acct.id] }, selection),
+  def select_account(section, accounts, selection)
+    select_tag "event[#{section}][account_id]", 
+      options_for_select(
+        (selection ? [] : [["", ""]]) +
+          accounts.map { |acct| [acct.name, acct.id] },
+        selection),
       :id => "account_for_#{section}",
       :onchange => "Events.handleAccountChange(this, '#{section}')"
   end
 
   def select_bucket(section, options={})
-    select_tag "event[#{section}][][bucket_id]", "<option>-- Select an account --</option>",
+    select_tag "event[#{section}][bucket_id]", "<option>-- Select an account --</option>",
       :class => ["bucket_for_#{section}", options.fetch(:splittable, true) ? "splittable" : nil].compact.join(" "),
       :disabled => true,
       :onchange => "Events.handleBucketChange(this, '#{section}')"
@@ -58,5 +54,66 @@ module EventsHelper
     else
       ""
     end
+  end
+
+  def section_wants_check_options?(section)
+    case section
+    when :payment_source, :transfer_from, :deposit
+      true
+    else
+      false
+    end
+  end
+
+  FORM_SECTIONS = {
+    :deposit => {
+      :title                => "Deposit Information",
+      :account_prompt       => "<strong>Which account</strong> was this deposited to?",
+      :single_bucket_prompt => "<strong>Which bucket</strong> was this deposited to?",
+      :multi_bucket_prompt  => "This deposit was to multiple buckets."
+    },
+    :credit_options => {
+      :title                => "Repayment Options",
+      :account_prompt       => "<strong>Which account</strong> will be used to " +
+                               "<strong>repay this credit</strong>?",
+      :single_bucket_prompt => "<strong>Which bucket</strong> will be used to " +
+                               "<strong>repay this credit</strong>?",
+      :multi_bucket_prompt  => "Multiple buckets will be used to repay this credit.",
+    },
+    :payment_source => {
+      :title                => "Payment Source",
+      :account_prompt       => "Which account</strong> was this drawn from?",
+      :single_bucket_prompt => "<strong>Which bucket</strong> was this drawn from?",
+      :multi_bucket_prompt  => "This expense drew from multiple buckets."
+    },
+    :transfer_from => {
+      :title                => "Transfer Source",
+      :account_prompt       => "<strong>Which account</strong> were funds transferred " +
+                               "<strong>from</strong>?",
+      :single_bucket_prompt => "<strong>Which bucket</strong> were funds transferred from?",
+      :multi_bucket_prompt  => "This transfer pulled from multiple buckets."
+    },
+    :transfer_to => {
+      :title                => "Transfer Destination",
+      :account_prompt       => "<strong>Which account</strong> were funds transferred " +
+                               "<strong>to</strong>?",
+      :single_bucket_prompt => "<strong>Which bucket</strong> were funds transferred to?",
+      :multi_bucket_prompt  => "This transfer targetted multiple buckets."
+    }
+  }
+
+  def render_event_form_section(form, section)
+    section = section.to_sym
+
+    accounts = subscription.accounts
+    accounts = accounts.select { |a| a.role == "checking" } if section == :credit_options
+
+    values = { :section          => section,
+               :form             => form,
+               :accounts         => accounts,
+               :selected_account => form.object && form.object.account_for(section) }
+
+    render :partial => "events/form_section",
+           :locals => FORM_SECTIONS[section].merge(values)
   end
 end
