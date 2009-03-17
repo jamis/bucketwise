@@ -2,6 +2,10 @@ vendor/rails:
   :type: git
   :repository: git://github.com/rails/rails.git
   :revision: v2.3.2
+vendor/plugins/haml:
+  :type: git
+  :repository: git://github.com/nex3/haml.git
+  :revision: 2.0.9
 vendor/plugins/project_search:
   :type: git
   :repository: git://github.com/37signals/project_search.git
