@@ -2,7 +2,13 @@ class Event < ActiveRecord::Base
   belongs_to :subscription
   belongs_to :user
 
-  has_many :line_items, :dependent => :destroy
+  has_many :line_items, :dependent => :destroy do
+    def for_role(name)
+      name = name.to_s
+      select { |item| item.role == name }
+    end
+  end
+
   has_many :account_items, :dependent => :destroy
 
   alias_method :original_line_items_assignment, :line_items=
@@ -13,11 +19,27 @@ class Event < ActiveRecord::Base
     @balance ||= account_items.sum(:amount) || 0
   end
 
+  def account_for(role)
+    role = role.to_s
+    item = line_items.detect { |item| item.role == role }
+    return item ? item.account : nil
+  end
+
   def line_items=(list)
     if list.any? { |item| item.is_a?(Hash) }
       @line_items_to_realize = list
     else
       original_line_items_assignment(list)
+    end
+  end
+
+  def role
+    if balance > 0
+      :deposit
+    elsif balance < 0
+      :expense
+    else
+      :transfer
     end
   end
 

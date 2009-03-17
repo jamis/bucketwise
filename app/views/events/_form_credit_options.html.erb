@@ -1,16 +1,10 @@
-<fieldset id="credit_options" style="display: none">
-  <legend>Repayment Options</legend>
-
-  <p><strong>Which account</strong> will be used to <strong>repay this credit</strong>? <%= select_account(:credit_options) { |a| a.role == "checking" } %></p>
-  <p id="credit_options.single_bucket">
-    <strong>Which bucket</strong> will be used to <strong>repay this credit</strong>? <%= select_bucket(:credit_options) %><br />
-    <small>Money from this bucket will be transferred to an "Aside" bucket, to be used later to pay off this credit.</small>
-  </p>
-
-  <div id="credit_options.multiple_buckets" style="display: none">
-    <p>Multiple buckets will be used to repay this credit. <span id="credit_options.unassigned"></span></p>
-    <ol id="credit_options.line_items">
-    </ol>
-    <p><%= link_to_function "More buckets, please!", "Events.addLineItemTo('credit_options', true)" %></p>
-  </div>
-</fieldset>
+<%= render :partial => "events/form_section", :locals => {
+       :form                 => form,
+       :section              => :credit_options,
+       :title                => "Repayment Options",
+       :account_prompt       => "<strong>Which account</strong> will be used to <strong>repay this credit</strong>?",
+       :single_bucket_prompt => "<strong>Which bucket</strong> will be used to <strong>repay this credit</strong>?",
+       :multi_bucket_prompt  => "Multiple buckets will be used to repay this credit.",
+       :comment              => "Money from this bucket will be transferred to an \"Aside\" bucket, to be used later to pay off this credit.",
+       :account_roles        => "checking"
+    } %>

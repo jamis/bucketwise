@@ -32,8 +32,11 @@ module EventsHelper
     accounts = subscription.accounts.to_a
     accounts = accounts.select { |a| yield a } if block_given?
 
+    account = @event && @event.account_for(section)
+    selection = account ? account.id : nil
+
     select_tag "event[#{section}][][account_id]", 
-      options_for_select([["", ""]] + accounts.map { |acct| [acct.name, acct.id] }),
+      options_for_select([["", ""]] + accounts.map { |acct| [acct.name, acct.id] }, selection),
       :id => "account_for_#{section}",
       :onchange => "Events.handleAccountChange(this, '#{section}')"
   end
@@ -47,5 +50,13 @@ module EventsHelper
 
   def event_for_form
     @event || Event.new(:occurred_on => Date.today)
+  end
+
+  def event_amount_value
+    if @event
+      "%.2f" % (@event.balance / 100.0)
+    else
+      ""
+    end
   end
 end

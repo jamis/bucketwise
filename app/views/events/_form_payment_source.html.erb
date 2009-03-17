@@ -1,19 +1,9 @@
-<fieldset id="payment_source">
-  <legend>Payment Source</legend>
-
-  <p>
-    <strong>Which account</strong> was this drawn from? <%= select_account(:payment_source) %>
-    <span id="payment_source.check_options" style="display: none">
-      <strong>Check #</strong><%= form.text_field :check_number, :size => 6 %>
-    </span>
-  </p>
-
-  <p id="payment_source.single_bucket"><strong>Which bucket</strong> was this drawn from? <%= select_bucket(:payment_source) %></p>
-
-  <div id="payment_source.multiple_buckets" style="display: none">
-    <p>This expense drew from multiple buckets. <span id="payment_source.unassigned"></span></p>
-    <ol id="payment_source.line_items">
-    </ol>
-    <p><%= link_to_function "More buckets, please!", "Events.addLineItemTo('payment_source', true)" %></p>
-  </div>
-</fieldset>
+<%= render :partial => "events/form_section", :locals => {
+       :form                 => form,
+       :section              => :payment_source,
+       :title                => "Payment Source",
+       :check_options        => true,
+       :account_prompt       => "Which account</strong> was this drawn from?",
+       :single_bucket_prompt => "<strong>Which bucket</strong> was this drawn from?",
+       :multi_bucket_prompt  => "This expense drew from multiple buckets."
+    } %>

@@ -1,16 +1,8 @@
-<fieldset id="transfer_to" style="display: none">
-  <legend>Transfer Destination</legend>
-
-  <p>
-    <strong>Which account</strong> were funds transferred <strong>to</strong>? <%= select_account(:transfer_to) %>
-  </p>
-
-  <p id="transfer_to.single_bucket"><strong>Which bucket</strong> were funds transferred to? <%= select_bucket(:transfer_to) %></p>
-
-  <div id="transfer_to.multiple_buckets" style="display: none">
-    <p>This transfer targetted from multiple buckets. <span id="transfer_to.unassigned"></span></p>
-    <ol id="transfer_to.line_items">
-    </ol>
-    <p><%= link_to_function "More buckets, please!", "Events.addLineItemTo('transfer_to', true)" %></p>
-  </div>
-</fieldset>
+<%= render :partial => "events/form_section", :locals => {
+       :form                 => form,
+       :section              => :transfer_to,
+       :title                => "Transfer Destination",
+       :account_prompt       => "<strong>Which account</strong> were funds transferred <strong>to</strong>?",
+       :single_bucket_prompt => "<strong>Which bucket</strong> were funds transferred to?",
+       :multi_bucket_prompt  => "This transfer targetted multiple buckets."
+    } %>
