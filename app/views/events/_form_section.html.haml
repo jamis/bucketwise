@@ -3,7 +3,7 @@
 
   %p
     = account_prompt
-    = select_account(section, accounts, selected_account)
+    = select_account(section, accounts, selected_account && selected_account.id)
     - if section_wants_check_options?(section)
       %span{:id => "#{section}.check_options", :style => "display: none"}
         == <strong>Check #</strong>#{form.text_field :check_number, :size => 6}
