@@ -48,12 +48,18 @@ def populate_database(name, email, identity)
 
     subscription.events.create(:user => user, :occurred_on => 7.days.ago,
       :actor => "Paycheck", :line_items => [
-        { :account_id => checking.id, :bucket_id => dining.id, :amount => 50_00 },
-        { :account_id => checking.id, :bucket_id => groceries.id, :amount => 200_00 },
-        { :account_id => checking.id, :bucket_id => entertain.id, :amount => 50_00 },
-        { :account_id => checking.id, :bucket_id => fuel.id, :amount => 50_00 },
-        { :account_id => checking.id, :bucket_id => books.id, :amount => 100_00 },
-        { :account_id => checking.id, :bucket_id => checking.buckets.default.id, :amount => 1000_00 }
+        { :account_id => checking.id, :bucket_id => dining.id,
+          :amount => 50_00, :role => "deposit" },
+        { :account_id => checking.id, :bucket_id => groceries.id, :amount => 200_00,
+          :role => "deposit" },
+        { :account_id => checking.id, :bucket_id => entertain.id, :amount => 50_00,
+          :role => "deposit" },
+        { :account_id => checking.id, :bucket_id => fuel.id, :amount => 50_00,
+          :role => "deposit" },
+        { :account_id => checking.id, :bucket_id => books.id, :amount => 100_00,
+          :role => "deposit" },
+        { :account_id => checking.id, :bucket_id => checking.buckets.default.id,
+          :amount => 1000_00, :role => "deposit" }
       ])
 
     subscription.events.create(:user => user, :occurred_on => 6.days.ago,
@@ -79,15 +85,17 @@ def populate_database(name, email, identity)
     subscription.events.create(:user => user, :occurred_on => 4.days.ago,
       :actor => "Wells Fargo", :line_items => [
         { :account_id => checking.id, :bucket_id => aside.id,
-          :amount => -20_09, :role => "payment_source" },
+          :amount => -20_09, :role => "transfer_from" },
         { :account_id => mastercard.id, :bucket_id => mastercard.buckets.default.id,
-          :amount => 20_09, :role => "payment_source" }
+          :amount => 20_09, :role => "transfer_to" }
       ])
 
     subscription.events.create(:user => user, :occurred_on => 3.days.ago,
       :actor => "Savings transfer", :line_items => [
-        { :account_id => checking.id, :bucket_id => checking.buckets.default.id, :amount => -1000_00 },
-        { :account_id => savings.id, :bucket_id => save_goal.id, :amount => 1000_00 }
+        { :account_id => checking.id, :bucket_id => checking.buckets.default.id,
+          :amount => -1000_00, :role => "transfer_from" },
+        { :account_id => savings.id, :bucket_id => save_goal.id,
+          :amount => 1000_00, :role => "transfer_to" }
       ])
   end
 end
