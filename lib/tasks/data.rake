@@ -59,29 +59,29 @@ def populate_database(name, email, identity)
     subscription.events.create(:user => user, :occurred_on => 6.days.ago,
       :actor => "McDonald's", :line_items => [
         { :account_id => checking.id, :bucket_id => dining.id,
-          :amount => -18_95, :role => "aside" },
+          :amount => -18_95, :role => "credit_options" },
         { :account_id => checking.id, :bucket_id => tax.id,
-          :amount => -1_14, :role => "aside" },
+          :amount => -1_14, :role => "credit_options" },
         { :account_id => checking.id, :bucket_id => aside.id,
-          :amount => 20_09, :role => "aside" },
+          :amount => 20_09, :role => "credit_options" },
         { :account_id => mastercard.id, :bucket_id => mastercard.buckets.default.id,
-          :amount => -20_09, :role => "payment" }
+          :amount => -20_09, :role => "payment_source" }
       ])
 
     subscription.events.create(:user => user, :occurred_on => 5.days.ago,
       :actor => "Albertsons", :line_items => [
         { :account_id => checking.id, :bucket_id => groceries.id,
-          :amount => -55_22, :role => "payment" },
+          :amount => -55_22, :role => "payment_source" },
         { :account_id => checking.id, :bucket_id => tax.id,
-          :amount => -3_32, :role => "payment" }
+          :amount => -3_32, :role => "payment_source" }
       ])
 
     subscription.events.create(:user => user, :occurred_on => 4.days.ago,
       :actor => "Wells Fargo", :line_items => [
         { :account_id => checking.id, :bucket_id => aside.id,
-          :amount => -20_09, :role => "payment" },
+          :amount => -20_09, :role => "payment_source" },
         { :account_id => mastercard.id, :bucket_id => mastercard.buckets.default.id,
-          :amount => 20_09, :role => "payment" }
+          :amount => 20_09, :role => "payment_source" }
       ])
 
     subscription.events.create(:user => user, :occurred_on => 3.days.ago,
