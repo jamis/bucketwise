@@ -50,7 +50,7 @@ module EventsHelper
 
   def event_amount_value
     if @event
-      "%.2f" % (@event.balance / 100.0)
+      "%.2f" % (@event.balance.abs / 100.0)
     else
       ""
     end
@@ -63,6 +63,31 @@ module EventsHelper
     else
       false
     end
+  end
+
+  def event_wants_section?(section)
+    return true unless @event
+
+    case section.to_sym
+    when :payment_source, :credit_options then
+      return @event.role == :expense
+    when :deposit then
+      return @event.role == :deposit
+    when :transfer_from, :transfer_to then
+      return @event.role == :transfer
+    end
+
+    return false
+  end
+
+  def section_visible_for_event?(section)
+    return true unless @event
+
+    if @event.role == :expense && section == :credit_options
+      return @event.line_items.for_role(:credit_options).any?
+    end
+
+    return true
   end
 
   def bucket_action_phrase_for(section)

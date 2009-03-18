@@ -5,7 +5,7 @@ class Event < ActiveRecord::Base
   has_many :line_items, :dependent => :destroy do
     def for_role(name)
       name = name.to_s
-      select { |item| item.role == name }
+      to_a.select { |item| item.role == name }
     end
   end
 
@@ -34,13 +34,13 @@ class Event < ActiveRecord::Base
   end
 
   def role
-    if balance > 0
-      :deposit
-    elsif balance < 0
-      :expense
-    else
-      :transfer
-    end
+    @role ||= if balance > 0
+        :deposit
+      elsif balance < 0
+        :expense
+      else
+        :transfer
+      end
   end
 
   protected

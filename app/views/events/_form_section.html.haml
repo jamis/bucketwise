@@ -1,4 +1,4 @@
-%fieldset{:id => section}
+%fieldset{:id => section, :style => section_visible_for_event?(section) ? nil : "display: none"}
   %legend= title
 
   %p

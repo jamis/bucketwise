@@ -372,3 +372,13 @@ input.number {
   padding: 0.1em 0.5em;
   border-right: 1px solid #555;
 }
+
+div.transaction.edit span.expense_label,
+div.transaction.edit span.deposit_label,
+div.transaction.edit span.transfer_label {
+  display: none;
+}
+
+div.transaction.expense span.expense_label { display: inline; }
+div.transaction.deposit span.deposit_label { display: inline; }
+div.transaction.transfer span.transfer_label { display: inline; }

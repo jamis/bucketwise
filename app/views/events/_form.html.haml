@@ -14,7 +14,7 @@
   = render :partial => "events/form_general", :locals => { :form => form }
 
   - form_sections.each do |section|
-    = render_event_form_section(form, section)
+    = render_event_form_section(form, section) if event_wants_section?(section)
 
   %p
     %input{:type => "submit", :value => "Record this transaction"}/
