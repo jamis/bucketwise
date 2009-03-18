@@ -1,0 +1,23 @@
+%fieldset{:id => section}
+  %legend= title
+
+  %p
+    = account_prompt
+    = select_account(section, accounts, selected_account)
+    - if section_wants_check_options?(section)
+      %span{:id => "#{section}.check_options", :style => "display: none"}
+        == <strong>Check #</strong>#{form.text_field :check_number, :size => 6}
+
+  %p{:id => "#{section}.single_bucket"}
+    = single_bucket_prompt
+    = select_bucket(section, :form => form)
+    - if section == :credit_options
+      %br/
+      %small Money from this bucket will be transferred to an "Aside" bucket, to be used later to pay off this credit.
+
+  %div{:id => "#{section}.multiple_buckets", :style => "display: none"}
+    %p
+      = multi_bucket_prompt
+      %span{:id => "#{section}.unassigned"}/
+    %ol{:id => "#{section}.line_items"}/
+    %p= link_to_function "More buckets, please!", "Events.addLineItemTo('#{section}', true)"

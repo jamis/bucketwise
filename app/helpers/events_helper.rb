@@ -65,6 +65,22 @@ module EventsHelper
     end
   end
 
+  def bucket_action_phrase_for(section)
+    case section.to_sym
+    when :payment_source
+      "was drawn from"
+    when :credit_options
+      "will be repaid from"
+    when :deposit
+      "was deposited to"
+    when :transfer_from
+      "was transferred from"
+    when :transfer_to
+      "was transferred to"
+    else raise ArgumentError, "unsupported form section: #{section.inspect}"
+    end
+  end
+
   FORM_SECTIONS = {
     :deposit => {
       :title                => "Deposit Information",

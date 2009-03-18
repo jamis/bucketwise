@@ -1,0 +1,10 @@
+%tr.account{:id => dom_id(account)}
+  %th= link_to(account.name, account)
+  = balance_cell(account, :classes => "total")
+- reset_cycle
+= render(account.buckets.recent)
+- if account.buckets.length > 5
+  %tr.bucket
+    %td.more{:colspan => 2}
+      &rarr;
+      = link_to "See all #{account.buckets.length} buckets", account_buckets_path(account)

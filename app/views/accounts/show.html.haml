@@ -1,0 +1,7 @@
+#data.content
+  %h2
+    = balance_cell(account, :classes => %w(total balance), :tag => "span", :id => "balance")
+    &= account.name
+
+  %table.entries
+    = render(@items)

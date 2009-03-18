@@ -1,0 +1,22 @@
+:javascript
+  Events.accounts = { #{accounts_and_buckets_as_javascript} };
+
+#templates{:style => "display: none"}
+  - form_sections.each do |section|
+    %div{:id => "template.#{section}"}
+      = render :partial => "events/line_item", :locals => { :section => section }
+
+- form_for(:event, event_for_form, :url => events_path, :html => { :id => "event_form", :onsubmit => "Events.submit(this); return false" }) do |form|
+  #success_notice.notice{:style => "display: none"}
+    %p== Your transaction has been recorded. You may enter another one, |
+         or #{link_to_function "close this form", "Events.cancel()"}. |
+
+  = render :partial => "events/form_general", :locals => { :form => form }
+
+  - form_sections.each do |section|
+    = render_event_form_section(form, section)
+
+  %p
+    %input{:type => "submit", :value => "Record this transaction"}/
+    or
+    = link_to_function "cancel", "Events.cancel()"

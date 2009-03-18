@@ -1,0 +1,4 @@
+== $#{text_field_tag "event[#{section}][amount]", "", :size => 8, :class => "number", :onchange => "Events.updateUnassignedFor('#{section}')"}
+= bucket_action_phrase_for(section)
+= select_bucket(section, :splittable => false)
+= link_to_function "[x]", "Events.removeLineItem(this.up('li'))"
