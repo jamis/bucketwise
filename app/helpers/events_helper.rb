@@ -44,7 +44,7 @@ module EventsHelper
         options[:line_item].bucket_id)
       disabled = false
     else
-      select_options = "<options>-- Select an account --</option>"
+      select_options = "<option>-- Select an account --</option>"
       disabled = true
     end
 
@@ -169,7 +169,7 @@ module EventsHelper
     },
     :payment_source => {
       :title                => "Payment Source",
-      :account_prompt       => "Which account</strong> was this drawn from?",
+      :account_prompt       => "<strong>Which account</strong> was this drawn from?",
       :single_bucket_prompt => "<strong>Which bucket</strong> was this drawn from?",
       :multi_bucket_prompt  => "This expense drew from multiple buckets."
     },
