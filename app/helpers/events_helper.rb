@@ -38,9 +38,21 @@ module EventsHelper
   end
 
   def select_bucket(section, options={})
-    select_tag "event[#{section}][bucket_id]", "<option>-- Select an account --</option>",
-      :class => ["bucket_for_#{section}", options.fetch(:splittable, true) ? "splittable" : nil].compact.join(" "),
-      :disabled => true,
+    if options[:line_item]
+      select_options = options_for_select(
+        options[:line_item].account.buckets.sorted.map { |bucket| [bucket.name, bucket.id] },
+        options[:line_item].bucket_id)
+      disabled = false
+    else
+      select_options = "<options>-- Select an account --</option>"
+      disabled = true
+    end
+
+    classes = ["bucket_for_#{section}", options.fetch(:splittable, true) ? "splittable" : nil]
+
+    select_tag "event[#{section}][bucket_id]", select_options,
+      :class => classes.compact.join(" "),
+      :disabled => disabled,
       :onchange => "Events.handleBucketChange(this, '#{section}')"
   end
 
@@ -50,7 +62,21 @@ module EventsHelper
 
   def event_amount_value
     if @event
-      "%.2f" % (@event.balance.abs / 100.0)
+      if @event.role == :transfer
+        balance = @event.account_items.map { |a| a.amount.abs }.max
+      else
+        balance = @event.balance.abs
+      end
+
+      "%.2f" % (balance / 100.0)
+    else
+      ""
+    end
+  end
+
+  def line_item_amount_value(item)
+    if item
+      "%.2f" % (item.amount.abs / 100.0)
     else
       ""
     end
@@ -88,6 +114,26 @@ module EventsHelper
     end
 
     return true
+  end
+
+  def section_has_single_bucket?(section)
+    return false if @event && @event.line_items.for_role(section).length > 1
+    return true
+  end
+
+  def multi_bucket_visibility_for(section)
+    return nil if @event && @event.line_items.for_role(section).length > 1
+    return "display: none;"
+  end
+
+  def for_each_line_item_in(section)
+    (@event && @event.line_items.for_role(section) || []).each do |item|
+      yield item
+    end
+  end
+
+  def line_item_for_section(section)
+    @event && @event.line_items.for_role(section).first
   end
 
   def bucket_action_phrase_for(section)

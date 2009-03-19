@@ -14,7 +14,10 @@ var Events = {
   populateBucket: function(select, acctId, options) {
     options = options || {};
 
-    var selected = select.options[select.selectedIndex].value;
+    var selected = undefined;
+    if(select.selectedIndex >= 0)
+      selected = select.options[select.selectedIndex].value;
+
     for(var i = 0; i < select.options.length; i++) {
       select.options[0] = null;
     }

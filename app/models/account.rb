@@ -13,6 +13,10 @@ class Account < ActiveRecord::Base
         :author => user)
     end
 
+    def sorted
+      sort_by(&:name)
+    end
+
     def default
       detect { |bucket| bucket.role == "default" }
     end
