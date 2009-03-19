@@ -26,6 +26,20 @@ div#header h1 {
   padding: 0.5em 0 0 0;
 }
 
+div#header h1 span.actions {
+  font-size: 50%;
+  float: right;
+  line-height: 2.5em;
+}
+
+div#header h1 span.actions a {
+  color: #559;
+}
+
+div#header h1 span.actions a:hover {
+  color: #00f;
+}
+
 div#container {
   text-align: left;
   width: 700px;
@@ -396,3 +410,36 @@ div.transaction.edit span.transfer_label {
 div.transaction.expense span.expense_label { display: inline; }
 div.transaction.deposit span.deposit_label { display: inline; }
 div.transaction.transfer span.transfer_label { display: inline; }
+
+
+/* ------------------------------------------------------------------ *
+ * LOGIN PAGE
+ * ------------------------------------------------------------------ */
+
+body.login {
+  background: #ccc;
+}
+
+body.login div.login_form {
+  width: 20em;
+  margin: 20em auto;
+  border: 2px solid #777;
+  background: white;
+  padding: 1em;
+}
+
+body.login .alert {
+  border: 1px solid #900;
+  background: #faa;
+  color: #500;
+  font-size: 90%;
+  padding: 0.5em;
+}
+
+body.login .notice {
+  border: 1px solid #090;
+  background: #afa;
+  color: #050;
+  font-size: 90%;
+  padding: 0.5em;
+}

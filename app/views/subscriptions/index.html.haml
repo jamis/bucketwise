@@ -1,0 +1,6 @@
+#data.content
+  %h2 Your Subscriptions
+
+  %ul
+    - user.subscriptions.each do |subscription|
+      %li= link_to(subscription.id, subscription_path(subscription))

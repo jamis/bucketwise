@@ -1,4 +1,4 @@
-module DashboardsHelper
+module SubscriptionsHelper
   def balance_cell(account_or_bucket, options={})
     balance = real_balance = account_or_bucket.balance
     if account_or_bucket.respond_to?(:available_balance)
@@ -27,7 +27,7 @@ module DashboardsHelper
   end
 
   def back_to_dashboard_link
-    link = link_to("back to dashboard", dashboard_path)
+    link = link_to("back to dashboard", subscription_path(subscription))
     content_tag :span, "(#{link})", :class => "back"
   end
 end

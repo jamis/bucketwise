@@ -8,5 +8,8 @@
 
   %body
     #header
-      %h1 Buckets
+      %h1
+        %span.actions
+          = link_to "logout", session_path, :method => :delete
+        Buckets
     #container= yield

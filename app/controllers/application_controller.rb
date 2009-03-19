@@ -8,12 +8,16 @@ class ApplicationController < ActionController::Base
   # Uncomment the :secret if you're not using the cookie session store
   protect_from_forgery # :secret => '6acd7a19e14fbc4cc26255206125631f'
 
+  before_filter :authenticate
   before_filter :find_subscription, :find_user
 
   protected
 
     attr_reader :subscription, :user
     helper_method :subscription, :user
+
+    def authenticate
+    end
 
     def find_subscription
       @subscription = Subscription.find(1)

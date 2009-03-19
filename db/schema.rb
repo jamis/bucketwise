@@ -88,13 +88,15 @@ ActiveRecord::Schema.define(:version => 20080513032848) do
   add_index "user_subscriptions", ["user_id"], :name => "index_user_subscriptions_on_user_id"
 
   create_table "users", :force => true do |t|
-    t.string   "name",         :null => false
-    t.string   "email",        :null => false
-    t.string   "identity_url"
+    t.string   "name",          :null => false
+    t.string   "email",         :null => false
+    t.string   "user_name"
+    t.string   "password_hash"
+    t.string   "salt"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  add_index "users", ["identity_url"], :name => "index_users_on_identity_url", :unique => true
+  add_index "users", ["user_name"], :name => "index_users_on_user_name", :unique => true
 
 end

@@ -1,0 +1,25 @@
+!!!
+%html
+  %head
+    %meta{"http-equiv" => "Content-Type", :content => "text/html; charset=utf-8"}/
+    %title Login to Buckets
+    = stylesheet_link_tag "money"
+    = javascript_include_tag "prototype"
+
+  %body.login
+    .login_form
+      - if flash[:failed]
+        .alert The user name or password you gave was incorrect. Please try again.
+      - if flash[:logged_out]
+        .notice You have been logged out.
+      - form_tag(:session, :url => session_path) do
+        %p
+          User name:
+          = text_field_tag :user_name
+        %p
+          Password:
+          = password_field_tag :password
+        %p= submit_tag "Log into Buckets"
+
+    :javascript
+      window.onload = function() { $('user_name').focus(); }

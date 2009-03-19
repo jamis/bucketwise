@@ -11,21 +11,22 @@ namespace :data do
 
     ui = HighLine.new
 
-    @name = ENV['BUCKETS_USER'] || ui.ask("Name: ")
+    @name = ENV['BUCKETS_NAME'] || ui.ask("Name: ")
     @email = ENV['BUCKETS_EMAIL'] || ui.ask("E-mail: ")
-    @identity = ENV['BUCKETS_IDENTITY'] || ui.ask("OpenID URL: ")
+    @user_name = ENV['BUCKETS_USER'] || ui.ask("User name: ")
+    @password = ENV['BUCKETS_PASSWORD'] || ui.ask("Password: ")
   end
 
   task :populate => [:prompt_for_info, :environment] do
-    populate_database(@name, @email, @identity)
+    populate_database(@name, @email, @user_name, @password)
   end
 
   task :reset => [:prompt_for_info, :wipe, "db:migrate", :populate]
 end
 
-def populate_database(name, email, identity)
+def populate_database(name, email, user_name, password)
   User.transaction do
-    user = User.create(:name => name, :email => email, :identity_url => identity)
+    user = User.create(:name => name, :email => email, :user_name => user_name, :password => password)
 
     subscription = Subscription.create(:owner => user)
     user.subscriptions << subscription
