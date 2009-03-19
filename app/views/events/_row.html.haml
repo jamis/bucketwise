@@ -2,7 +2,7 @@
 
   %td.date
     %div.nubbin{:id => dom_id(event, :nubbin), :style => "display: none"}
-      = link_to("&#x270e;", edit_event_path(event, :from => current_location)) + "|"
+      = link_to("&#x270e;", edit_event_path(event, :return_to => request.request_uri)) + "|"
       = link_to_remote("&#x2716;", :url => event_path(event, :from => current_location), :method => :delete, :confirm => "Are you sure you want to delete this event?") + "|"
       = link_to_remote("&#x24d8;", :url => event_path(event), :method => :get, :before => "Events.expand(#{event.id})", :html => { :class => "zoom" })
       %span.zooming &#x231b;

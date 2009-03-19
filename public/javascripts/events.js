@@ -421,5 +421,9 @@ var Events = {
         row.addClassName('odd');
       i++;
     })
+  },
+
+  returnToCaller: function() {
+    window.location.href = Events.return_to;
   }
 }

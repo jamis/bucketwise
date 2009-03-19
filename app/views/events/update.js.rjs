@@ -1,1 +1,1 @@
-page.redirect_to(dashboard_url)
+page.events.return_to_caller
