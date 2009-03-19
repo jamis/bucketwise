@@ -374,9 +374,13 @@ var Events = {
   },
 
   cancel: function() {
-    Events.highlightLink("");
-    Events.reset();
-    $('new_event').hide();
+    if(Events.return_to) {
+      Events.returnToCaller();
+    } else {
+      Events.highlightLink("");
+      Events.reset();
+      $('new_event').hide();
+    }
   },
 
   expand: function(id) {

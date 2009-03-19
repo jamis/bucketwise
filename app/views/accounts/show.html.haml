@@ -2,6 +2,7 @@
   %h2
     = balance_cell(account, :classes => %w(total balance), :tag => "span", :id => "balance")
     &= account.name
+    = back_to_dashboard_link
 
   %table.entries
     = render(@items)

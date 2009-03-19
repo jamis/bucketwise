@@ -79,6 +79,20 @@ div#container {
   float: right;
 }
 
+.content h2 span.back {
+  font-size: 80%;
+  white-space: nowrap;
+  color: #777;
+}
+
+.content h2 span.back a {
+  color: #57c;
+}
+
+.content h2 span.back a:hover {
+  color: #00f;
+}
+
 #links a.highlight {
   padding: 0.5em 0.2em;
   background: #5f9;
