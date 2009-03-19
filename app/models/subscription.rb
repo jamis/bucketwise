@@ -2,6 +2,7 @@ class Subscription < ActiveRecord::Base
   belongs_to :owner, :class_name => "User"
 
   has_many :accounts
+  has_many :tags
 
   has_many :events do
     def recent(n=5)

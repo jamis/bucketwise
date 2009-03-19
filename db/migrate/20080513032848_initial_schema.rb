@@ -83,6 +83,24 @@ class InitialSchema < ActiveRecord::Migration
 
     add_index :account_items, :event_id
     add_index :account_items, %w(account_id occurred_on)
+
+    create_table :tags do |t|
+      t.integer :subscription_id, :null => false
+      t.string  :name, :null => false
+      t.timestamps
+    end
+
+    add_index :tags, %w(subscription_id name), :unique => true
+
+    create_table :tagged_items do |t|
+      t.integer :event_id, :null => false
+      t.integer :tag_id, :null => false
+      t.date    :occurred_on, :null => false
+      t.integer :amount, :null => false
+    end
+
+    add_index :tagged_items, :event_id
+    add_index :tagged_items, %w(tag_id occurred_on)
   end
 
   def self.down
@@ -94,5 +112,7 @@ class InitialSchema < ActiveRecord::Migration
     drop_table :events
     drop_table :line_items
     drop_table :account_items
+    drop_table :tags
+    drop_table :tagged_items
   end
 end

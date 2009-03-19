@@ -12,10 +12,12 @@ class Event < ActiveRecord::Base
   end
 
   has_many :account_items, :dependent => :destroy
+  has_many :tagged_items, :dependent => :destroy
 
   alias_method :original_line_items_assignment, :line_items=
+  alias_method :original_tagged_items_assignment, :tagged_items=
 
-  after_save :realize_line_items
+  after_save :realize_line_items, :realize_tagged_items
 
   def balance
     @balance ||= account_items.sum(:amount) || 0
@@ -32,6 +34,14 @@ class Event < ActiveRecord::Base
       @line_items_to_realize = list
     else
       original_line_items_assignment(list)
+    end
+  end
+
+  def tagged_items=(list)
+    if list.any? { |item| item.is_a?(Hash) }
+      @tagged_items_to_realize = list
+    else
+      original_tagged_items_assignment(list)
     end
   end
 
@@ -74,6 +84,24 @@ class Event < ActiveRecord::Base
         end
 
         @line_items_to_realize = nil
+      end
+    end
+
+    def realize_tagged_items
+      if @tagged_items_to_realize
+        tagged_items.destroy_all
+
+        @tagged_items_to_realize.each do |item|
+          if item[:tag_id] =~ /^n:(.*)/
+            item[:tag_id] = subscription.tags.find_or_create_by_name($1).id
+          else
+            subscription.tags.find(item[:tag_id])
+          end
+
+          tagged_items.create(item)
+        end
+
+        @tagged_items_to_realize = nil
       end
     end
 end

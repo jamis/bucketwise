@@ -78,6 +78,25 @@ ActiveRecord::Schema.define(:version => 20080513032848) do
 
   add_index "subscriptions", ["owner_id"], :name => "index_subscriptions_on_owner_id"
 
+  create_table "tagged_items", :force => true do |t|
+    t.integer "event_id",    :null => false
+    t.integer "tag_id",      :null => false
+    t.date    "occurred_on", :null => false
+    t.integer "amount",      :null => false
+  end
+
+  add_index "tagged_items", ["event_id"], :name => "index_tagged_items_on_event_id"
+  add_index "tagged_items", ["tag_id", "occurred_on"], :name => "index_tagged_items_on_tag_id_and_occurred_on"
+
+  create_table "tags", :force => true do |t|
+    t.integer  "subscription_id", :null => false
+    t.string   "name",            :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "tags", ["subscription_id", "name"], :name => "index_tags_on_subscription_id_and_name", :unique => true
+
   create_table "user_subscriptions", :force => true do |t|
     t.integer  "subscription_id", :null => false
     t.integer  "user_id",         :null => false
