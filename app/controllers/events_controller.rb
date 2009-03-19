@@ -11,6 +11,10 @@ class EventsController < ApplicationController
     @event = subscription.events.create(params[:event].merge(:user_id => user.id))
   end
 
+  def update
+    event.update_attributes(params[:event].merge(:user_id => event.user_id))
+  end
+
   def destroy
     event.destroy
   end

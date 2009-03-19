@@ -2,6 +2,8 @@ class Event < ActiveRecord::Base
   belongs_to :subscription
   belongs_to :user
 
+  attr_protected :subscription_id
+
   has_many :line_items, :dependent => :destroy do
     def for_role(name)
       name = name.to_s
@@ -13,7 +15,7 @@ class Event < ActiveRecord::Base
 
   alias_method :original_line_items_assignment, :line_items=
 
-  after_create :realize_line_items
+  after_save :realize_line_items
 
   def balance
     @balance ||= account_items.sum(:amount) || 0
@@ -48,6 +50,7 @@ class Event < ActiveRecord::Base
     def realize_line_items
       if @line_items_to_realize
         line_items.destroy_all
+        account_items.destroy_all
 
         summaries = Hash.new(0)
         @line_items_to_realize.each do |item|
