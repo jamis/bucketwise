@@ -6,18 +6,21 @@ namespace :data do
     mv "db/development.sqlite3", "db/backup/development.sqlite3.#{timestamp}"
   end
 
-  task :populate => :environment do
+  task :prompt_for_info do
     require 'highline'
 
     ui = HighLine.new
-    name = ENV['BUCKETS_USER'] || ui.ask("Name: ")
-    email = ENV['BUCKETS_EMAIL'] || ui.ask("E-mail: ")
-    identity = ENV['BUCKETS_IDENTITY'] || ui.ask("OpenID URL: ")
 
-    populate_database(name, email, identity)
+    @name = ENV['BUCKETS_USER'] || ui.ask("Name: ")
+    @email = ENV['BUCKETS_EMAIL'] || ui.ask("E-mail: ")
+    @identity = ENV['BUCKETS_IDENTITY'] || ui.ask("OpenID URL: ")
   end
 
-  task :reset => [:wipe, "db:migrate", :populate]
+  task :populate => [:prompt_for_info, :environment] do
+    populate_database(@name, @email, @identity)
+  end
+
+  task :reset => [:prompt_for_info, :wipe, "db:migrate", :populate]
 end
 
 def populate_database(name, email, identity)
@@ -70,7 +73,7 @@ def populate_database(name, email, identity)
         { :account_id => checking.id, :bucket_id => tax.id,
           :amount => -1_14, :role => "credit_options" },
         { :account_id => checking.id, :bucket_id => aside.id,
-          :amount => 20_09, :role => "credit_options" },
+          :amount => 20_09, :role => "aside" },
         { :account_id => mastercard.id, :bucket_id => mastercard.buckets.default.id,
           :amount => -20_09, :role => "payment_source" }
       ])
