@@ -168,6 +168,8 @@ var Events = {
   },
 
   updateUnassignedFor: function(section) {
+    if(!$(section)) return;
+
     var money = Events.computeUnassignedFor(section)
 
     if(money.unassigned > 0) {
@@ -216,26 +218,26 @@ var Events = {
 
     Events.serializeGeneralInformation(request);
 
-    if($('payment_source').visible()) {
+    if($('payment_source') && $('payment_source').visible()) {
       Events.serializeSection(request, 'payment_source', {expense:true});
     }
 
-    if($('credit_options').visible()) {
+    if($('credit_options') && $('credit_options').visible()) {
       Events.serializeSection(request, 'credit_options', {expense:true});
       var account_id = parseInt($F('account_for_credit_options'));
       var debit = Money.parse('expense_total');
       Events.addLineItem(request, account_id, 'r:aside', debit, 'aside');
     }
 
-    if($('deposit').visible()) {
+    if($('deposit') && $('deposit').visible()) {
       Events.serializeSection(request, 'deposit', {expense:false})
     }
 
-    if($('transfer_from').visible()) {
+    if($('transfer_from') && $('transfer_from').visible()) {
       Events.serializeSection(request, 'transfer_from', {expense:true})
     }
 
-    if($('transfer_to').visible()) {
+    if($('transfer_to') && $('transfer_to').visible()) {
       Events.serializeSection(request, 'transfer_to', {expense:false})
     }
 
@@ -276,7 +278,8 @@ var Events = {
       request['event']['check_number'] = $F($(section + '.check_options').down('input'));
     }
 
-    if($(section + '.single_bucket').visible()) {
+    single = $(section + '.single_bucket');
+    if(single && single.visible()) {
       var bucket_id = $F($(section + '.single_bucket').down('select'));
       Events.addLineItem(request, account_id, bucket_id, expense, section);
     } else {
@@ -305,12 +308,9 @@ var Events = {
       var options = {};
       var action = form.readAttribute('action');
 
-      options.postBody = Events.buildXMLStringFor(Events.serialize(form));
-
-      if (form.hasAttribute('method') && !options.method)
-        options.method = form.method;
-
+      options.method = "post";
       options.contentType = "application/xml";
+      options.postBody = Events.buildXMLStringFor(Events.serialize(form));
 
       return new Ajax.Request(action, options);
     } catch(e) {

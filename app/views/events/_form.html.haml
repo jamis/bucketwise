@@ -6,7 +6,7 @@
     %div{:id => "template.#{section}"}
       = render :partial => "events/line_item", :locals => { :section => section }
 
-- form_for(:event, event_for_form, :url => events_path, :html => { :id => "event_form", :onsubmit => "Events.submit(this); return false" }) do |form|
+- form_for(:event, event_for_form, :url => event_form_action, :html => { :id => "event_form", :onsubmit => "Events.submit(this); return false" }) do |form|
   #success_notice.notice{:style => "display: none"}
     %p== Your transaction has been recorded. You may enter another one, |
          or #{link_to_function "close this form", "Events.cancel()"}. |

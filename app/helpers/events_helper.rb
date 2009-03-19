@@ -60,6 +60,14 @@ module EventsHelper
     @event || Event.new(:occurred_on => Date.today)
   end
 
+  def event_form_action
+    if @event
+      update_event_path(@event)
+    else
+      events_path
+    end
+  end
+
   def event_amount_value
     if @event
       if @event.role == :transfer
