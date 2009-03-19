@@ -43,7 +43,8 @@ def populate_database(name, email, identity)
 
     subscription.events.create(:user => user, :occurred_on => 8.days.ago,
       :actor => "Starting balance", :line_items => [
-        { :account_id => savings.id, :bucket_id => savings.buckets.default.id, :amount => 2345_67 }
+        { :account_id => savings.id, :bucket_id => savings.buckets.default.id,
+          :amount => 2345_67, :role => "deposit" }
       ])
 
     subscription.events.create(:user => user, :occurred_on => 7.days.ago,
