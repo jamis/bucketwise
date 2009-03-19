@@ -9,7 +9,6 @@ class ApplicationController < ActionController::Base
   protect_from_forgery # :secret => '6acd7a19e14fbc4cc26255206125631f'
 
   before_filter :authenticate
-  before_filter :find_subscription, :find_user
 
   protected
 
@@ -17,14 +16,15 @@ class ApplicationController < ActionController::Base
     helper_method :subscription, :user
 
     def authenticate
+      if session[:user_id]
+        @user = User.find(session[:user_id])
+      else
+        redirect_to(session_url)
+      end
     end
 
     def find_subscription
       @subscription = Subscription.find(1)
-    end
-
-    def find_user
-      @user = @subscription.owner
     end
 
     def current_location

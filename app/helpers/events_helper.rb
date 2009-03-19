@@ -64,7 +64,7 @@ module EventsHelper
     if @event
       update_event_path(@event)
     else
-      events_path
+      subscription_events_path(subscription)
     end
   end
 

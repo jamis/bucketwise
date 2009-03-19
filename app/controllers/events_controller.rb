@@ -1,4 +1,5 @@
 class EventsController < ApplicationController
+  before_filter :find_subscription, :only => %w(create)
   before_filter :find_event, :except => %w(create)
 
   def show
@@ -24,7 +25,12 @@ class EventsController < ApplicationController
     attr_reader :event
     helper_method :event
 
+    def find_subscription
+      @subscription = user.subscriptions.find(params[:subscription_id])
+    end
+
     def find_event
-      @event = subscription.events.find(params[:id])
+      @event = Event.find(params[:id])
+      @subscription = user.subscriptions.find(@event.subscription_id)
     end
 end
