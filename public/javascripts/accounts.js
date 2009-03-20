@@ -1,7 +1,12 @@
 var Accounts = {
   revealForm: function() {
-    $('accounts_summary').hide();
-    $('accounts_summary_header').addClassName('anchor');
+    if($('blankslate')) {
+      $('blankslate').hide();
+    } else {
+      $('data').hide();
+      $('links').hide();
+    }
+
     $('new_account').show();
     $('account_name').activate();
   },
@@ -9,8 +14,13 @@ var Accounts = {
   hideForm: function() {
     Accounts.reset();
     $('new_account').hide();
-    $('accounts_summary_header').removeClassName('anchor');
-    $('accounts_summary').show();
+
+    if($('blankslate')) {
+      $('blankslate').show();
+    } else {
+      $('data').show();
+      $('links').show();
+    }
   },
 
   submit: function() {
@@ -28,5 +38,9 @@ var Accounts = {
 
   reset: function() {
     $('new_account_form').reset();
+  },
+
+  removeBlankSlate: function() {
+    if($('blankslate')) $('blankslate').remove();
   }
 }

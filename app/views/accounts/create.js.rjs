@@ -1,3 +1,5 @@
+page.accounts.remove_blank_slate
+
 if @account.balance != 0
   page['recent_entries'].replace_html :partial => "events/event",
     :collection => subscription.events.recent

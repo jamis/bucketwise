@@ -32,7 +32,7 @@
         %p
           %label
             <strong>When</strong> was the statement issued:
-            = balance.text_field :occurred_on, :value => Date.today, :size => 9
+            = calendar_date_select_tag "account[starting_balance][occurred_on]", Date.today, :size => 9
 
   %p
     = submit_tag "Create this account"

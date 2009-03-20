@@ -1,4 +1,8 @@
 module SubscriptionsHelper
+  def blank_slate?
+    subscription.accounts.empty?
+  end
+
   def balance_cell(container, options={})
     balance = real_balance = container.balance
     if container.respond_to?(:available_balance)
