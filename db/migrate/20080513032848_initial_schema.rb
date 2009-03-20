@@ -87,10 +87,12 @@ class InitialSchema < ActiveRecord::Migration
     create_table :tags do |t|
       t.integer :subscription_id, :null => false
       t.string  :name, :null => false
+      t.integer :balance, :null => false, :default => 0
       t.timestamps
     end
 
     add_index :tags, %w(subscription_id name), :unique => true
+    add_index :tags, %w(subscription_id balance)
 
     create_table :tagged_items do |t|
       t.integer :event_id, :null => false

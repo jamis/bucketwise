@@ -89,12 +89,14 @@ ActiveRecord::Schema.define(:version => 20080513032848) do
   add_index "tagged_items", ["tag_id", "occurred_on"], :name => "index_tagged_items_on_tag_id_and_occurred_on"
 
   create_table "tags", :force => true do |t|
-    t.integer  "subscription_id", :null => false
-    t.string   "name",            :null => false
+    t.integer  "subscription_id",                :null => false
+    t.string   "name",                           :null => false
+    t.integer  "balance",         :default => 0, :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
+  add_index "tags", ["subscription_id", "balance"], :name => "index_tags_on_subscription_id_and_balance"
   add_index "tags", ["subscription_id", "name"], :name => "index_tags_on_subscription_id_and_name", :unique => true
 
   create_table "user_subscriptions", :force => true do |t|

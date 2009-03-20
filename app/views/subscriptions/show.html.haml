@@ -18,3 +18,7 @@
   #new_account.form{:style => "display: none"}= render :partial => "accounts/form"
 
   %table#accounts_summary= render(subscription.accounts)
+
+  - if subscription.tags.any?
+    %h2 Tags
+    = render :partial => "tags/cloud"

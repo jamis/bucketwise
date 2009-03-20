@@ -37,10 +37,10 @@ def populate_database(name, email, user_name, password)
 
     dining = checking.buckets.create(:name => "Dining", :author => user)
     groceries = checking.buckets.create(:name => "Groceries", :author => user)
+    household = checking.buckets.create(:name => "Household", :author => user)
     entertain = checking.buckets.create(:name => "Entertainment", :author => user)
     fuel = checking.buckets.create(:name => "Auto:Fuel", :author => user)
     books = checking.buckets.create(:name => "Books", :author => user)
-    tax = checking.buckets.create(:name => "Tax", :author => user)
     aside = checking.buckets.for_role("aside", user)
 
     save_goal = savings.buckets.create(:name => "Vacation Goal", :author => user)
@@ -63,28 +63,37 @@ def populate_database(name, email, user_name, password)
           :role => "deposit" },
         { :account_id => checking.id, :bucket_id => books.id, :amount => 100_00,
           :role => "deposit" },
+        { :account_id => checking.id, :bucket_id => household.id, :amount => 50_00,
+          :role => "deposit" },
         { :account_id => checking.id, :bucket_id => checking.buckets.default.id,
           :amount => 1000_00, :role => "deposit" }
+      ], :tagged_items => [
+        { :tag_id => "n:paycheck", :amount => 1500_00 }
       ])
 
     subscription.events.create(:user => user, :occurred_on => 6.days.ago,
       :actor => "McDonald's", :line_items => [
         { :account_id => checking.id, :bucket_id => dining.id,
-          :amount => -18_95, :role => "credit_options" },
-        { :account_id => checking.id, :bucket_id => tax.id,
-          :amount => -1_14, :role => "credit_options" },
+          :amount => -20_09, :role => "credit_options" },
         { :account_id => checking.id, :bucket_id => aside.id,
           :amount => 20_09, :role => "aside" },
         { :account_id => mastercard.id, :bucket_id => mastercard.buckets.default.id,
           :amount => -20_09, :role => "payment_source" }
+      ], :tagged_items => [
+        { :tag_id => "n:fastfood", :amount => 20_09 },
+        { :tag_id => "n:tax:sales", :amount => 1_14 }
       ])
 
     subscription.events.create(:user => user, :occurred_on => 5.days.ago,
       :actor => "Albertsons", :line_items => [
         { :account_id => checking.id, :bucket_id => groceries.id,
-          :amount => -55_22, :role => "payment_source" },
-        { :account_id => checking.id, :bucket_id => tax.id,
-          :amount => -3_32, :role => "payment_source" }
+          :amount => -33_55, :role => "payment_source" },
+        { :account_id => checking.id, :bucket_id => household.id,
+          :amount => -24_99, :role => "payment_source" }
+      ], :tagged_items => [
+        { :tag_id => "n:tax:sales", :amount => 3_32 },
+        { :tag_id => "n:milk", :amount => 7_80 },
+        { :tag_id => "n:fruit", :amount => 10_02 }
       ])
 
     subscription.events.create(:user => user, :occurred_on => 4.days.ago,
