@@ -112,7 +112,7 @@ module EventsHelper
 
   def tag_list_for_event
     if @event
-      @event.tags.map(&:name).join(", ")
+      @event.tagged_items.whole.map(&:tag).map(&:name).sort.join(", ")
     else
       ""
     end
@@ -147,7 +147,7 @@ module EventsHelper
   end
 
   def event_has_partial_tags?
-    @event && @event.tags.length < @event.tagged_items.length
+    @event && @event.tagged_items.partial.any?
   end
 
   def section_visible_for_event?(section)
@@ -252,5 +252,9 @@ module EventsHelper
 
     render :partial => "events/form_section",
            :locals => FORM_SECTIONS[section].merge(values)
+  end
+
+  def tag_links_for(event)
+    event.tags.sort_by(&:name).map { |tag| link_to(h(tag.name), tag_path(tag)) }.join(", ")
   end
 end

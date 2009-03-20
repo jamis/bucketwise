@@ -287,12 +287,16 @@ table.entries tr.even.hover td {
   background: #eed;
 }
 
+td.zoom div.detail {
+  margin-bottom: 1em;
+}
+
 td.zoom table {
   border-right: 3px solid #777;
   border-bottom: 3px solid #777;
   background: #ffd;
   width: auto;
-  margin: -3px 0 1em 7.5em;
+  margin: -3px 0 0 7.5em;
   font-size: 80%;
 }
 
@@ -305,6 +309,11 @@ td.zoom tr.odd td {
 
 td.zoom tr.even td {
   background: #eea;
+}
+
+td.zoom p.tags {
+  margin: 0.5em 0 0 7.5em;
+  font-size: 80%;
 }
 
 .form {

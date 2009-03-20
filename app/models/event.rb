@@ -23,6 +23,8 @@ class Event < ActiveRecord::Base
     end
   end
 
+  has_many :tags, :through => :tagged_items
+
   alias_method :original_line_items_assignment, :line_items=
   alias_method :original_tagged_items_assignment, :tagged_items=
 
@@ -42,13 +44,6 @@ class Event < ActiveRecord::Base
     when :expense then balance.abs
     when :transfer then account_items.first.amount.abs
     end
-  end
-
-  # Returns the list of tags for which the tagged_items on this event have an
-  # amount that matches the #value of this event. Tagged items that tag only
-  # part of the event's value are not included.
-  def tags
-    @tags ||= tagged_items.whole.map(&:tag).sort_by(&:name)
   end
 
   def account_for(role)
