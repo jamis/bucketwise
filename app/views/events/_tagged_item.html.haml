@@ -1,4 +1,7 @@
 == $#{text_field_tag "event[tags][amount]", tagged_item_amount_value(tagged_item), :size => 8, :class => "number"}
 is tagged as
-= text_field_tag "event[tags][name]", tagged_item_name_value(tagged_item), :size => 12, :class => "tag"
+= tag_entry_field "event[tags][name]", tagged_item_name_value(tagged_item), :size => 12, :class => "tag", :id => tagged_item ? dom_id(tagged_item, :tag_name) : "{ID}"
+- if tagged_item
+  :javascript
+    new Autocompleter.Local('#{dom_id(tagged_item, :tag_name)}', '#{dom_id(tagged_item, :tag_name)}_select', Events.tags);
 = link_to_function "[x]", "Events.removeTaggedItem(this.up('li'))"

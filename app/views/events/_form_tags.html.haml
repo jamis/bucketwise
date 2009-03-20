@@ -12,6 +12,10 @@
     %br/
     %small Enter tag names, separated by commas, that will apply to this entire transaction.
 
+  #event_tags_list_select.tag_select{:style => "display: none"}
+  :javascript
+    new Autocompleter.Local('event_tags_list', 'event_tags_list_select', Events.tags, {tokens: ','});
+
   %p#tag_items_collapsed{:style => event_has_partial_tags? ? "display: none" : nil}
     &rarr;
     = link_to_function "I'd like to add tags for parts of this transaction...", "Events.revealPartialTags()"

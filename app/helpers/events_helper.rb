@@ -257,4 +257,14 @@ module EventsHelper
   def tag_links_for(event)
     event.tags.sort_by(&:name).map { |tag| link_to(h(tag.name), tag_path(tag)) }.join(", ")
   end
+
+  def tag_entry_field(name, value, options={})
+    completer_opts = {}
+    completer_opts[:tokens] = "," if options.delete(:multiple)
+
+    tag_field = text_field_tag(name, value, options)
+    dropdown = content_tag(:div, "", :style => "display: none", :class => "tag_select", :id => "#{options[:id]}_select")
+
+    tag_field + dropdown
+  end
 end

@@ -1,4 +1,6 @@
 var Events = {
+  nextID: 0,
+
   updateBucketsFor: function(section, reset) {
     var acctSelect = $('account_for_' + section);
     var disabled = acctSelect.selectedIndex == 0;
@@ -148,8 +150,12 @@ var Events = {
   addTaggedItem: function() {
     var ol = $('tagged_items');
     var li = document.createElement("li");
-    li.innerHTML = $('template.tagged_item').innerHTML;
+    var content = $('template.tagged_item').innerHTML;
+    var id = "tagged_item_i" + String(Events.nextID++);
+    li.innerHTML = content.gsub(/\{ID\}/, id);
     ol.appendChild(li);
+
+    new Autocompleter.Local(id, id + '_select', Events.tags);
   },
 
   removeTaggedItem: function(li) {
