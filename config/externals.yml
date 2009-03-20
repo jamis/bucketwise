@@ -2,6 +2,10 @@ vendor/rails:
   :type: git
   :repository: git://github.com/rails/rails.git
   :revision: v2.3.2.1
+vendor/plugins/calendar_date_select:
+  :type: git
+  :repository: git://github.com/timcharper/calendar_date_select.git
+  :revision: 88b7caf7acecf31186661c0efd6bc606cdcc666d
 vendor/plugins/haml:
   :type: git
   :repository: git://github.com/nex3/haml.git

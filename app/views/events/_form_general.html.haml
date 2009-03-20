@@ -5,7 +5,7 @@
     %span.expense_label <strong>When</strong> did this expense occur?
     %span.deposit_label <strong>When</strong> did this deposit occur?
     %span.transfer_label <strong>When</strong> did this transfer occur?
-    = form.text_field :occurred_on, :size => 10
+    = form.calendar_date_select :occurred_on, :size => 10
   %p
     %span.expense_label <strong>How much</strong> was paid?
     %span.deposit_label <strong>How much</strong> was deposited?
