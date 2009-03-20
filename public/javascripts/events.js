@@ -155,7 +155,7 @@ var Events = {
     li.innerHTML = content.gsub(/\{ID\}/, id);
     ol.appendChild(li);
 
-    new Autocompleter.Local(id, id + '_select', Events.tags);
+    new Autocompleter.Local(id, id + '_select', Events.tags, {frequency: 0.2});
   },
 
   removeTaggedItem: function(li) {

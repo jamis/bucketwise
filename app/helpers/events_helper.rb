@@ -12,7 +12,7 @@ module EventsHelper
   end
 
   def tags_as_javascript
-    subscription.tags.map(&:name).sort.to_json
+    subscription.tags(:reload).map(&:name).sort.to_json
   end
 
   def links_to_accounts_for_event(event)

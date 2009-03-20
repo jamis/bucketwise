@@ -14,7 +14,7 @@
 
   #event_tags_list_select.tag_select{:style => "display: none"}
   :javascript
-    new Autocompleter.Local('event_tags_list', 'event_tags_list_select', Events.tags, {tokens: ','});
+    new Autocompleter.Local('event_tags_list', 'event_tags_list_select', Events.tags, {tokens: ',', frequency: 0.2});
 
   %p#tag_items_collapsed{:style => event_has_partial_tags? ? "display: none" : nil}
     &rarr;
