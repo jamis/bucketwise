@@ -226,6 +226,7 @@ var Events = {
 
     request['event'] = {};
     request['event']['line_item'] = [];
+    request['event']['tagged_item'] = [];
 
     Events.serializeGeneralInformation(request);
 
@@ -251,6 +252,8 @@ var Events = {
     if($('transfer_to') && $('transfer_to').visible()) {
       Events.serializeSection(request, 'transfer_to', {expense:false})
     }
+
+    Events.serializeTags(request);
 
     return request;
   },
@@ -296,6 +299,39 @@ var Events = {
     } else {
       Events.addLineItems(request, account_id, section, options);
     }
+  },
+
+  serializeTags: function(request) {
+    if($('tags').visible()) {
+      Events.serializeEventTags(request);
+      if($('tag_items').visible())
+        Events.serializeItemTags(request);
+    }
+  },
+
+  serializeEventTags: function(request) {
+    var tagList = $F('event_tags_list').strip();
+    if(tagList.empty()) return;
+
+    var total = Money.parse('expense_total');
+    tagList.split(",").each(function(name) {
+      Events.addTaggedItemRecord(request, total, "n:" + name.strip());
+    });
+  },
+
+  serializeItemTags: function(request) {
+    $('tagged_items').select('li').each(function(row) {
+      var name = $F(row.down('input.tag')).strip();
+      if(name.length > 0) {
+        var amount = Money.parse(row.down('input.number'));
+        Events.addTaggedItemRecord(request, amount, "n:" + name);
+      }
+    });
+  },
+
+  addTaggedItemRecord: function(request, amount, tag_id) {
+    var item = { amount: amount, tag_id: tag_id };
+    request['event']['tagged_item'].push(item);
   },
 
   addLineItem: function(request, account_id, bucket_id, amount, role) {

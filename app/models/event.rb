@@ -15,11 +15,11 @@ class Event < ActiveRecord::Base
 
   has_many :tagged_items, :dependent => :destroy do
     def partial
-      @partial ||= select { |item| item.amount != @owner.value }
+      @partial ||= to_a.select { |item| item.amount != @owner.value }
     end
 
     def whole
-      @partial ||= select { |item| item.amount == @owner.value }
+      @whole ||= to_a.select { |item| item.amount == @owner.value }
     end
   end
 
@@ -126,7 +126,7 @@ class Event < ActiveRecord::Base
             subscription.tags.find(item[:tag_id])
           end
 
-          tagged_items.create(item)
+          tagged_items.create(item.merge(:occurred_on => occurred_on))
         end
 
         @tagged_items_to_realize = nil

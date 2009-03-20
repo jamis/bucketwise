@@ -1,4 +1,4 @@
 == $#{text_field_tag "event[tags][amount]", tagged_item_amount_value(tagged_item), :size => 8, :class => "number"}
 is tagged as
-= text_field_tag "event[tags][name]", tagged_item_name_value(tagged_item), :size => 12
+= text_field_tag "event[tags][name]", tagged_item_name_value(tagged_item), :size => 12, :class => "tag"
 = link_to_function "[x]", "Events.removeTaggedItem(this.up('li'))"
