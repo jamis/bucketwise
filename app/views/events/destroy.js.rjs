@@ -11,4 +11,7 @@ when /buckets\/(\d+)/ then
   bucket = Bucket.find($1)
   subscription.accounts.find(bucket.account_id)
   page['balance'].replace(balance_cell(bucket, :classes => %w(total balance), :tag => "span", :id => "balance"))
+when /tags\/(\d+)/ then
+  tag = subscription.tags.find($1)
+  page['balance'].replace(balance_cell(tag, :classes => %w(total balance), :tag => "span", :id => "balance"))
 end

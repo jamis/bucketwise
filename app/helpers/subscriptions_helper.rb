@@ -1,8 +1,8 @@
 module SubscriptionsHelper
-  def balance_cell(account_or_bucket, options={})
-    balance = real_balance = account_or_bucket.balance
-    if account_or_bucket.respond_to?(:available_balance)
-      balance = account_or_bucket.available_balance
+  def balance_cell(container, options={})
+    balance = real_balance = container.balance
+    if container.respond_to?(:available_balance)
+      balance = container.available_balance
     end
 
     classes = %w(number)

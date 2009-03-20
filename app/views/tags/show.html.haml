@@ -1,0 +1,9 @@
+#data.content
+  %h2
+    = balance_cell(tag_ref, :classes => %w(total balance), :tag => "span", :id => "balance")
+    tag
+    &= tag_ref.name
+    = back_to_dashboard_link
+
+  %table.entries
+    = render(@items)
