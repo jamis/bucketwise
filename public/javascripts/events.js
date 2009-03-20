@@ -381,8 +381,13 @@ var Events = {
   },
 
   revealPartialTags: function() {
+    Events.addTaggedItem();
+    Events.addTaggedItem();
+
     $('tag_items_collapsed').hide();
     $('tag_items').show();
+
+    $('tag_items').down('input').focus();
   },
 
   reset: function() {
@@ -393,6 +398,9 @@ var Events = {
         Events.handleAccountChange($('account_for_' + section), section);
       })
 
+    $('tag_items').hide();
+    $('tag_items_collapsed').show();
+    $('tagged_items').innerHTML = "";
     $('tags').hide();
     $('tags_collapsed').show();
   },
