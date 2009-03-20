@@ -12,7 +12,16 @@ class Event < ActiveRecord::Base
   end
 
   has_many :account_items, :dependent => :destroy
-  has_many :tagged_items, :dependent => :destroy
+
+  has_many :tagged_items, :dependent => :destroy do
+    def partial
+      @partial ||= select { |item| item.amount != @owner.value }
+    end
+
+    def whole
+      @partial ||= select { |item| item.amount == @owner.value }
+    end
+  end
 
   alias_method :original_line_items_assignment, :line_items=
   alias_method :original_tagged_items_assignment, :tagged_items=
@@ -21,6 +30,25 @@ class Event < ActiveRecord::Base
 
   def balance
     @balance ||= account_items.sum(:amount) || 0
+  end
+
+  # Like balance, but always shows the absolute value of an event. Whereas
+  # balance will be 0 for a transfer, value will be the amount transferred.
+  # An expense will give a negative balance, but value will be the absolute
+  # value of that.
+  def value
+    case role
+    when :deposit then balance
+    when :expense then balance.abs
+    when :transfer then account_items.first.amount.abs
+    end
+  end
+
+  # Returns the list of tags for which the tagged_items on this event have an
+  # amount that matches the #value of this event. Tagged items that tag only
+  # part of the event's value are not included.
+  def tags
+    @tags ||= tagged_items.whole.map(&:tag).sort_by(&:name)
   end
 
   def account_for(role)

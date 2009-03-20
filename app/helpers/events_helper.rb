@@ -11,6 +11,10 @@ module EventsHelper
     end
   end
 
+  def tags_as_javascript
+    subscription.tags.map(&:name).sort.to_json
+  end
+
   def links_to_accounts_for_event(event)
     links = event.account_items.map do |item|
       link_to(h(item.account.name), item.account)
@@ -90,6 +94,30 @@ module EventsHelper
     end
   end
 
+  def tagged_item_name_value(item)
+    if item
+      item.tag.name
+    else
+      ""
+    end
+  end
+
+  def tagged_item_amount_value(item)
+    if item
+      "%.2f" % (item.amount.abs / 100.0)
+    else
+      ""
+    end
+  end
+
+  def tag_list_for_event
+    if @event
+      @event.tags.map(&:name).join(", ")
+    else
+      ""
+    end
+  end
+
   def section_wants_check_options?(section)
     case section
     when :payment_source, :transfer_from, :deposit
@@ -114,6 +142,14 @@ module EventsHelper
     return false
   end
 
+  def event_has_tags?
+    @event && @event.tagged_items.any?
+  end
+
+  def event_has_partial_tags?
+    @event && @event.tags.length < @event.tagged_items.length
+  end
+
   def section_visible_for_event?(section)
     return true unless @event
 
@@ -136,6 +172,12 @@ module EventsHelper
 
   def for_each_line_item_in(section)
     (@event && @event.line_items.for_role(section) || []).each do |item|
+      yield item
+    end
+  end
+
+  def for_each_partial_tagged_item
+    (@event && @event.tagged_items.partial || []).each do |item|
       yield item
     end
   end

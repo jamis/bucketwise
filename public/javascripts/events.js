@@ -145,6 +145,17 @@ var Events = {
     Events.updateUnassigned();
   },
 
+  addTaggedItem: function() {
+    var ol = $('tagged_items');
+    var li = document.createElement("li");
+    li.innerHTML = $('template.tagged_item').innerHTML;
+    ol.appendChild(li);
+  },
+
+  removeTaggedItem: function(li) {
+    li.remove();
+  },
+
   updateUnassigned: function() {
     $('success_notice').hide();
     Events.updateUnassignedFor('payment_source');
@@ -364,6 +375,16 @@ var Events = {
     $('transfer_to').show();
   },
 
+  revealTags: function() {
+    $('tags_collapsed').hide();
+    $('tags').show();
+  },
+
+  revealPartialTags: function() {
+    $('tag_items_collapsed').hide();
+    $('tag_items').show();
+  },
+
   reset: function() {
     $('event_form').reset();
 
@@ -371,6 +392,9 @@ var Events = {
       function(section) {
         Events.handleAccountChange($('account_for_' + section), section);
       })
+
+    $('tags').hide();
+    $('tags_collapsed').show();
   },
 
   cancel: function() {

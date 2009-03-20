@@ -371,6 +371,12 @@ div.transaction div.notice p {
   background-position: left middle;
 }
 
+div.transaction #tags_collapsed {
+  border: 1px solid #ccc;
+  margin-top: 0.5em;
+  padding: 0.5em;
+}
+
 div#new_account {
   width: 30em;
   margin: 0 auto;
