@@ -426,6 +426,33 @@ div.transaction.expense span.expense_label { display: inline; }
 div.transaction.deposit span.deposit_label { display: inline; }
 div.transaction.transfer span.transfer_label { display: inline; }
 
+div.tag_select {
+  background: white;
+  border: 1px solid #ccc;
+  padding: 0.5em;
+}
+
+div.tag_select ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+div.tag_select li {
+  line-height: 1.1em;
+  cursor: pointer;
+}
+
+div.tag_select li.selected {
+  background: #ffd;
+}
+
+div.tag_select strong {
+  font-weight: bold;
+  color: black;
+  background: transparent;
+  padding: 0;
+}
 
 /* ------------------------------------------------------------------ *
  * LOGIN PAGE
