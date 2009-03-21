@@ -9,4 +9,4 @@
             %td.number= item.amount > 0 ? format_amount(item.amount) : ""
             %td.negative.number= item.amount < 0 ? format_amount(item.amount) : ""
       - if event.tags.any?
-        %p.tags= "&rarr; " + tag_links_for(event)
+        %p.tags= "&#x2713; " + tag_links_for(event)

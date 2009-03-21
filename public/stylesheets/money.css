@@ -205,7 +205,7 @@ tr.bucket td.more a {
 }
 
 tr.even {
-  background: #eee;
+  background: #ffd;
 }
 
 tr.bucket td.indent {
@@ -239,32 +239,6 @@ td.date {
   opacity: 0.5;
 }
 
-td.expand {
-  width: 1px;
-  padding-right: 0.3em;
-  text-align: center;
-}
-
-td.expanding {
-  background-color: #f77;
-}
-
-td.expanding * {
-  visibility: none;
-}
-
-td.expand a.collapse {
-  display: none;
-}
-
-td.expanding a {
-  display: none;
-}
-
-td.expanded a.expand {
-  display: none;
-}
-
 table.entries th {
   line-height: 2em;
   background: #bfb;
@@ -282,8 +256,9 @@ table.entries tr.zoomed {
 
 table.entries td.zoom {
   padding: 0;
-  background: #cc7;
+  background: #eee;
   border-top: 3px solid #777;
+  border-bottom: 1px solid #ccc;
 }
 
 table.entries tr.odd.hover td {
@@ -295,15 +270,31 @@ table.entries tr.even.hover td {
 }
 
 td.zoom div.detail {
-  margin-bottom: 1em;
+  margin: -3px 7.5em 1em 7.5em;
+}
+
+div.detail p.tags {
+  font-size: 80%;
+  margin-top: 0.2em;
+  padding: 0.2em;
+  color: #666;
+}
+
+div.detail p.tags a {
+  color: #66f;
+  font-weight: bold;
+}
+
+div.detail p.tags a:hover {
+  color: #00c;
 }
 
 td.zoom table {
   border-right: 3px solid #777;
   border-bottom: 3px solid #777;
   background: #ffd;
+  margin: 0;
   width: auto;
-  margin: -3px 0 0 7.5em;
   font-size: 80%;
 }
 
@@ -316,11 +307,6 @@ td.zoom tr.odd td {
 
 td.zoom tr.even td {
   background: #eea;
-}
-
-td.zoom p.tags {
-  margin: 0.5em 0 0 7.5em;
-  font-size: 80%;
 }
 
 .form {
