@@ -493,6 +493,20 @@ var Events = {
     $('nubbin_event_' + id).hide();
   },
 
+  delete: function(url, token) {
+    if(confirm("Do you wish to delete this transaction?")) {
+      parameters = 'authenticity_token=' + encodeURIComponent(token) + '&' +
+                   'from=' + encodeURIComponent(Events.source);
+
+      new Ajax.Request(url, {
+        asynchronous:true,
+        evalScripts:true,
+        method:'delete',
+        parameters:parameters
+      });
+    }
+  },
+
   destroy: function(id) {
     var table = $('event_' + id).up('table');
     $('event_' + id).remove();

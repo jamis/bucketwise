@@ -8,6 +8,9 @@
     = calendar_date_select_includes "default"
 
   %body
+    :javascript
+      Events.source = #{current_location.to_json};
+
     #header
       %h1
         %span.actions
