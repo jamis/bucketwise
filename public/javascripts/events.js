@@ -507,6 +507,11 @@ var Events = {
     }
   },
 
+  edit: function(url) {
+    var return_to = window.location.pathname;
+    window.location = url + "?return_to=" + encodeURIComponent(return_to);
+  },
+
   destroy: function(id) {
     var table = $('event_' + id).up('table');
     $('event_' + id).remove();
