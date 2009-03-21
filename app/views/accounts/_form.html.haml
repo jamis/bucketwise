@@ -1,4 +1,4 @@
-- remote_form_for(:account, :url => subscription_accounts_path(subscription), :html => { :onsubmit => "if(!Accounts.submit()) return false", :id => "new_account_form" }) do |form|
+- form_for(:account, :url => subscription_accounts_path(subscription), :html => { :onsubmit => "if(!Accounts.submit()) return false", :id => "new_account_form" }) do |form|
   %fieldset
     %legend Account info
 

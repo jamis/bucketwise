@@ -38,9 +38,5 @@ var Accounts = {
 
   reset: function() {
     $('new_account_form').reset();
-  },
-
-  removeBlankSlate: function() {
-    if($('blankslate')) $('blankslate').remove();
   }
 }
