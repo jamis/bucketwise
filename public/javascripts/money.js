@@ -23,7 +23,9 @@ var Money = {
 
     if(match[3] && match[3].length > 0) {
       var cents_magnitude = Math.pow(10, match[3].length);
-      var cents = Math.round(parseInt(match[3].sub(/^0+/, "")) * 100 / cents_magnitude);
+      var cents_text = match[3].sub(/^0+/, "");
+      if(cents_text.blank()) cents_text = "0";
+      var cents = Math.round(parseInt(cents_text) * 100 / cents_magnitude);
     } else {
       var cents = 0;
     }
