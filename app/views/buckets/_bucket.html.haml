@@ -2,8 +2,8 @@
 
   %td
     .nubbin{:id => dom_id(bucket, :nubbin), :style => "display: none"}
-      = link_to_function("$+", "Buckets.transferTo(#{bucket.account_id}, #{bucket.id})")
-      = link_to_function("$-", "Buckets.transferFrom(#{bucket.account_id}, #{bucket.id})")
+      = link_to_function("&#x2913;", "Buckets.transferTo(#{bucket.account_id}, #{bucket.id})")
+      = link_to_function("&#x21A5;", "Buckets.transferFrom(#{bucket.account_id}, #{bucket.id})")
     = link_to(h(bucket.name), bucket, :class => "bucket")
 
   = balance_cell(bucket)
