@@ -160,6 +160,13 @@ var Events = {
   autocomplete_tag_field: function(id, options) {
     options = options || {};
     options.frequency = options.frequency || 0.2;
+    options.onHide = options.onHide ||
+      function(element, update) {
+        new Effect.Fade(update,{
+          duration:0.15,
+          afterFinish:function() { update.innerHTML = ""; }
+        })
+      }
 
     new Autocompleter.Local(id, id + "_select", Events.tags, options);
   },
