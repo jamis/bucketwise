@@ -5,7 +5,7 @@
     = account_prompt
     = select_account(section, accounts, selected_account && selected_account.id)
     - if section_wants_check_options?(section)
-      %span{:id => "#{section}.check_options", :style => "display: none"}
+      %span{:id => "#{section}.check_options", :style => check_options_style_for(section)}
         == <strong>Check #</strong>#{form.text_field :check_number, :size => 6}
 
   - if section_has_single_bucket?(section)

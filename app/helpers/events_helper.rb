@@ -171,6 +171,14 @@ module EventsHelper
     return true
   end
 
+  def check_options_style_for(section)
+    if @event && @event.line_items.for_role(section).first.account.role == "checking"
+      nil
+    else
+      "display: none"
+    end
+  end
+
   def section_has_single_bucket?(section)
     return false if @event && @event.line_items.for_role(section).length > 1
     return true
