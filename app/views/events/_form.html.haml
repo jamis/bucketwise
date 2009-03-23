@@ -5,9 +5,7 @@
 #templates{:style => "display: none"}
   - form_sections.each do |section|
     %div{:id => "template.#{section}"}
-      = render :partial => "events/line_item", :locals => { :section => section }
-  %div{:id => "template.tagged_item"}
-    = render :partial => "events/tagged_item"
+      = render :partial => template_partial_for(section), :locals => { :section => section }
 
 - form_for(:event, event_for_form, :url => event_form_action, :html => { :id => "event_form", :onsubmit => "Events.submit(this); return false" }) do |form|
   #success_notice.notice{:style => "display: none"}
@@ -18,8 +16,6 @@
 
   - form_sections.each do |section|
     = render_event_form_section(form, section) if event_wants_section?(section)
-
-  = render :partial => "events/form_tags", :locals => { :form => form }
 
   %p
     %input{:type => "submit", :value => "Record this transaction"}/

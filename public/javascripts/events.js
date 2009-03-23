@@ -2,10 +2,10 @@ var Events = {
   nextID: 0,
 
   updateBucketsFor: function(section, reset) {
-    var acctSelect = $('account_for_' + section);
-    var disabled = acctSelect.selectedIndex == 0;
-    var acctId = disabled ? null : parseInt(acctSelect.options[acctSelect.selectedIndex].value);
     var skipAside = section == 'credit_options';
+    var acctField = $('account_for_' + section);
+    var disabled = acctField.tagName == "SELECT" && acctField.selectedIndex == 0;
+    var acctId = disabled ? null : $F(acctField);
 
     Events.getBucketSelects(section).each(function(bucketSelect) {
       Events.populateBucket(bucketSelect, acctId,
@@ -99,8 +99,7 @@ var Events = {
       $(section + '.multiple_buckets').down('input').activate();
 
     } else if(selected == '++') {
-      var acctSelect = $('account_for_' + section);
-      var acctId = parseInt(acctSelect.options[acctSelect.selectedIndex].value);
+      var acctId = $F('account_for_' + section);
 
       var name = prompt('Name your new bucket:');
       if(name) {
@@ -136,7 +135,7 @@ var Events = {
     ol.appendChild(li);
     if(populate) {
       var acctSelect = $('account_for_' + section);
-      var acctId = parseInt(acctSelect.options[acctSelect.selectedIndex].value);
+      var acctId = $F('account_for_' + section);
       Events.populateBucket(li.down("select"), acctId,
         {'skipAside':(section=='credit_options')});
     }
@@ -150,7 +149,7 @@ var Events = {
   addTaggedItem: function() {
     var ol = $('tagged_items');
     var li = document.createElement("li");
-    var content = $('template.tagged_item').innerHTML;
+    var content = $('template.tags').innerHTML;
     var id = "tagged_item_i" + String(Events.nextID++);
     li.innerHTML = content.gsub(/\{ID\}/, id);
     ol.appendChild(li);
@@ -234,6 +233,20 @@ var Events = {
     return xml;
   },
 
+  available: function(section) {
+    return $(section) && $(section).visible();
+  },
+
+  sections: {
+    payment_source : {expense:true},
+    credit_options : {expense:true},
+    deposit        : {expense:false},
+    transfer_from  : {expense:true},
+    transfer_to    : {expense:false},
+    reallocate_from: {expense:false, reallocation: true},
+    reallocate_to  : {expense:true, reallocation: true}
+  },
+
   serialize: function(parent) {
     var request = {};
 
@@ -241,29 +254,16 @@ var Events = {
     request['event']['line_item'] = [];
     request['event']['tagged_item'] = [];
 
-    Events.serializeGeneralInformation(request);
-
-    if($('payment_source') && $('payment_source').visible()) {
-      Events.serializeSection(request, 'payment_source', {expense:true});
+    if(Events.available('general_information'))
+      Events.serializeGeneralInformation(request);
+    else {
+      request['event']['occurred_on'] = Events.defaultDate;
+      request['event']['actor'] = Events.defaultActor;
     }
 
-    if($('credit_options') && $('credit_options').visible()) {
-      Events.serializeSection(request, 'credit_options', {expense:true});
-      var account_id = parseInt($F('account_for_credit_options'));
-      var debit = Money.parse('expense_total');
-      Events.addLineItem(request, account_id, 'r:aside', debit, 'aside');
-    }
-
-    if($('deposit') && $('deposit').visible()) {
-      Events.serializeSection(request, 'deposit', {expense:false})
-    }
-
-    if($('transfer_from') && $('transfer_from').visible()) {
-      Events.serializeSection(request, 'transfer_from', {expense:true})
-    }
-
-    if($('transfer_to') && $('transfer_to').visible()) {
-      Events.serializeSection(request, 'transfer_to', {expense:false})
+    for(section in Events.sections) {
+      if(Events.available(section))
+        Events.serializeSection(request, section, Events.sections[section]);
     }
 
     Events.serializeTags(request);
@@ -299,7 +299,8 @@ var Events = {
   serializeSection: function(request, section, options) {
     options = options || {};
     var account_id = $F('account_for_' + section);
-    var expense = (options.expense ? -1 : 1) * Money.parse('expense_total');
+    var total = Money.parse('expense_total');
+    var expense = (options.expense ? -1 : 1) * total;
 
     if(Events.sectionWantsCheckOptions(section) && $(section + '.check_options').visible()) {
       request['event']['check_number'] = $F($(section + '.check_options').down('input'));
@@ -309,8 +310,18 @@ var Events = {
     if(single && single.visible()) {
       var bucket_id = $F($(section + '.single_bucket').down('select'));
       Events.addLineItem(request, account_id, bucket_id, expense, section);
+      value = expense;
     } else {
-      Events.addLineItems(request, account_id, section, options);
+      value = Events.addLineItems(request, account_id, section, options);
+    }
+
+    if(options.reallocation) {
+      var bucket_id = $F($(section).down('p.primary').down('select'));
+      Events.addLineItem(request, account_id, bucket_id, -value, 'primary');
+    }
+
+    if(section == 'credit_options') {
+      Events.addLineItem(request, account_id, 'r:aside', total, 'aside');
     }
   },
 
@@ -354,11 +365,16 @@ var Events = {
 
   addLineItems: function(request, account_id, section, options) {
     options = options || {};
+    value = 0;
+
     $(section + '.line_items').select('li').each(function(row) {
       bucket_id = $F(row.down('select'));
       amount = (options.expense ? -1 : 1) * Money.parse(row.down('input[type=text]'));
+      value += amount;
       Events.addLineItem(request, account_id, bucket_id, amount, section);
     });
+
+    return value;
   },
 
   submit: function(form) {
@@ -394,11 +410,14 @@ var Events = {
     $$('.expense_label').invoke('hide');
     $$('.deposit_label').invoke('hide');
     $$('.transfer_label').invoke('hide');
+    $('general_information').show();
     $('payment_source').hide();
     $('credit_options').hide();
     $('deposit').hide();
     $('transfer_from').hide();
     $('transfer_to').hide();
+    $('reallocate_from').hide();
+    $('reallocate_to').hide();
     $('event_occurred_on').activate();
   },
 
@@ -422,6 +441,18 @@ var Events = {
     $$('.transfer_label').invoke('show');
     $('transfer_from').show();
     $('transfer_to').show();
+  },
+
+  revealReallocationForm: function(direction, account_id, bucket_id) {
+    Events.revealBasicForm();
+    $('general_information').hide();
+    var section = 'reallocate_' + direction;
+    $('account_for_' + section).value = account_id;
+    $(section + ".line_items").innerHTML = "";
+    $(section).show();
+    Events.updateBucketsFor(section);
+    Events.selectBucket($(section).down('select'), bucket_id);
+    Events.addLineItemTo(section, true);
   },
 
   revealTags: function() {
@@ -482,7 +513,7 @@ var Events = {
   onMouseOver: function(id) {
     $('event_' + id).addClassName("hover");
     var nubbin = $('nubbin_event_' + id);
-    var offset = nubbin.parentNode.cumulativeOffset();
+    var offset = nubbin.up("tr").cumulativeOffset();
 
     nubbin.show();
     nubbin.style.left = (offset.left - nubbin.getWidth()) + "px";

@@ -185,7 +185,7 @@ tr.bucket td {
   padding: 0.25em 0.3em 0.25em 1em;
 }
 
-tr.bucket a {
+tr.bucket a.bucket {
   display: block;
   color: #000;
 }
@@ -206,10 +206,6 @@ tr.bucket td.more a {
 
 tr.even {
   background: #ffd;
-}
-
-tr.bucket td.indent {
-  width: 2em;
 }
 
 td.total {

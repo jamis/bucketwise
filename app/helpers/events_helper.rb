@@ -5,7 +5,7 @@ module EventsHelper
       memo << account.id.to_s << ":{id:#{account.id},name:#{account.name.to_json},role:#{account.role.to_json},buckets:["
       memo << account.buckets.sort_by(&:name).inject("") do |m, bucket|
         m << "," unless m.blank?
-        m << "{id:#{bucket.id},name:#{bucket.name.to_json},role:#{bucket.role.to_json}}"
+        m << "{id:#{bucket.id},name:#{bucket.name.to_json},balance:#{bucket.balance},role:#{bucket.role.to_json}}"
       end
       memo << "]}"
     end
@@ -28,7 +28,10 @@ module EventsHelper
        credit_options
        deposit
        transfer_from
-       transfer_to)
+       transfer_to
+       reallocate_from
+       reallocate_to
+       tags)
   end
 
   def select_account(section, accounts, selection)
@@ -242,16 +245,26 @@ module EventsHelper
   def render_event_form_section(form, section)
     section = section.to_sym
 
-    accounts = subscription.accounts
-    accounts = accounts.select { |a| a.role == "checking" } if section == :credit_options
+    case section
+    when :tags then
+      render :partial => "events/form_tags", :locals => { :form => form }
 
-    values = { :section          => section,
-               :form             => form,
-               :accounts         => accounts,
-               :selected_account => form.object && form.object.account_for(section) }
+    when :reallocate_from, :reallocate_to then
+      render :partial => "events/form_reallocate",
+        :locals => { :form => form, :section => section }
 
-    render :partial => "events/form_section",
-           :locals => FORM_SECTIONS[section].merge(values)
+    else
+      accounts = subscription.accounts
+      accounts = accounts.select { |a| a.role == "checking" } if section == :credit_options
+
+      values = { :section          => section,
+                 :form             => form,
+                 :accounts         => accounts,
+                 :selected_account => form.object && form.object.account_for(section) }
+
+      render :partial => "events/form_section",
+             :locals => FORM_SECTIONS[section].merge(values)
+    end
   end
 
   def tag_links_for(event)
@@ -266,5 +279,22 @@ module EventsHelper
     dropdown = content_tag(:div, "", :style => "display: none", :class => "tag_select", :id => "#{options[:id]}_select")
 
     tag_field + dropdown
+  end
+
+  def reallocation_verbs_for(section)
+    case section.to_sym
+    when :reallocate_to   then %w(to from)
+    when :reallocate_from then %w(from to)
+    else
+      raise ArgumentError, "unsupported section #{section.inspect} for reallocation_verbs_for"
+    end
+  end
+
+  def template_partial_for(section)
+    case section
+    when "tags" then "events/tagged_item"
+    when "reallocate_from", "reallocate_to" then "events/reallocation_item"
+    else "events/line_item"
+    end
   end
 end

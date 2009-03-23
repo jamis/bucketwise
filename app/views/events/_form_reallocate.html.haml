@@ -1,0 +1,12 @@
+%fieldset{:id => section, :style => section_visible_for_event?(section) ? nil : "display: none"}
+  %legend Reallocate funds
+
+  %p.primary
+    = hidden_field_tag "account_for_#{section}", ""
+
+    == <strong>Which bucket</strong> are you reallocating funds <strong>#{reallocation_verbs_for(section).first}</strong>?
+    = select_bucket(section, :splittable => false)
+
+  %ol{:id => "#{section}.line_items"}
+
+  %p= link_to_function "More buckets, please!", "Events.addLineItemTo('#{section}', true)"

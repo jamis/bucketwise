@@ -1,3 +1,9 @@
-%tr.bucket{:class => cycle('odd', 'even')}
-  %td= link_to(bucket.name, bucket)
+%tr.bucket{:id => dom_id(bucket), :class => cycle('odd', 'even'), :onmouseover => "Buckets.onMouseOver(#{bucket.id})", :onmouseout => "Buckets.onMouseOut(#{bucket.id})"}
+
+  %td
+    .nubbin{:id => dom_id(bucket, :nubbin), :style => "display: none"}
+      = link_to_function("$+", "Buckets.transferTo(#{bucket.account_id}, #{bucket.id})")
+      = link_to_function("$-", "Buckets.transferFrom(#{bucket.account_id}, #{bucket.id})")
+    = link_to(h(bucket.name), bucket, :class => "bucket")
+
   = balance_cell(bucket)
