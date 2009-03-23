@@ -398,6 +398,16 @@ input.number {
   border-right: 1px solid #555;
 }
 
+.nubbin a.button {
+  padding: 0.1em 0.5em;
+  border: 1px solid #eee;
+}
+
+.nubbin a.button:hover {
+  background: #009;
+  color: white;
+}
+
 div.transaction.edit span.expense_label,
 div.transaction.edit span.deposit_label,
 div.transaction.edit span.transfer_label {
