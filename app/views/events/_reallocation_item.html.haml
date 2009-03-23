@@ -1,4 +1,4 @@
 Reallocate
-= "$" + text_field_tag("amount", "", :class => "number", :size => 9)
+= "$" + text_field_tag("amount", line_item_amount_value(reallocation_item), :class => "number", :size => 9)
 == <strong>#{reallocation_verbs_for(section).last}</strong>
-= select_bucket(section, :splittable => false)
+= select_bucket(section, :splittable => false, :line_item => reallocation_item)

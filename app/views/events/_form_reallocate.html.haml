@@ -2,11 +2,13 @@
   %legend Reallocate funds
 
   %p.primary
-    = hidden_field_tag "account_for_#{section}", ""
+    = hidden_field_tag "account_for_#{section}", account_id_for_section(section)
 
     == <strong>Which bucket</strong> are you reallocating funds <strong>#{reallocation_verbs_for(section).first}</strong>?
-    = select_bucket(section, :splittable => false)
+    = select_bucket(section, :splittable => false, :line_item => line_item_for_section('primary'))
 
   %ol{:id => "#{section}.line_items"}
+    - for_each_line_item_in(section) do |item|
+      %li= render :partial => "events/reallocation_item", :object => item, :locals => { :section => section }
 
   %p= link_to_function "More buckets, please!", "Events.addLineItemTo('#{section}', true)"

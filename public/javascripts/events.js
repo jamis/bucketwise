@@ -299,8 +299,11 @@ var Events = {
   serializeSection: function(request, section, options) {
     options = options || {};
     var account_id = $F('account_for_' + section);
-    var total = Money.parse('expense_total');
-    var expense = (options.expense ? -1 : 1) * total;
+
+    if($('expense_total')) {
+      var total = Money.parse('expense_total');
+      var expense = (options.expense ? -1 : 1) * total;
+    }
 
     if(Events.sectionWantsCheckOptions(section) && $(section + '.check_options').visible()) {
       request['event']['check_number'] = $F($(section + '.check_options').down('input'));

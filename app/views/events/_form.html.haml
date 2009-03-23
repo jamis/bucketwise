@@ -12,7 +12,12 @@
     %p== Your transaction has been recorded. You may enter another one, |
          or #{link_to_function "close this form", "Events.cancel()"}. |
 
-  = render :partial => "events/form_general", :locals => { :form => form }
+  - if event_wants_section?('general_information')
+    = render :partial => "events/form_general", :locals => { :form => form }
+  - else
+    :javascript
+      Events.defaultDate = #{@event.occurred_on.strftime("%Y-%m-%d").to_json};
+      Events.defaultActor = #{@event.actor.to_json};
 
   - form_sections.each do |section|
     = render_event_form_section(form, section) if event_wants_section?(section)

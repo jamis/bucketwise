@@ -133,13 +133,21 @@ module EventsHelper
   def event_wants_section?(section)
     return true unless @event
 
-    case section.to_sym
+    section = section.to_sym
+    return true if section == :tags
+
+    case section
+    when :general_information then
+      return @event.role != :reallocation
     when :payment_source, :credit_options then
       return @event.role == :expense
     when :deposit then
       return @event.role == :deposit
     when :transfer_from, :transfer_to then
       return @event.role == :transfer
+    when :reallocate_from, :reallocate_to
+      return @event.role == :reallocation &&
+        @event.line_items.any? { |item| item.role.to_sym == section }
     end
 
     return false
@@ -187,6 +195,10 @@ module EventsHelper
 
   def line_item_for_section(section)
     @event && @event.line_items.for_role(section).first
+  end
+
+  def account_id_for_section(section)
+    @event && @event.line_items.for_role(section).first.account_id
   end
 
   def bucket_action_phrase_for(section)

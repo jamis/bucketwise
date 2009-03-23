@@ -73,6 +73,8 @@ class Event < ActiveRecord::Base
         :deposit
       elsif balance < 0
         :expense
+      elsif account_items.length == 1
+        :reallocation
       else
         :transfer
       end
