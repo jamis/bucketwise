@@ -3,37 +3,53 @@ john_checking_general:
   author: john
   name: General
   role: default
-  created_at: <%= (2.months.ago + 1.hour).utc.to_s(:db) %>
-  updated_at: <%= (2.months.ago + 1.hour).utc.to_s(:db) %>
+  created_at: <%= (60.days.ago + 1.hour).utc.to_s(:db) %>
+  updated_at: <%= (60.days.ago + 1.hour).utc.to_s(:db) %>
 
 john_checking_groceries:
   account: john_checking
   author: john
   name: Groceries
   role: ~
-  created_at: <%= (2.months.ago + 2.hours).utc.to_s(:db) %>
-  updated_at: <%= (2.months.ago + 2.hours).utc.to_s(:db) %>
+  created_at: <%= (60.days.ago + 2.hours).utc.to_s(:db) %>
+  updated_at: <%= (60.days.ago + 2.hours).utc.to_s(:db) %>
 
 john_checking_household:
   account: john_checking
   author: john
   name: Household
   role: ~
-  created_at: <%= (2.months.ago + 2.hours).utc.to_s(:db) %>
-  updated_at: <%= (2.months.ago + 2.hours).utc.to_s(:db) %>
+  created_at: <%= (60.days.ago + 2.hours).utc.to_s(:db) %>
+  updated_at: <%= (60.days.ago + 2.hours).utc.to_s(:db) %>
+
+john_checking_dining:
+  account: john_checking
+  author: john
+  name: Dining
+  role: ~
+  created_at: <%= (60.days.ago + 2.hours).utc.to_s(:db) %>
+  updated_at: <%= (60.days.ago + 2.hours).utc.to_s(:db) %>
+
+john_checking_aside:
+  account: john_checking
+  author: john
+  name: Aside
+  role: aside
+  created_at: <%= (60.days.ago + 3.hours).utc.to_s(:db) %>
+  updated_at: <%= (60.days.ago + 3.hours).utc.to_s(:db) %>
 
 john_mastercard_general:
   account: john_mastercard
   author: john
   name: General
   role: default
-  created_at: <%= (2.months.ago + 2.hours).utc.to_s(:db) %>
-  updated_at: <%= (2.months.ago + 2.hours).utc.to_s(:db) %>
+  created_at: <%= (60.days.ago + 2.hours).utc.to_s(:db) %>
+  updated_at: <%= (60.days.ago + 2.hours).utc.to_s(:db) %>
 
 john_savings_general:
   account: john_savings
   author: john
   name: General
   role: default
-  created_at: <%= (2.months.ago + 3.hours).utc.to_s(:db) %>
-  updated_at: <%= (2.months.ago + 3.hours).utc.to_s(:db) %>
+  created_at: <%= (60.days.ago + 3.hours).utc.to_s(:db) %>
+  updated_at: <%= (60.days.ago + 3.hours).utc.to_s(:db) %>

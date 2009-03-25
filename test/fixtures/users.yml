@@ -4,5 +4,5 @@ john:
   user_name: jjohnson
   password_hash: "9fa57e93a8d9a3abe5a30ea13edbe250b7dd16d2" # hash of 'testing'
   salt: "?s\201i??<?2\254/\e?FӨu%\bza]%W?*?\276:"
-  created_at: <%= 2.months.ago.utc.to_s(:db) %>
-  updated_at: <%= 2.months.ago.utc.to_s(:db) %>
+  created_at: <%= 60.days.ago.utc.to_s(:db) %>
+  updated_at: <%= 60.days.ago.utc.to_s(:db) %>

@@ -27,6 +27,18 @@ class AccountTest < ActiveSupport::TestCase
     end
   end
 
+  test "available balance should be the same as balance when there is no aside" do
+    assert !accounts(:john_savings).buckets.detect { |bucket| bucket.role == 'aside' }
+    assert_equal accounts(:john_savings).available_balance, accounts(:john_savings).balance
+  end
+
+  test "unavailable balance should exclude aside balance" do
+    checking = accounts(:john_checking)
+    aside = buckets(:john_checking_aside)
+    assert !aside.balance.zero?
+    assert_equal checking.available_balance, checking.balance - aside.balance
+  end
+
   private
 
     def new_account(options={})

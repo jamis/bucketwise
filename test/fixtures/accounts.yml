@@ -3,21 +3,21 @@ john_checking:
   author: john
   name: Checking
   role: checking
-  created_at: <%= (2.months.ago + 1.hour).utc.to_s(:db) %>
-  updated_at: <%= (2.months.ago + 1.hour).utc.to_s(:db) %>
+  created_at: <%= (60.days.ago + 1.hour).utc.to_s(:db) %>
+  updated_at: <%= (60.days.ago + 1.hour).utc.to_s(:db) %>
 
 john_mastercard:
   subscription: john
   author: john
   name: Mastercard
   role: credit-card
-  created_at: <%= (2.months.ago + 2.hours).utc.to_s(:db) %>
-  updated_at: <%= (2.months.ago + 2.hours).utc.to_s(:db) %>
+  created_at: <%= (60.days.ago + 2.hours).utc.to_s(:db) %>
+  updated_at: <%= (60.days.ago + 2.hours).utc.to_s(:db) %>
 
 john_savings:
   subscription: john
   author: john
   name: Savings
   role: ~
-  created_at: <%= (2.months.ago + 3.hours).utc.to_s(:db) %>
-  updated_at: <%= (2.months.ago + 3.hours).utc.to_s(:db) %>
+  created_at: <%= (60.days.ago + 3.hours).utc.to_s(:db) %>
+  updated_at: <%= (60.days.ago + 3.hours).utc.to_s(:db) %>

@@ -1,0 +1,31 @@
+john_checking_starting_balance:
+  event: john_checking_starting_balance
+  account: john_checking
+  bucket: john_checking_general
+  amount: 100000
+  role: deposit
+  occurred_on: <%= 60.days.ago.to_date.to_s(:db) %>
+
+john_lunch_mastercard:
+  event: john_lunch
+  account: john_mastercard
+  bucket: john_mastercard_general
+  amount: -775
+  role: payment_source
+  occurred_on: <%= 59.days.ago.utc.to_s(:db) %>
+
+john_lunch_checking_dining:
+  event: john_lunch
+  account: john_checking
+  bucket: john_checking_dining
+  amount: -775
+  role: credit_options
+  occurred_on: <%= 59.days.ago.utc.to_s(:db) %>
+
+john_lunch_checking_aside:
+  event: john_lunch
+  account: john_checking
+  bucket: john_checking_aside
+  amount: 775
+  role: aside
+  occurred_on: <%= 59.days.ago.utc.to_s(:db) %>

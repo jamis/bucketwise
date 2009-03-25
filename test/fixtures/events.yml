@@ -1,0 +1,17 @@
+john_checking_starting_balance:
+  subscription: john
+  user: john
+  occurred_on: <%= 60.days.ago.to_date.to_s(:db) %>
+  actor: Starting balance
+  check_number: ~
+  created_at: <%= (60.days.ago + 1.hour).utc.to_s(:db) %>
+  updated_at: <%= (60.days.ago + 1.hour).utc.to_s(:db) %>
+
+john_lunch:
+  subscription: john
+  user: john
+  occurred_on: <%= 59.days.ago.to_date.to_s(:db) %>
+  actor: Sandwich Central
+  check_number: ~
+  created_at: <%= 59.days.ago.utc.to_s(:db) %>
+  updated_at: <%= 59.days.ago.utc.to_s(:db) %>

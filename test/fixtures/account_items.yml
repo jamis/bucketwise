@@ -1,0 +1,17 @@
+john_checking_starting_balance:
+  event: john_checking_starting_balance
+  account: john_checking
+  amount: 100000
+  occurred_on: <%= 60.days.ago.to_date.to_s(:db) %>
+
+john_lunch_mastercard:
+  event: john_lunch
+  account: john_mastercard
+  amount: -775
+  occurred_on: <%= 59.days.ago.utc.to_s(:db) %>
+
+john_lunch_checking:
+  event: john_lunch
+  account: john_checking
+  amount: 0
+  occurred_on: <%= 59.days.ago.utc.to_s(:db) %>
