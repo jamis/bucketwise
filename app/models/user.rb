@@ -10,6 +10,8 @@ class User < ActiveRecord::Base
 
   before_save :set_password_hash_and_salt
 
+  validates_uniqueness_of :user_name
+
   def self.password_hash_for(password, salt)
     Digest::SHA1.hexdigest(salt + password)
   end
@@ -24,7 +26,7 @@ class User < ActiveRecord::Base
 
     def set_password_hash_and_salt
       if @password
-        self.salt = Array.new(32) { rand(256) }.pack("C*")
+        self.salt = Array.new(32) { 32 + rand(95) }.pack("C*")
         self.password_hash = self.class.password_hash_for(@password, salt)
         @password = nil
       end
