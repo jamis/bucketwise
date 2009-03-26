@@ -47,6 +47,8 @@ class EventTest < ActiveSupport::TestCase
     event = subscriptions(:john).events.create(@event_base)
     assert_equal [-25_75, -15_25], event.line_items.map(&:amount)
     assert_equal [buckets(:john_checking_groceries), buckets(:john_checking_household)], event.line_items.map(&:bucket)
+    assert buckets(:john_checking_groceries, :reload).updated_at > 1.second.ago.utc
+    assert buckets(:john_checking_household, :reload).updated_at > 1.second.ago.utc
   end
 
   test "create with buckets by name should find or create buckets as needed" do
