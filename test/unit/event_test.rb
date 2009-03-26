@@ -132,6 +132,27 @@ class EventTest < ActiveSupport::TestCase
     assert_equal :reallocation, events(:john_reallocate_to).role
   end
 
+  test "value for deposit should be the balance" do
+    assert_equal events(:john_checking_starting_balance).balance,
+      events(:john_checking_starting_balance).value
+  end
+
+  test "value for expense should be the absolute value of the balance" do
+    assert_equal events(:john_lunch).balance.abs, events(:john_lunch).value
+  end
+
+  test "value for transfer should be the absolute value any one of the account items" do
+    assert_equal events(:john_bill_pay).account_items.first.amount.abs,
+      events(:john_bill_pay).value
+  end
+
+  test "value for reallocation should be the absolute value any one of the primary item" do
+    assert_equal events(:john_reallocate_from).line_items.for_role(:primary).first.amount.abs,
+      events(:john_reallocate_from).value
+    assert_equal events(:john_reallocate_to).line_items.for_role(:primary).first.amount.abs,
+      events(:john_reallocate_to).value
+  end
+
   protected
 
     def prepare_basic_event_data
