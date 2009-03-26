@@ -15,3 +15,30 @@ john_lunch:
   check_number: ~
   created_at: <%= 59.days.ago.utc.to_s(:db) %>
   updated_at: <%= 59.days.ago.utc.to_s(:db) %>
+
+john_bill_pay:
+  subscription: john
+  user: john
+  occurred_on: <%= 58.days.ago.to_date.to_s(:db) %>
+  actor: MasterCard Co.
+  check_number: 1234
+  created_at: <%= 58.days.ago.utc.to_s(:db) %>
+  updated_at: <%= 58.days.ago.utc.to_s(:db) %>
+
+john_reallocate_from:
+  subscription: john
+  user: john
+  occurred_on: <%= 57.days.ago.to_date.to_s(:db) %>
+  actor: Bucket reallocation
+  check_number: ~
+  created_at: <%= 57.days.ago.utc.to_s(:db) %>
+  updated_at: <%= 57.days.ago.utc.to_s(:db) %>
+
+john_reallocate_to:
+  subscription: john
+  user: john
+  occurred_on: <%= 56.days.ago.to_date.to_s(:db) %>
+  actor: Bucket reallocation
+  check_number: ~
+  created_at: <%= 56.days.ago.utc.to_s(:db) %>
+  updated_at: <%= 56.days.ago.utc.to_s(:db) %>

@@ -15,3 +15,27 @@ john_lunch_checking:
   account: john_checking
   amount: 0
   occurred_on: <%= 59.days.ago.utc.to_s(:db) %>
+
+john_bill_pay_checking:
+  event: john_bill_pay
+  account: john_checking
+  amount: -775
+  occurred_on: <%= 58.days.ago.utc.to_s(:db) %>
+
+john_bill_pay_mastercard:
+  event: john_bill_pay
+  account: john_mastercard
+  amount: 775
+  occurred_on: <%= 58.days.ago.utc.to_s(:db) %>
+
+john_reallocate_from_checking:
+  event: john_reallocate_from
+  account: john_checking
+  amount: 0
+  occurred_on: <%= 57.days.ago.utc.to_s(:db) %>
+
+john_reallocate_to_checking:
+  event: john_reallocate_to
+  account: john_checking
+  amount: 0
+  occurred_on: <%= 56.days.ago.utc.to_s(:db) %>

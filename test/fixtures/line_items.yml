@@ -29,3 +29,51 @@ john_lunch_checking_aside:
   amount: 775
   role: aside
   occurred_on: <%= 59.days.ago.utc.to_s(:db) %>
+
+john_bill_pay_checking_aside:
+  event: john_bill_pay
+  account: john_checking
+  bucket: john_checking_aside
+  amount: -755
+  role: transfer_from
+  occurred_on: <%= 58.days.ago.utc.to_s(:db) %>
+
+john_bill_pay_mastercard_general:
+  event: john_bill_pay
+  account: john_mastercard
+  bucket: john_mastercard_general
+  amount: 755
+  role: transfer_to
+  occurred_on: <%= 58.days.ago.utc.to_s(:db) %>
+
+john_reallocate_from_general:
+  event: john_reallocate_from
+  account: john_checking
+  bucket: john_general
+  amount: -1000
+  role: primary
+  occurred_on: <%= 57.days.ago.utc.to_s(:db) %>
+
+john_reallocate_from_dining:
+  event: john_reallocate_from
+  account: john_checking
+  bucket: john_checking_dining
+  amount: 1000
+  role: reallocate_from
+  occurred_on: <%= 57.days.ago.utc.to_s(:db) %>
+
+john_reallocate_to_general:
+  event: john_reallocate_to
+  account: john_checking
+  bucket: john_general
+  amount: -1000
+  role: reallocate_to
+  occurred_on: <%= 56.days.ago.utc.to_s(:db) %>
+
+john_reallocate_to_dining:
+  event: john_reallocate_to
+  account: john_checking
+  bucket: john_checking_dining
+  amount: 1000
+  role: primary
+  occurred_on: <%= 56.days.ago.utc.to_s(:db) %>

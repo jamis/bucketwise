@@ -115,6 +115,23 @@ class EventTest < ActiveSupport::TestCase
     assert_equal [milk, fruit], event.tagged_items.map(&:tag)
   end
 
+  test "role for deposit event should be deposit" do
+    assert_equal :deposit, events(:john_checking_starting_balance).role
+  end
+
+  test "role for expense event should be expense" do
+    assert_equal :expense, events(:john_lunch).role
+  end
+
+  test "role for transfer event should be transfer" do
+    assert_equal :transfer, events(:john_bill_pay).role
+  end
+
+  test "role for reallocation events should be reallocation" do
+    assert_equal :reallocation, events(:john_reallocate_from).role
+    assert_equal :reallocation, events(:john_reallocate_to).role
+  end
+
   protected
 
     def prepare_basic_event_data
