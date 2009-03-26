@@ -1,2 +1,5 @@
 john:
-  owner: john (User)
+  owner: john
+
+tim:
+  owner: tim

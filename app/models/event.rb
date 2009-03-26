@@ -40,9 +40,10 @@ class Event < ActiveRecord::Base
   # value of that.
   def value
     case role
-    when :deposit then balance
-    when :expense then balance.abs
+    when :expense, :deposit then balance.abs
     when :transfer then account_items.first.amount.abs
+    when :reallocation then line_items.detect { |item| item.role == 'primary' }.amount.abs
+    else raise "cannot compute value of line item with role #{role.inspect}"
     end
   end
 

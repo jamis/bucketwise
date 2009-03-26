@@ -1,3 +1,7 @@
+# --------------------------------------------------------------
+# john
+# --------------------------------------------------------------
+
 john_checking:
   subscription: john
   author: john
@@ -21,3 +25,16 @@ john_savings:
   role: ~
   created_at: <%= (60.days.ago + 3.hours).utc.to_s(:db) %>
   updated_at: <%= (60.days.ago + 3.hours).utc.to_s(:db) %>
+
+# --------------------------------------------------------------
+# tim
+# --------------------------------------------------------------
+
+tim_checking:
+  subscription: tim
+  author: tim
+  name: Checking
+  role: checking
+  created_at: <%= (59.days.ago + 1.hour).utc.to_s(:db) %>
+  updated_at: <%= (59.days.ago + 1.hour).utc.to_s(:db) %>
+
