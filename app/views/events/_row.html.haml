@@ -5,7 +5,7 @@
   %td
     .nubbin{:id => dom_id(event, :nubbin), :style => "display: none"}
       = link_to_function("&#x270e;", "Events.edit(#{edit_event_path(event).to_json})")
-      = link_to_function("&#x2716;", "Events.delete(#{event_path(event).to_json}, #{form_authenticity_token.to_json})")
+      = link_to_function("&#x2716;", "Events.deleteEvent(#{event_path(event).to_json}, #{form_authenticity_token.to_json})")
       = link_to_remote("&#x24d8;", :url => event_path(event), :method => :get, :before => "Events.expand(#{event.id})", :html => { :class => "zoom" })
       %span.zooming &#x231b;
       = link_to_function("&#x2713;", "Events.collapse(#{event.id})", :class => "zoomed")

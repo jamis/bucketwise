@@ -534,7 +534,7 @@ var Events = {
     $('nubbin_event_' + id).hide();
   },
 
-  delete: function(url, token) {
+  deleteEvent: function(url, token) {
     if(confirm("Do you wish to delete this transaction?")) {
       parameters = 'authenticity_token=' + encodeURIComponent(token) + '&' +
                    'from=' + encodeURIComponent(Events.source);
