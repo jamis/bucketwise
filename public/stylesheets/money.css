@@ -224,6 +224,11 @@ span.real_balance {
   color: #999;
 }
 
+span.check {
+  font-size: 80%;
+  color: #999;
+}
+
 .negative {
   color: red;
 }

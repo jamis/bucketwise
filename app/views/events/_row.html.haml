@@ -10,6 +10,8 @@
       %span.zooming &#x231b;
       = link_to_function("&#x2713;", "Events.collapse(#{event.id})", :class => "zoomed")
     &= event.actor
+    - if event.check_number.present?
+      %span.check== ##{event.check_number}
     - if account_links
       %br/
       %span.account_links= links_to_accounts_for_event(event)
