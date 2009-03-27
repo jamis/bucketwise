@@ -6,4 +6,6 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :buckets
   map.resources :accounts, :has_many => :buckets
   map.resources :tags
+
+  map.connect "", :controller => "subscriptions", :action => "index"
 end
