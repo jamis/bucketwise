@@ -1,3 +1,7 @@
+# --------------------------------------------------------------
+# john
+# --------------------------------------------------------------
+
 john_checking_starting_balance:
   event: john_checking_starting_balance
   account: john_checking
@@ -39,3 +43,13 @@ john_reallocate_to_checking:
   account: john_checking
   amount: 0
   occurred_on: <%= 56.days.ago.utc.to_s(:db) %>
+
+# --------------------------------------------------------------
+# tim
+# --------------------------------------------------------------
+
+tim_checking_starting_balance:
+  event: tim_checking_starting_balance
+  account: tim_checking
+  amount: 125000
+  occurred_on: <%= 59.days.ago.to_date.to_s(:db) %>

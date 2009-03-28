@@ -117,6 +117,13 @@ class EventTest < ActiveSupport::TestCase
     assert_equal [milk, fruit], event.tagged_items.map(&:tag)
   end
 
+  test "update without line items should leave exising line items alone"
+  test "update with line items should replace all line items with those given"
+  test "update without tagged items should leave exising tagged items alone"
+  test "update with tagged items should replace tagged line items with those given"
+
+  test "destroy should remove event's line items, account_items, and tagged_items"
+
   test "role for deposit event should be deposit" do
     assert_equal :deposit, events(:john_checking_starting_balance).role
   end

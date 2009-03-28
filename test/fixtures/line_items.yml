@@ -1,3 +1,7 @@
+# --------------------------------------------------------------
+# john
+# --------------------------------------------------------------
+
 john_checking_starting_balance:
   event: john_checking_starting_balance
   account: john_checking
@@ -77,3 +81,16 @@ john_reallocate_to_dining:
   amount: 1000
   role: primary
   occurred_on: <%= 56.days.ago.utc.to_s(:db) %>
+
+# --------------------------------------------------------------
+# tim
+# --------------------------------------------------------------
+
+tim_checking_starting_balance:
+  event: tim_checking_starting_balance
+  account: tim_checking
+  bucket: tim_checking_general
+  amount: 125000
+  role: deposit
+  occurred_on: <%= 59.days.ago.to_date.to_s(:db) %>
+
