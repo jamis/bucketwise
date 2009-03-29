@@ -3,3 +3,6 @@ john:
 
 tim:
   owner: tim
+
+john_family:
+  owner: john

@@ -7,3 +7,8 @@ tim:
   subscription: tim
   user: tim
   created_at: <%= 59.days.ago.utc.to_s(:db) %>
+
+john_family:
+  subscription: john_family
+  user: john
+  created_at: <%= 55.days.ago.utc.to_s(:db) %>

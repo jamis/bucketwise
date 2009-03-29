@@ -37,4 +37,3 @@ tim_checking:
   role: checking
   created_at: <%= (59.days.ago + 1.hour).utc.to_s(:db) %>
   updated_at: <%= (59.days.ago + 1.hour).utc.to_s(:db) %>
-
