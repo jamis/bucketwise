@@ -19,7 +19,7 @@ class ApplicationController < ActionController::Base
       if session[:user_id]
         @user = User.find(session[:user_id])
       else
-        redirect_to(session_url)
+        redirect_to(new_session_url)
       end
     end
 

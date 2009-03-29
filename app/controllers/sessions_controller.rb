@@ -3,7 +3,7 @@ class SessionsController < ApplicationController
 
   layout nil
 
-  def show
+  def new
   end
 
   def create
@@ -11,7 +11,7 @@ class SessionsController < ApplicationController
 
     if @user.nil?
       flash[:failed] = true
-      redirect_to(session_url)
+      redirect_to(new_session_url)
     else
       session[:user_id] = @user.id
 
@@ -26,6 +26,6 @@ class SessionsController < ApplicationController
   def destroy
     flash[:logged_out] = true
     session[:user_id] = nil
-    redirect_to(session_url)
+    redirect_to(new_session_url)
   end
 end
