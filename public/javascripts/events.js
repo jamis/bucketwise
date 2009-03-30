@@ -216,6 +216,14 @@ var Events = {
     }
   },
 
+  encodeXML: function(str) {
+    return str.replace(/&/g, '&amp;' ).
+               replace(/</g, '&lt;'  ).
+               replace(/>/g, '&gt;'  ).
+               replace(/'/g, '&apos;').
+               replace(/"/g, '&quot;');
+  },
+
   buildXMLStringFor: function(request) {
     var xml = "";
 
@@ -239,7 +247,7 @@ var Events = {
     } else if(typeof value == "object") {
       xml += "<" + tag + ">" + Events.buildXMLStringFor(value) + "</" + tag + ">";
     } else {
-      xml += "<" + tag + ">" + value + "</" + tag + ">";
+      xml += "<" + tag + ">" + Events.encodeXML(String(value)) + "</" + tag + ">";
     }
 
     return xml;
