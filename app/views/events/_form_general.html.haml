@@ -6,13 +6,19 @@
     %span.deposit_label <strong>When</strong> did this deposit occur?
     %span.transfer_label <strong>When</strong> did this transfer occur?
     = form.calendar_date_select :occurred_on, :size => 10
+
   %p
     %span.expense_label <strong>How much</strong> was paid?
     %span.deposit_label <strong>How much</strong> was deposited?
     %span.transfer_label <strong>How much</strong> was transferred?
     == $#{text_field_tag :amount, event_amount_value, :size => 8, :id => "expense_total", :class => "number", :onchange => "Events.updateUnassigned()"}
+
   %p
     %span.expense_label <strong>Who</strong> received the payment?
     %span.deposit_label <strong>What</strong> was this deposit for?
     %span.transfer_label <strong>What</strong> was this transfer for?
     = form.text_field :actor, :size => 30
+
+  %p
+    <strong>What</strong> was this for?
+    = form.text_field :memo, :size => 50

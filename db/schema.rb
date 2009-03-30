@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20080513032848) do
+ActiveRecord::Schema.define(:version => 20090330132556) do
 
   create_table "account_items", :force => true do |t|
     t.integer "event_id",    :null => false
@@ -52,6 +52,7 @@ ActiveRecord::Schema.define(:version => 20080513032848) do
     t.integer  "check_number"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.text     "memo"
   end
 
   add_index "events", ["subscription_id", "actor"], :name => "index_events_on_subscription_id_and_actor"
