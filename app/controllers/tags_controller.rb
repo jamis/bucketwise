@@ -8,6 +8,8 @@ class TagsController < ApplicationController
 
   protected
 
+    # can't call it 'tag' because that conflicts with the Rails 'tag()'
+    # helper method. 'tag_ref' is lame, but sufficient.
     attr_reader :tag_ref
     helper_method :tag_ref
 
