@@ -117,12 +117,57 @@ class EventTest < ActiveSupport::TestCase
     assert_equal [milk, fruit], event.tagged_items.map(&:tag)
   end
 
-  test "update without line items should leave exising line items alone"
-  test "update with line items should replace all line items with those given"
-  test "update without tagged items should leave exising tagged items alone"
-  test "update with tagged items should replace tagged line items with those given"
+  test "update without line items should leave exising line items alone" do
+    events(:john_lunch).update_attributes :actor => "Somebody Else"
+    assert_equal "Somebody Else", events(:john_lunch, :reload).actor
+    assert events(:john_lunch).line_items.any?
+  end
 
-  test "destroy should remove event's line items, account_items, and tagged_items"
+  test "update with line items should replace all line items with those given" do
+    items = events(:john_lunch).line_items.to_a
+
+    events(:john_lunch).update_attributes :actor => "Somebody Else",
+      :line_items => [
+        { :account_id => accounts(:john_savings).id,
+          :bucket_id => buckets(:john_savings_general).id,
+          :amount => 200_00,
+          :role => "payment_source" }]
+
+    assert !items.any? { |item| LineItem.exists?(item.id) }
+    assert_equal 200_00, events(:john_lunch, :reload).balance
+  end
+
+  test "update without tagged items should leave exising tagged items alone" do
+    events(:john_lunch).update_attributes :actor => "Somebody Else"
+    assert_equal "Somebody Else", events(:john_lunch, :reload).actor
+    assert events(:john_lunch).tagged_items.any?
+  end
+
+  test "update with tagged items should replace tagged line items with those given" do
+    items = events(:john_lunch).tagged_items.to_a
+
+    events(:john_lunch).update_attributes :actor => "Somebody Else",
+      :tagged_items => [{ :tag_id => "n:testing", :amount => 311}]
+
+    assert !items.any? { |item| TaggedItem.exists?(item.id) }
+    assert_equal [311], events(:john_lunch, :reload).tagged_items.map(&:amount)
+  end
+
+  test "destroy should remove event's line items, account_items, and tagged_items" do
+    line_items = events(:john_lunch).line_items.to_a
+    account_items = events(:john_lunch).account_items.to_a
+    tagged_items = events(:john_lunch).tagged_items.to_a
+
+    assert line_items.any?
+    assert account_items.any?
+    assert tagged_items.any?
+
+    events(:john_lunch).destroy
+
+    assert !line_items.any? { |item| LineItem.exists?(item.id) }
+    assert !account_items.any? { |item| AccountItem.exists?(item.id) }
+    assert !tagged_items.any? { |item| TaggedItem.exists?(item.id) }
+  end
 
   test "role for deposit event should be deposit" do
     assert_equal :deposit, events(:john_checking_starting_balance).role

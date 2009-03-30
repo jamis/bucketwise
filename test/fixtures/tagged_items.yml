@@ -6,6 +6,6 @@ john_lunch_tip:
 
 john_lunch_lunch:
   event: john_lunch
-  tag: john_tip
+  tag: john_lunch
   occurred_on: <%= 59.days.ago.to_date.to_s(:db) %>
   amount: 775
