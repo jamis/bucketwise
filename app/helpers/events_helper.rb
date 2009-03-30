@@ -130,6 +130,10 @@ module EventsHelper
     end
   end
 
+  def section_wants_repayment_options?(section)
+    section == :payment_source
+  end
+
   def event_wants_section?(section)
     return true unless @event
 
@@ -171,12 +175,12 @@ module EventsHelper
     return true
   end
 
-  def check_options_style_for(section)
-    if @event && @event.line_items.for_role(section).first.account.role == "checking"
-      nil
-    else
-      "display: none"
-    end
+  def check_options_visible_for?(section)
+    @event && @event.line_items.for_role(section).first.account.role == "checking"
+  end
+
+  def repayment_options_visible_for?(section)
+    @event && section == :payment_source && @event.line_items.for_role('credit_options').empty?
   end
 
   def section_has_single_bucket?(section)

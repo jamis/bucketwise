@@ -71,7 +71,7 @@ var Events = {
       switch(account.role) {
         case 'credit-card':
           if(Events.sectionWantsCreditOptions(section))
-            $('credit_options').show();
+            $(section + '.repayment_options').show();
           break;
         case 'checking':
           if(Events.sectionWantsCheckOptions(section))
@@ -79,6 +79,11 @@ var Events = {
           break;
       }
     }
+  },
+
+  showRepaymentOptions: function(section) {
+    $(section + '.repayment_options').hide();
+    $('credit_options').show();
   },
 
   bucketComparer: function(a, b) {

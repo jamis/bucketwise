@@ -348,6 +348,18 @@ td.zoom tr.even td {
   color: #070;
 }
 
+.form .repayment_options {
+  font-size: 80%;
+}
+
+.form .repayment_options a {
+  color: #77f;
+}
+
+.form .repayment_options a:hover {
+  color: #00f;
+}
+
 .form p small {
   color: #c75;
 }
