@@ -3,4 +3,4 @@
 
   %ul
     - user.subscriptions.each do |subscription|
-      %li= link_to(subscription.id, subscription_path(subscription))
+      %li{:id => dom_id(subscription)}= link_to(subscription.id, subscription_path(subscription))
