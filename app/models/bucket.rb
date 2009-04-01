@@ -1,6 +1,8 @@
 class Bucket < ActiveRecord::Base
   DEFAULT_PAGE_SIZE = 100
 
+  Temp = Struct.new(:id, :name, :role, :balance)
+
   belongs_to :account
   belongs_to :author, :class_name => "User", :foreign_key => "user_id"
 
@@ -14,6 +16,14 @@ class Bucket < ActiveRecord::Base
 
       [records.length > size, records[0,size]]
     end
+  end
+
+  def self.default
+    Temp.new("r:default", "General", "default", 0)
+  end
+
+  def self.aside
+    Temp.new("r:aside", "Aside", "aside", 0)
   end
 
   def balance

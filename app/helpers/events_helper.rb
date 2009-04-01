@@ -1,14 +1,26 @@
 module EventsHelper
   def accounts_and_buckets_as_javascript
-    subscription.accounts.inject("") do |memo, account|
-      memo << "," unless memo.blank?
-      memo << account.id.to_s << ":{id:#{account.id},name:#{account.name.to_json},role:#{account.role.to_json},buckets:["
-      memo << account.buckets.sort_by(&:name).inject("") do |m, bucket|
-        m << "," unless m.blank?
-        m << "{id:#{bucket.id},name:#{bucket.name.to_json},balance:#{bucket.balance},role:#{bucket.role.to_json}}"
-      end
-      memo << "]}"
+    # This rule is so that standard buckets (like "aside") that have not
+    # yet been created get sorted to the bottom. Until they're "real" they
+    # are second-class citizens, but we still want to let people select them
+    # if they need them.
+
+    sorter = Proc.new do |bucket|
+      [Integer === bucket.id ? 0 : 1, bucket.name.downcase]
     end
+
+    hash = subscription.accounts.inject({}) do |hash, account|
+      buckets = account.buckets.with_defaults.sort_by(&sorter).map do |bucket|
+        { :id => bucket.id, :name => bucket.name,
+          :role => bucket.role, :balance => bucket.balance }
+      end
+
+      hash[account.id] = { :id => account.id, :name => account.name,
+        :role => account.role, :buckets => buckets }
+      hash
+    end
+
+    hash.to_json
   end
 
   def tags_as_javascript
