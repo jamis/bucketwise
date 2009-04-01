@@ -1,0 +1,2 @@
+page[dom_id(bucket, :name)].replace_html :partial => "buckets/bucket_name",
+  :locals => { :bucket => bucket }

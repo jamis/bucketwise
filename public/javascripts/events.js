@@ -61,7 +61,11 @@ var Events = {
 
     Events.updateBucketsFor(section, true);
 
-    if(Events.sectionWantsCreditOptions(section)) $('credit_options').hide();
+    if(Events.sectionWantsCreditOptions(section)) {
+      $(section + '.repayment_options').hide();
+      $('credit_options').hide();
+    }
+
     if(Events.sectionWantsCheckOptions(section)) $(section + '.check_options').hide();
 
     if(select.selectedIndex > 0) {

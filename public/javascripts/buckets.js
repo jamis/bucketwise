@@ -24,5 +24,20 @@ var Buckets = {
   transferFrom: function(account_id, bucket_id) {
     Buckets.configureEvent();
     Events.revealReallocationForm('from', account_id, bucket_id);
+  },
+
+  rename: function(url, name, token) {
+    new_name = prompt("Enter the name for this bucket:", name);
+    if(new_name && new_name != name) {
+      params = encodeURIComponent("bucket[name]") + "=" + encodeURIComponent(new_name) +
+        "&authenticity_token=" + encodeURIComponent(token);
+
+      new Ajax.Request(url, {
+        asynchronous:true,
+        evalScripts:true,
+        method:'put',
+        parameters:params
+      });
+    }
   }
 }

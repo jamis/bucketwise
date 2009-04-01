@@ -13,6 +13,12 @@ class BucketsControllerTest < ActionController::TestCase
     assert_response :missing
   end
 
+  test "update should 404 when user without permissions requests page" do
+    xhr :put, :update, :id => buckets(:tim_checking_general).id, :bucket => { :name => "Hi!" }
+    assert_response :missing
+    assert_equal "General", buckets(:tim_checking_general, :reload).name
+  end
+
   test "index should load account and subscription and render page" do
     get :index, :account_id => accounts(:john_checking).id
     assert_response :success
@@ -28,5 +34,15 @@ class BucketsControllerTest < ActionController::TestCase
     assert_equal subscriptions(:john), assigns(:subscription)
     assert_equal accounts(:john_checking), assigns(:account)
     assert_equal buckets(:john_checking_dining), assigns(:bucket)
+  end
+
+  test "update should change bucket name and render javascript" do
+    xhr :put, :update, :id => buckets(:john_checking_general).id, :bucket => { :name => "Hi!" }
+    assert_response :success
+    assert_template "buckets/update.js.rjs"
+    assert_equal subscriptions(:john), assigns(:subscription)
+    assert_equal accounts(:john_checking), assigns(:account)
+    assert_equal buckets(:john_checking_general), assigns(:bucket)
+    assert_equal "Hi!", buckets(:john_checking_general, :reload).name
   end
 end

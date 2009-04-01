@@ -4,5 +4,5 @@
     &= account.name
     = back_to_dashboard_link
 
-  %table.entries
+  %table.account_summary
     = render(account.buckets.sort_by(&:name))

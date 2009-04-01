@@ -348,12 +348,9 @@ td.zoom tr.even td {
   color: #070;
 }
 
-.form .repayment_options {
-  font-size: 80%;
-}
-
 .form .repayment_options a {
   color: #77f;
+  text-decoration: underline;
 }
 
 .form .repayment_options a:hover {
@@ -411,12 +408,14 @@ input.number {
 
 .nubbin {
   position: absolute;
-  padding: 0.1em 0.5em;
-  border-right: 1px solid #555;
+  padding: 0em 0.5em;
 }
 
 .nubbin a.button {
-  padding: 0.1em 0.5em;
+  padding: 0.1em 0;
+  width: 1.5em;
+  text-align: center;
+  display: inline-block;
   border: 1px solid #eee;
 }
 
