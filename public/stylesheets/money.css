@@ -96,10 +96,6 @@ div#container {
   opacity: 1.0;
 }
 
-.content h2 span.balance {
-  float: right;
-}
-
 .content h2 span.back {
   font-size: 80%;
   white-space: nowrap;
@@ -212,7 +208,7 @@ td.total {
   font-weight: bold;
 }
 
-td.number {
+td.number, th.number {
   text-align: right;
   width: 1px;
   padding-left: 0.5em;
@@ -233,11 +229,11 @@ span.check {
   color: red;
 }
 
-td.date {
+td.date, th.date {
   width: 1px;
   padding-left: 0.3em;
   padding-right: 0.5em;
-  opacity: 0.5;
+  color: #888;
 }
 
 table.entries th {
@@ -245,6 +241,11 @@ table.entries th {
   background: #bfb;
   padding: 0 0.3em;
   border-bottom: 1px solid #9c9;
+}
+
+tr.current_balance th {
+  border-top: 1px solid #9c9;
+  background: #dfd;
 }
 
 table.entries tr td {

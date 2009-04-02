@@ -1,0 +1,6 @@
+%tr.current_balance
+  %th.date= Date.today.strftime("%Y-%m-%d")
+  %th Current balance
+  %th.number.total.balance{:colspan => 2}= balance_cell(container, :tag => "span")
+%tr.spacer
+  %td{:colspan => 4}

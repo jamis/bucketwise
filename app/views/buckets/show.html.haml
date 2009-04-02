@@ -1,9 +1,9 @@
 #data.content
   %h2
-    = balance_cell(bucket, :classes => %w(total balance), :tag => "span", :id => "balance")
     == #{link_to(h(bucket.account.name), bucket.account)}:
     &= bucket.name
     = back_to_dashboard_link
 
   %table.entries
+    = render :partial => "events/balance", :locals => { :container => bucket }
     = render(@items)
