@@ -29,9 +29,4 @@ module SubscriptionsHelper
 
     "$%s.%02d" % [number_with_delimiter(dollars), cents]
   end
-
-  def back_to_dashboard_link
-    link = link_to("back to dashboard", subscription_path(subscription))
-    content_tag :span, "(#{link})", :class => "back"
-  end
 end

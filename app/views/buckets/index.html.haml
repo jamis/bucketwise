@@ -1,8 +1,11 @@
 #data.content
+  .navigation
+    = link_to "Dashboard", subscription_path(subscription)
+    = link_to "Transactions", account_path(account)
+
   %h2
     = balance_cell(account, :classes => %w(total balance), :tag => "span")
-    &= account.name
-    = back_to_dashboard_link
+    == Buckets in #{h(account.name)}
 
   %table.account_summary
     = render(account.buckets.sort_by(&:name))

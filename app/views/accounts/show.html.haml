@@ -1,7 +1,9 @@
 #data.content
-  %h2
-    &= account.name
-    = back_to_dashboard_link
+  .navigation
+    = link_to "Dashboard", subscription_path(subscription)
+    = link_to "Buckets", account_buckets_path(account)
+
+  %h2&= account.name
 
   %table.entries
     = render :partial => "events/balance", :locals => { :container => account }

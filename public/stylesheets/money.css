@@ -76,6 +76,10 @@ div#container {
   font-size: 1.2em;
 }
 
+h2 span.balance {
+  float: right;
+}
+
 .content h2.anchor {
   margin-bottom: 0;
 }
@@ -107,6 +111,23 @@ div#container {
 }
 
 .content h2 span.back a:hover {
+  color: #00f;
+}
+
+.navigation {
+  border-bottom: 1px solid #ccc;
+  margin: 0 -0.7em 1em -0.7em;
+  font-size: 80%;
+  color: #777;
+}
+
+.navigation a {
+  color: #77f;
+  border-left: 1px solid #ccc;
+  padding: 0 0.2em;
+}
+
+.navigation a:hover {
   color: #00f;
 }
 
