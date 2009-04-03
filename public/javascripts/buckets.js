@@ -26,11 +26,19 @@ var Buckets = {
     Events.revealReallocationForm('from', account_id, bucket_id);
   },
 
+  view: function() {
+    if($$('tr.bucket').any()) {
+      return 'index';
+    } else {
+      return 'perma';
+    }
+  },
+
   rename: function(url, name, token) {
     new_name = prompt("Enter the name for this bucket:", name);
     if(new_name && new_name != name) {
       params = encodeURIComponent("bucket[name]") + "=" + encodeURIComponent(new_name) +
-        "&authenticity_token=" + encodeURIComponent(token);
+        "&authenticity_token=" + encodeURIComponent(token) + "&view=" + Buckets.view();
 
       new Ajax.Request(url, {
         asynchronous:true,

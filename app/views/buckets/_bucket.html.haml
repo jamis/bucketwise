@@ -1,6 +1,6 @@
 %tr.bucket{:id => dom_id(bucket), :class => cycle('odd', 'even'), :onmouseover => "Buckets.onMouseOver(#{bucket.id})", :onmouseout => "Buckets.onMouseOut(#{bucket.id})"}
 
   %td{:id => dom_id(bucket, :name)}
-    = render :partial => "buckets/bucket_name", :locals => { :bucket => bucket }
+    = render :partial => "buckets/bucket_name_for_index", :locals => { :bucket => bucket }
 
   = balance_cell(bucket)
