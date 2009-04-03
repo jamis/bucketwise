@@ -4,6 +4,6 @@ module BucketsHelper
   end
 
   def possible_receiver_buckets
-    account.buckets - [bucket]
+    (account.buckets - [bucket]).sort_by(&:name)
   end
 end
