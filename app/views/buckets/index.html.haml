@@ -1,7 +1,7 @@
 #data.content
   .navigation
     = link_to "Dashboard", subscription_path(subscription)
-    = link_to "Transactions", account_path(account)
+    = link_to "Transactions in #{h(account.name)}", account_path(account)
 
   %h2
     = balance_cell(account, :classes => %w(total balance), :tag => "span")

@@ -1,7 +1,7 @@
 #data.content
   .navigation
     = link_to "Dashboard", subscription_path(subscription)
-    = link_to "Buckets", account_buckets_path(account)
+    = link_to "Buckets in #{h(account.name)}", account_buckets_path(account)
 
   %h2&= account.name
 
