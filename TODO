@@ -1,0 +1,50 @@
+immediately:
+* after saving a reallocation event, the line items don't reset
+* green "your transaction has been recorded" notice doesn't disappear when starting a new event
+* date column for event row is squashed in safari
+* "Add a new bucket" should set focus on new bucket line
+* check # and "select repayment options" links are out of whack when editing an event
+
+before inviting other users to "beta test":
+* cache current balances on accounts and buckets
+* cache balances on events (?)
+* make bucket reallocation work from bucket index
+* make bucket reallocation work from bucket perma
+* user info page (for password change)
+* password reset from login page
+* account delete
+* account rename
+* tag delete (optionally move transactions to different tag, e.g. "tag merge")
+* tag rename
+* API
+* validations
+* rake tasks for user and subscription creation
+* change style for event detail view: "window shade" style isn't really working
+* spinner for ajax actions
+* attr_protected everywhere (perhaps implement an update_override method or something for places where it would be useful to do mass updates despite protected attrs?)
+
+before public release:
+* signup process
+* exception notifier (?)
+* README with installation instructions
+* /subscriptions index
+* CHANGELOG
+
+FIXME
+* make all autocompleting fields refresh their source array after event creation
+
+future
+* autocomplete actor field in event form
+* better 404 and 500 error pages
+* searching & reporting
+* account reconciliation
+* transaction templates ("saved" or "memorized" transactions)
+* scheduled transactions (occur automatically at specified intervals)
+* show check numbers in event detail view
+* add a memo field for events
+* print stylesheet
+* oauth authentication for API
+* filter event views to show only events with a non-zero balance for the account in question
+* filter event views to show only deposits, or only expenses
+* normalize 'actor' so we can do actor-centric queries more efficiently
+* full-text searching on the memo field
