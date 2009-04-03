@@ -14,6 +14,12 @@ class BucketsController < ApplicationController
     bucket.update_attributes(params[:bucket])
   end
 
+  def destroy
+    receiver = account.buckets.find(params[:receiver_id])
+    receiver.assimilate(bucket)
+    redirect_to(receiver)
+  end
+
   protected
 
     attr_reader :account, :bucket

@@ -47,5 +47,19 @@ var Buckets = {
         parameters:params
       });
     }
+  },
+
+  deleteBucket: function() {
+    $('data').hide();
+    $('delete_form').show();
+  },
+
+  confirmDelete: function() {
+    return confirm("Are you sure you want to delete this bucket?");
+  },
+
+  cancelDelete: function() {
+    $('delete_form').hide();
+    $('data').show();
   }
 }

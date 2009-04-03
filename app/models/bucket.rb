@@ -29,4 +29,21 @@ class Bucket < ActiveRecord::Base
   def balance
     @balance ||= line_items.sum(:amount) || 0
   end
+
+  def assimilate(bucket)
+    if bucket == self
+      raise ArgumentError, "cannot assimilate self"
+    end
+
+    if bucket.account_id != account_id
+      raise ArgumentError, "cannot assimilate bucket from different account"
+    end
+
+    old_id = bucket.id
+
+    Bucket.transaction do
+      LineItem.update_all(["bucket_id = ?", id], :bucket_id => old_id)
+      bucket.destroy
+    end
+  end
 end

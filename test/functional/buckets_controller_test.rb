@@ -45,4 +45,21 @@ class BucketsControllerTest < ActionController::TestCase
     assert_equal buckets(:john_checking_general), assigns(:bucket)
     assert_equal "Hi!", buckets(:john_checking_general, :reload).name
   end
+
+  test "destroy without receiver_id should 404" do
+    assert_no_difference "Bucket.count" do
+      delete :destroy, :id => buckets(:john_checking_dining).id
+    end
+    assert_response :missing
+  end
+
+  test "destroy should assimilate line items and destroy bucket" do
+    assert_difference "Bucket.count", -1 do
+      delete :destroy, :id => buckets(:john_checking_dining).id,
+        :receiver_id => buckets(:john_checking_groceries).id
+    end
+    assert_redirected_to(buckets(:john_checking_groceries))
+    assert !Bucket.exists?(buckets(:john_checking_dining).id)
+    assert buckets(:john_checking_groceries), line_items(:john_lunch_checking_dining).bucket
+  end
 end

@@ -1,3 +1,3 @@
-%span.actions== #{link_to_function("Rename", "Buckets.rename(#{bucket_path(bucket).to_json}, #{bucket.name.to_json}, #{form_authenticity_token.to_json})")} | #{link_to_function("Delete/Merge", "Buckets.delete()")}
+%span.actions== #{link_to_function("Rename", "Buckets.rename(#{bucket_path(bucket).to_json}, #{bucket.name.to_json}, #{form_authenticity_token.to_json})")} | #{link_to_function("Delete/Merge", "Buckets.deleteBucket()")}
 == #{link_to(h(bucket.account.name), bucket.account)}:
 &= bucket.name

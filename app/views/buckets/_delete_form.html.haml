@@ -1,0 +1,10 @@
+- form_tag(bucket_path(bucket), :method => 'delete', :onsubmit => "return Buckets.confirmDelete()") do
+  %fieldset
+    %legend Delete/Merge
+    %p== To delete this bucket, you'll need to move the transactions from "#{h(bucket.name)}" into another bucket.
+    %p
+      Please select that other bucket:
+      = select_tag(:receiver_id, options_from_collection_for_select(possible_receiver_buckets, :id, :name, account.buckets.default.id))
+  %p
+    = submit_tag "Merge and delete this bucket"
+    == or #{link_to_function("Cancel", "Buckets.cancelDelete()")}
