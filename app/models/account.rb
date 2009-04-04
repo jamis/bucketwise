@@ -49,10 +49,6 @@ class Account < ActiveRecord::Base
 
   after_create :create_default_buckets, :set_starting_balance
 
-  def balance
-    @balance ||= account_items.sum(:amount) || 0
-  end
-
   def available_balance
     @available_balance ||= balance - unavailable_balance
   end
@@ -76,6 +72,7 @@ class Account < ActiveRecord::Base
           :actor => "Starting balance", :user_id => user_id,
           :line_items => [{:account_id => id, :bucket_id => buckets.default.id,
             :amount => starting_balance[:amount], :role => "deposit"}])
+        reload # make sure the balance is set correctly
       end
     end
 end

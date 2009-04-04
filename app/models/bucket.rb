@@ -26,10 +26,6 @@ class Bucket < ActiveRecord::Base
     Temp.new("r:aside", "Aside", "aside", 0)
   end
 
-  def balance
-    @balance ||= line_items.sum(:amount) || 0
-  end
-
   def assimilate(bucket)
     if bucket == self
       raise ArgumentError, "cannot assimilate self"
@@ -43,6 +39,7 @@ class Bucket < ActiveRecord::Base
 
     Bucket.transaction do
       LineItem.update_all(["bucket_id = ?", id], :bucket_id => old_id)
+      update_attribute :balance, balance + bucket.balance
       bucket.destroy
     end
   end

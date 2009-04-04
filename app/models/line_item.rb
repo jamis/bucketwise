@@ -3,11 +3,16 @@ class LineItem < ActiveRecord::Base
   belongs_to :account
   belongs_to :bucket
 
-  after_create :ping_bucket
+  after_create :increment_bucket_balance
+  before_destroy :decrement_bucket_balance
 
   protected
 
-    def ping_bucket
-      bucket.ping!
+    def increment_bucket_balance
+      bucket.update_attribute :balance, bucket.balance + amount
+    end
+
+    def decrement_bucket_balance
+      bucket.update_attribute :balance, bucket.balance - amount
     end
 end

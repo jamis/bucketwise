@@ -7,6 +7,7 @@ john_checking:
   author: john
   name: Checking
   role: checking
+  balance: 99225
   created_at: <%= (60.days.ago + 1.hour).utc.to_s(:db) %>
   updated_at: <%= (60.days.ago + 1.hour).utc.to_s(:db) %>
 
@@ -15,6 +16,7 @@ john_mastercard:
   author: john
   name: Mastercard
   role: credit-card
+  balance: -1025
   created_at: <%= (60.days.ago + 2.hours).utc.to_s(:db) %>
   updated_at: <%= (60.days.ago + 2.hours).utc.to_s(:db) %>
 
@@ -23,6 +25,7 @@ john_savings:
   author: john
   name: Savings
   role: ~
+  balance: 0
   created_at: <%= (60.days.ago + 3.hours).utc.to_s(:db) %>
   updated_at: <%= (60.days.ago + 3.hours).utc.to_s(:db) %>
 
@@ -35,5 +38,6 @@ tim_checking:
   author: tim
   name: Checking
   role: checking
+  balance: 125000
   created_at: <%= (59.days.ago + 1.hour).utc.to_s(:db) %>
   updated_at: <%= (59.days.ago + 1.hour).utc.to_s(:db) %>

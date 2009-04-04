@@ -44,6 +44,18 @@ john_reallocate_to_checking:
   amount: 0
   occurred_on: <%= 56.days.ago.utc.to_s(:db) %>
 
+john_lunch_again_mastercard:
+  event: john_lunch_again
+  account: john_mastercard
+  amount: -1025
+  occurred_on: <%= 59.days.ago.utc.to_s(:db) %>
+
+john_lunch_again_checking:
+  event: john_lunch_again
+  account: john_checking
+  amount: 0
+  occurred_on: <%= 59.days.ago.utc.to_s(:db) %>
+
 # --------------------------------------------------------------
 # tim
 # --------------------------------------------------------------

@@ -8,4 +8,17 @@
 class AccountItem < ActiveRecord::Base
   belongs_to :event
   belongs_to :account
+
+  after_create :increment_balance
+  before_destroy :decrement_balance
+
+  protected
+
+    def increment_balance
+      account.update_attribute :balance, account.balance + amount
+    end
+
+    def decrement_balance
+      account.update_attribute :balance, account.balance - amount
+    end
 end

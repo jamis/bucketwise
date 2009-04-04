@@ -92,20 +92,21 @@ class Event < ActiveRecord::Base
         @line_items_to_realize.each do |item|
           account = subscription.accounts.find(item[:account_id])
 
-          if item[:bucket_id] =~ /^n:(.*)/
-            item[:bucket_id] = account.buckets.find_or_create_by_name(:name => $1, :author => user).id
-          elsif item[:bucket_id] =~ /^r:(.*)/
-            item[:bucket_id] = account.buckets.for_role($1, user).id
+          bucket_id = item.delete(:bucket_id)
+          item[:bucket] = if bucket_id =~ /^n:(.*)/
+            account.buckets.find_or_create_by_name(:name => $1, :author => user)
+          elsif bucket_id =~ /^r:(.*)/
+            account.buckets.for_role($1, user)
           else
-            account.buckets.find(item[:bucket_id])
+            account.buckets.find(bucket_id)
           end
 
           item = line_items.create(item.merge(:occurred_on => occurred_on))
-          summaries[item.account_id] += item.amount
+          summaries[account] += item.amount
         end
 
-        summaries.each do |account_id, amount|
-          account_items.create(:account_id => account_id,
+        summaries.each do |account, amount|
+          account_items.create(:account => account,
             :amount => amount, :occurred_on => occurred_on)
         end
 

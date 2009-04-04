@@ -47,6 +47,15 @@ john_reallocate_to:
   created_at: <%= 56.days.ago.utc.to_s(:db) %>
   updated_at: <%= 56.days.ago.utc.to_s(:db) %>
 
+john_lunch_again:
+  subscription: john
+  user: john
+  occurred_on: <%= 55.days.ago.to_date.to_s(:db) %>
+  actor: Sandwich Central
+  check_number: ~
+  created_at: <%= 55.days.ago.utc.to_s(:db) %>
+  updated_at: <%= 55.days.ago.utc.to_s(:db) %>
+
 # --------------------------------------------------------------
 # tim
 # --------------------------------------------------------------

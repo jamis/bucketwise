@@ -7,6 +7,7 @@ john_checking_general:
   author: john
   name: General
   role: default
+  balance: 98000
   created_at: <%= (60.days.ago + 1.hour).utc.to_s(:db) %>
   updated_at: <%= (60.days.ago + 1.hour).utc.to_s(:db) %>
 
@@ -15,6 +16,7 @@ john_checking_groceries:
   author: john
   name: Groceries
   role: ~
+  balance: 0
   created_at: <%= (60.days.ago + 2.hours).utc.to_s(:db) %>
   updated_at: <%= (60.days.ago + 2.hours).utc.to_s(:db) %>
 
@@ -23,6 +25,7 @@ john_checking_household:
   author: john
   name: Household
   role: ~
+  balance: 0
   created_at: <%= (60.days.ago + 2.hours).utc.to_s(:db) %>
   updated_at: <%= (60.days.ago + 2.hours).utc.to_s(:db) %>
 
@@ -31,6 +34,7 @@ john_checking_dining:
   author: john
   name: Dining
   role: ~
+  balance: 200
   created_at: <%= (60.days.ago + 2.hours).utc.to_s(:db) %>
   updated_at: <%= (60.days.ago + 2.hours).utc.to_s(:db) %>
 
@@ -39,6 +43,7 @@ john_checking_aside:
   author: john
   name: Aside
   role: aside
+  balance: 1025
   created_at: <%= (60.days.ago + 3.hours).utc.to_s(:db) %>
   updated_at: <%= (60.days.ago + 3.hours).utc.to_s(:db) %>
 
@@ -47,6 +52,7 @@ john_mastercard_general:
   author: john
   name: General
   role: default
+  balance: 0
   created_at: <%= (60.days.ago + 2.hours).utc.to_s(:db) %>
   updated_at: <%= (60.days.ago + 2.hours).utc.to_s(:db) %>
 
@@ -55,6 +61,7 @@ john_savings_general:
   author: john
   name: General
   role: default
+  balance: 0
   created_at: <%= (60.days.ago + 3.hours).utc.to_s(:db) %>
   updated_at: <%= (60.days.ago + 3.hours).utc.to_s(:db) %>
 
@@ -67,6 +74,7 @@ tim_checking_general:
   author: tim
   name: General
   role: default
+  balance: 125000
   created_at: <%= (59.days.ago + 1.hour).utc.to_s(:db) %>
   updated_at: <%= (59.days.ago + 1.hour).utc.to_s(:db) %>
 

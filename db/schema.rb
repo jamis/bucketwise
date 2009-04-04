@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20090330132556) do
+ActiveRecord::Schema.define(:version => 20090404154634) do
 
   create_table "account_items", :force => true do |t|
     t.integer "event_id",    :null => false
@@ -22,23 +22,25 @@ ActiveRecord::Schema.define(:version => 20090330132556) do
   add_index "account_items", ["event_id"], :name => "index_account_items_on_event_id"
 
   create_table "accounts", :force => true do |t|
-    t.integer  "subscription_id", :null => false
-    t.integer  "user_id",         :null => false
-    t.string   "name",            :null => false
+    t.integer  "subscription_id",                :null => false
+    t.integer  "user_id",                        :null => false
+    t.string   "name",                           :null => false
     t.string   "role"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "balance",         :default => 0, :null => false
   end
 
   add_index "accounts", ["subscription_id", "name"], :name => "index_accounts_on_subscription_id_and_name", :unique => true
 
   create_table "buckets", :force => true do |t|
-    t.integer  "account_id", :null => false
-    t.integer  "user_id",    :null => false
-    t.string   "name",       :null => false
+    t.integer  "account_id",                :null => false
+    t.integer  "user_id",                   :null => false
+    t.string   "name",                      :null => false
     t.string   "role"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "balance",    :default => 0, :null => false
   end
 
   add_index "buckets", ["account_id", "name"], :name => "index_buckets_on_account_id_and_name", :unique => true

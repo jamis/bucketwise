@@ -94,8 +94,8 @@ class EventTest < ActiveSupport::TestCase
     ]
 
     event = subscriptions(:john).events.create(@event_base)
-    assert_equal [-25_00, 0], event.account_items.map(&:amount)
-    assert_equal [accounts(:john_mastercard), accounts(:john_checking)], event.account_items.map(&:account)
+    assert_equal [["Checking", 0], ["Mastercard", -25_00]],
+      event.account_items.map { |i| [i.account.name, i.amount] }.sort
   end
 
   test "create with tagged_items should generate tagged_items for event" do
