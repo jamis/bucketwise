@@ -69,6 +69,14 @@ class Event < ActiveRecord::Base
     end
   end
 
+  def role=(role)
+    unless %w(deposit expense reallocation transfer).include?(role.to_s)
+      raise ArgumentError, "invalid role: #{role.inspect}"
+    end
+
+    @role = role.to_sym
+  end
+
   def role
     @role ||= if balance > 0
         :deposit

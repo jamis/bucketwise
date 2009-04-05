@@ -1,9 +1,13 @@
-page['recent_entries'].replace_html :partial => "events/event",
-  :collection => subscription.events.recent
-page['accounts_summary'].replace_html :partial => "accounts/account",
-  :collection => subscription.accounts
-page.events.reset
-page[:success_notice].show
-page << "Events.accounts = #{accounts_and_buckets_as_javascript}"
-page << "Events.tags = #{tags_as_javascript}"
-page.visual_effect :highlight, dom_id(@event)
+if params[:source] == "new"
+  page.redirect_to(subscription_url(subscription))
+else
+  page['recent_entries'].replace_html :partial => "events/event",
+    :collection => subscription.events.recent
+  page['accounts_summary'].replace_html :partial => "accounts/account",
+    :collection => subscription.accounts
+  page.events.reset
+  page[:success_notice].show
+  page << "Events.accounts = #{accounts_and_buckets_as_javascript}"
+  page << "Events.tags = #{tags_as_javascript}"
+  page.visual_effect :highlight, dom_id(@event)
+end

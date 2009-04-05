@@ -61,6 +61,7 @@ module EventsHelper
       select_options = options_for_select(
         options[:line_item].account.buckets.sorted.map { |bucket| [bucket.name, bucket.id] },
         options[:line_item].bucket_id)
+      select_options += "<option value='++'>-- Add a new bucket --</option>"
       disabled = false
     else
       select_options = "<option>-- Select an account --</option>"
@@ -79,11 +80,15 @@ module EventsHelper
     @event || Event.new(:occurred_on => Date.today)
   end
 
+  def event_form_source
+    action_name == "new" ? "new" : nil
+  end
+
   def event_form_action
-    if @event
-      update_event_path(@event)
+    if @event.nil? || @event.new_record?
+      subscription_events_path(subscription, :source => event_form_source)
     else
-      subscription_events_path(subscription)
+      update_event_path(@event)
     end
   end
 
@@ -102,7 +107,7 @@ module EventsHelper
   end
 
   def line_item_amount_value(item)
-    if item
+    if item && item.amount
       "%.2f" % (item.amount.abs / 100.0)
     else
       ""

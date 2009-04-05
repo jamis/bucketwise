@@ -1,0 +1,9 @@
+:javascript
+  Events.return_to = #{(params[:return_to] || subscription_path(subscription)).to_json};
+  Events.defaultActor = "Bucket reallocation";
+  Events.defaultDate = #{Date.today.to_json};
+
+#data.content
+  %h2 New transaction
+
+  .transaction.form{:class => @event.role.to_s}= render :partial => "events/form"

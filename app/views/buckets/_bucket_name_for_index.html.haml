@@ -1,5 +1,5 @@
 .nubbin{:id => dom_id(bucket, :nubbin), :style => "display: none"}
-  = link_to_function("&#x2913;", "Buckets.transferTo(#{bucket.account_id}, #{bucket.id})", :class => "button")
-  = link_to_function("&#x21A5;", "Buckets.transferFrom(#{bucket.account_id}, #{bucket.id})", :class => "button")
+  = link_to("&#x2913;", new_subscription_event_path(subscription, :role => "reallocation", :to => bucket.id), :class => "button")
+  = link_to("&#x21A5;", new_subscription_event_path(subscription, :role => "reallocation", :from => bucket.id), :class => "button")
   = link_to_function("&#x270e;", "Buckets.rename(#{bucket_path(bucket).to_json}, #{bucket.name.to_json}, #{form_authenticity_token.to_json})", :class => "button")
 = link_to(h(bucket.name), bucket, :class => "bucket")

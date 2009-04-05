@@ -1,11 +1,15 @@
 class EventsController < ApplicationController
-  before_filter :find_subscription, :only => %w(create)
-  before_filter :find_event, :except => %w(create)
+  before_filter :find_subscription, :only => %w(new create)
+  before_filter :find_event, :except => %w(new create)
 
   def show
   end
 
   def edit
+  end
+
+  def new
+    @event = subscription.events.prepare(params)
   end
 
   def create

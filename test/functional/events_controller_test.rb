@@ -85,6 +85,37 @@ class EventsControllerTest < ActionController::TestCase
     assert !Event.exists?(events(:john_lunch).id)
   end
 
+  test "new should 404 when user without permission requests page" do
+    get :new, :subscription_id => subscriptions(:tim).id
+    assert_response :missing
+  end
+
+  test "new should 404 when user requests from bucket without access" do
+    get :new, :subscription_id => subscriptions(:john).id, :role => :reallocation, :from => buckets(:tim_checking_general).id
+    assert_response :missing
+  end
+
+  test "new should 404 when user requests to bucket without access" do
+    get :new, :subscription_id => subscriptions(:john).id, :role => :reallocation, :to => buckets(:tim_checking_general).id
+    assert_response :missing
+  end
+
+  test "new 'from reallocation' should render correct edit form" do
+    get :new, :subscription_id => subscriptions(:john).id, :role => :reallocation, :from => buckets(:john_checking_general).id
+    assert_response :success
+    assert_template "events/new"
+    assert_select "#reallocate_from"
+    assert_select "#reallocate_to", false
+  end
+
+  test "new 'to reallocation' should render correct edit form" do
+    get :new, :subscription_id => subscriptions(:john).id, :role => :reallocation, :to => buckets(:john_checking_general).id
+    assert_response :success
+    assert_template "events/new"
+    assert_select "#reallocate_to"
+    assert_select "#reallocate_from", false
+  end
+
   private
 
     def simple_event(account, bucket)

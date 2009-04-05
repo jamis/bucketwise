@@ -7,8 +7,6 @@ immediately:
 * deleting event from account perma results in ajax error (maybe only when there is only a single event in the account?)
 
 before inviting other users to "beta test":
-* make bucket reallocation work from bucket index
-* make bucket reallocation work from bucket perma
 * tag delete (optionally move transactions to different tag, e.g. "tag merge")
 * tag rename
 * API
@@ -46,3 +44,5 @@ future
 * filter event views to show only deposits, or only expenses
 * normalize 'actor' so we can do actor-centric queries more efficiently
 * full-text searching on the memo field
+* show bucket and account balances next to names in drop-downs
+* make bucket reallocation work from bucket perma
