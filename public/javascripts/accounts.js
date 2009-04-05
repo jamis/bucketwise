@@ -38,5 +38,20 @@ var Accounts = {
 
   reset: function() {
     $('new_account_form').reset();
+  },
+
+  rename: function(url, name, token) {
+    new_name = prompt("Enter the name for this account:", name);
+    if(new_name && new_name != name) {
+      params = encodeURIComponent("account[name]") + "=" + encodeURIComponent(new_name) +
+        "&authenticity_token=" + encodeURIComponent(token);
+
+      new Ajax.Request(url, {
+        asynchronous:true,
+        evalScripts:true,
+        method:'put',
+        parameters:params
+      });
+    }
   }
 }

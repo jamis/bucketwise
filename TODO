@@ -7,20 +7,19 @@ immediately:
 * deleting event from account perma results in ajax error (maybe only when there is only a single event in the account?)
 
 before inviting other users to "beta test":
-* cache balances on events (?)
 * make bucket reallocation work from bucket index
 * make bucket reallocation work from bucket perma
-* user info page (for password change)
-* password reset from login page
-* account rename
 * tag delete (optionally move transactions to different tag, e.g. "tag merge")
 * tag rename
 * API
 * validations
 * rake tasks for user and subscription creation
 * change style for event detail view: "window shade" style isn't really working
-* spinner for ajax actions
 * attr_protected everywhere (perhaps implement an update_override method or something for places where it would be useful to do mass updates despite protected attrs?)
+* spinner for ajax actions
+* user info page (for password change)
+* password reset from login page
+* cache balances on events (?)
 
 before public release:
 * signup process

@@ -17,6 +17,10 @@ class AccountsController < ApplicationController
     redirect_to(subscription_url(subscription))
   end
 
+  def update
+    account.update_attributes(params[:account])
+  end
+
   protected
 
     attr_reader :account
