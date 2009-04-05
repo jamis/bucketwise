@@ -106,6 +106,14 @@ john_lunch_again_checking_aside:
   role: aside
   occurred_on: <%= 59.days.ago.utc.to_s(:db) %>
 
+john_bare_mastercard_general:
+  event: john_bare_mastercard
+  account: john_mastercard
+  bucket: john_mastercard_general
+  amount: -1500
+  role: payment_source
+  occurred_on: <%= 54.days.ago.utc.to_s(:db) %>
+
 # --------------------------------------------------------------
 # tim
 # --------------------------------------------------------------

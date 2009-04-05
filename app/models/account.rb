@@ -60,6 +60,32 @@ class Account < ActiveRecord::Base
     end
   end
 
+  def destroy
+    transaction do
+      LineItem.delete_all :account_id => id
+      AccountItem.delete_all :account_id => id
+      Bucket.delete_all :account_id => id
+
+      tagged_items = TaggedItem.find_by_sql(<<-SQL.squish)
+        SELECT t.* FROM tagged_items t LEFT JOIN events e ON t.event_id = e.id
+         WHERE e.subscription_id = #{subscription_id}
+           AND NOT EXISTS (
+            SELECT * FROM account_items a WHERE a.event_id = e.id)
+      SQL
+
+      tagged_items.each { |item| item.destroy }
+
+      connection.delete(<<-SQL.squish)
+        DELETE FROM events
+         WHERE subscription_id = #{subscription_id}
+           AND NOT EXISTS (
+            SELECT * FROM account_items a WHERE a.event_id = events.id)
+      SQL
+
+      Account.delete(id)
+    end
+  end
+
   protected
 
     def create_default_buckets

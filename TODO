@@ -6,7 +6,6 @@ immediately:
 * check # and "select repayment options" links are out of whack when editing an event
 
 before inviting other users to "beta test":
-* cache current balances on accounts and buckets
 * cache balances on events (?)
 * make bucket reallocation work from bucket index
 * make bucket reallocation work from bucket perma

@@ -16,6 +16,13 @@ john_lunch:
   created_at: <%= 59.days.ago.utc.to_s(:db) %>
   updated_at: <%= 59.days.ago.utc.to_s(:db) %>
 
+john_fuel:
+  subscription: john
+  name: fuel
+  balance: 1500
+  created_at: <%= 55.days.ago.utc.to_s(:db) %>
+  updated_at: <%= 55.days.ago.utc.to_s(:db) %>
+
 # --------------------------------------------------------------
 # tim
 # --------------------------------------------------------------

@@ -48,13 +48,19 @@ john_lunch_again_mastercard:
   event: john_lunch_again
   account: john_mastercard
   amount: -1025
-  occurred_on: <%= 59.days.ago.utc.to_s(:db) %>
+  occurred_on: <%= 55.days.ago.utc.to_s(:db) %>
 
 john_lunch_again_checking:
   event: john_lunch_again
   account: john_checking
   amount: 0
-  occurred_on: <%= 59.days.ago.utc.to_s(:db) %>
+  occurred_on: <%= 55.days.ago.utc.to_s(:db) %>
+
+john_bare_mastercard:
+  event: john_bare_mastercard
+  account: john_mastercard
+  amount: -1500
+  occurred_on: <%= 54.days.ago.utc.to_s(:db) %>
 
 # --------------------------------------------------------------
 # tim

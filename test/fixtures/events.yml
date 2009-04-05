@@ -56,6 +56,15 @@ john_lunch_again:
   created_at: <%= 55.days.ago.utc.to_s(:db) %>
   updated_at: <%= 55.days.ago.utc.to_s(:db) %>
 
+john_bare_mastercard:
+  subscription: john
+  user: john
+  occurred_on: <%= 54.days.ago.to_date.to_s(:db) %>
+  actor: Auto fuel
+  check_number: ~
+  created_at: <%= 54.days.ago.utc.to_s(:db) %>
+  updated_at: <%= 54.days.ago.utc.to_s(:db) %>
+
 # --------------------------------------------------------------
 # tim
 # --------------------------------------------------------------

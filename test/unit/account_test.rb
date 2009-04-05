@@ -39,6 +39,40 @@ class AccountTest < ActiveSupport::TestCase
     assert_equal checking.available_balance, checking.balance - aside.balance
   end
 
+  test "destroy should remove all line items referencing this account" do
+    accounts(:john_mastercard).destroy
+    assert !Account.exists?(accounts(:john_mastercard).id)
+    assert LineItem.find(:all, :conditions => { :account_id => accounts(:john_mastercard).id }).empty?
+  end
+
+  test "destroy should remove all account items referencing this account" do
+    accounts(:john_mastercard).destroy
+    assert !Account.exists?(accounts(:john_mastercard).id)
+    assert AccountItem.find(:all, :conditions => { :account_id => accounts(:john_mastercard).id }).empty?
+  end
+
+  test "destroy should remove all buckets referencing this account" do
+    accounts(:john_mastercard).destroy
+    assert !Account.exists?(accounts(:john_mastercard).id)
+    assert Bucket.find(:all, :conditions => { :account_id => accounts(:john_mastercard).id }).empty?
+  end
+
+  test "destroy should remove all events referencing only this account" do
+    assert Event.exists?(events(:john_bare_mastercard).id)
+    assert Event.exists?(events(:john_lunch).id)
+    assert Event.exists?(events(:john_bill_pay).id)
+    accounts(:john_mastercard).destroy
+    assert !Event.exists?(events(:john_bare_mastercard).id)
+    assert Event.exists?(events(:john_lunch).id)
+    assert Event.exists?(events(:john_bill_pay).id)
+  end
+
+  test "destroy should remove all tagged items for events referencing only this account" do
+    assert_equal 1500, tags(:john_fuel).balance
+    accounts(:john_mastercard).destroy
+    assert_equal 0, tags(:john_fuel, :reload).balance
+  end
+
   private
 
     def new_account(options={})

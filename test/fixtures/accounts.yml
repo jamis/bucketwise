@@ -16,7 +16,7 @@ john_mastercard:
   author: john
   name: Mastercard
   role: credit-card
-  balance: -1025
+  balance: -2525
   created_at: <%= (60.days.ago + 2.hours).utc.to_s(:db) %>
   updated_at: <%= (60.days.ago + 2.hours).utc.to_s(:db) %>
 

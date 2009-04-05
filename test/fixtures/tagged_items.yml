@@ -9,3 +9,9 @@ john_lunch_lunch:
   tag: john_lunch
   occurred_on: <%= 59.days.ago.to_date.to_s(:db) %>
   amount: 775
+
+john_bare_mastercard:
+  event: john_bare_mastercard
+  tag: john_fuel
+  occurred_on: <%= 55.days.ago.to_date.to_s(:db) %>
+  amount: 1500
