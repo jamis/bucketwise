@@ -12,6 +12,11 @@ class AccountsController < ApplicationController
     redirect_to(subscription_url(subscription))
   end
 
+  def destroy
+    account.destroy
+    redirect_to(subscription_url(subscription))
+  end
+
   protected
 
     attr_reader :account

@@ -36,4 +36,18 @@ class AccountsControllerTest < ActionController::TestCase
     assert_equal subscriptions(:john), assigns(:subscription)
     assert assigns(:account)
   end
+
+  test "destroy should 404 when user without permission requests page" do
+    assert_no_difference "Account.count" do
+      delete :destroy, :id => accounts(:tim_checking).id
+      assert_response :missing
+    end
+  end
+
+  test "destroy should remove account and redirect" do
+    assert_difference "Account.count", -1 do
+      delete :destroy, :id => accounts(:john_mastercard).id
+      assert_redirected_to(subscription_url(subscriptions(:john)))
+    end
+  end
 end
