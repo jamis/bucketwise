@@ -6,6 +6,10 @@ class TagsController < ApplicationController
     @more_pages, @items = tag_ref.tagged_items.page(@page)
   end
 
+  def update
+    tag_ref.update_attributes(params[:tag])
+  end
+
   protected
 
     # can't call it 'tag' because that conflicts with the Rails 'tag()'

@@ -1,0 +1,2 @@
+%span.actions== #{link_to_function("Rename", "Tags.rename(#{tag_path(tag_ref).to_json}, #{tag_ref.name.to_json}, #{form_authenticity_token.to_json})")} | #{link_to_function("Delete", "Tags.deleteTag(#{tag_path(tag_ref).to_json}, #{form_authenticity_token.to_json})")}
+== Transactions tagged "#{h(tag_ref.name)}"

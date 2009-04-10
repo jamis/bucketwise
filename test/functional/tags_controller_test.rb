@@ -21,6 +21,19 @@ class TagsControllerTest < ActionController::TestCase
     assert_equal tags(:john_lunch), assigns(:tag_ref)
   end
 
+  test "update should 404 for inaccessible tag" do
+    xhr :put, :update, :id => tags(:tim_milk).id, :tag => { :name => "hijacked!" }
+    assert_response :missing
+    assert_equal "milk", tags(:tim_milk, :reload).name
+  end
+
+  test "update should change tag name and render javascript response" do
+    xhr :put, :update, :id =>tags(:john_lunch).id, :tag => { :name => "hijacked!" }
+    assert_response :success
+    assert_template "tags/update.js.rjs"
+    assert_equal "hijacked!", tags(:john_lunch, :reload).name
+  end
+
   protected
 
     def login_as_john

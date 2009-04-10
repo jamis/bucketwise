@@ -1,0 +1,1 @@
+page[:name].replace_html :partial => "tags/name"

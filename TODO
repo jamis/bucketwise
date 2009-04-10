@@ -5,10 +5,12 @@ immediately:
 * "Add a new bucket" should set focus on new bucket line
 * check # and "select repayment options" links are out of whack when editing an event
 * deleting event from account perma results in ajax error (maybe only when there is only a single event in the account?)
+* Reallocating a bucket doesn't change the updated_at field for the bucket?
+* "move in" and "move out" links on dashboard don't use existing form -- they go to events/new
+* make all autocompleting fields refresh their source array after event creation
 
 before inviting other users to "beta test":
 * tag delete (optionally move transactions to different tag, e.g. "tag merge")
-* tag rename
 * API
 * validations
 * rake tasks for user and subscription creation
@@ -18,18 +20,13 @@ before inviting other users to "beta test":
 * user info page (for password change)
 * password reset from login page
 * cache balances on events (?)
-
-before public release:
-* signup process
-* exception notifier (?)
 * README with installation instructions
-* /subscriptions index
 * CHANGELOG
 
-FIXME
-* make all autocompleting fields refresh their source array after event creation
-
 future
+* signup process
+* exception notifier (?)
+* /subscriptions index
 * autocomplete actor field in event form
 * better 404 and 500 error pages
 * searching & reporting
