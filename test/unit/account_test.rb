@@ -77,9 +77,8 @@ class AccountTest < ActiveSupport::TestCase
 
     def new_account(options={})
       options = {:name => "Visa",
-                 :role => "credit-card",
-                 :author => users(:john)}.merge(options)
+                 :role => "credit-card"}.merge(options)
 
-      subscriptions(:john).accounts.create(options)
+      subscriptions(:john).accounts.create_for(users(:john), options)
     end
 end

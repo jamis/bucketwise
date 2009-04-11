@@ -8,7 +8,7 @@ class AccountsController < ApplicationController
   end
 
   def create
-    @account = subscription.accounts.create(params[:account].merge(:author => user))
+    @account = subscription.accounts.create_for(user, params[:account])
     redirect_to(subscription_url(subscription))
   end
 

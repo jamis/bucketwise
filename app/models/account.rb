@@ -6,6 +6,7 @@ class Account < ActiveRecord::Base
   belongs_to :author, :class_name => "User", :foreign_key => "user_id"
 
   attr_accessor :starting_balance
+  attr_accessible :name, :role, :starting_balance
 
   has_many :buckets do
     def for_role(role, user)

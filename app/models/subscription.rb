@@ -1,7 +1,15 @@
 class Subscription < ActiveRecord::Base
   belongs_to :owner, :class_name => "User"
 
-  has_many :accounts
+  has_many :accounts do
+    def create_for(author, attributes)
+      returning build(attributes) do |account|
+        account.author = author
+        account.save
+      end
+    end
+  end
+
   has_many :tags
 
   has_many :events do
