@@ -15,6 +15,8 @@ class Tag < ActiveRecord::Base
     end
   end
 
+  attr_accessible :name
+
   def assimilate(tag)
     raise ActiveRecord::RecordNotSaved, "cannot assimilate self" if tag == self
 

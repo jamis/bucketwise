@@ -10,7 +10,6 @@ immediately:
 * make all autocompleting fields refresh their source array after event creation
 
 before inviting other users to "beta test":
-* attr_protected (attr_accessible?) everywhere (perhaps implement an update_override method or something for places where it would be useful to do mass updates despite protected attrs?)
 * validations
 * API
 * rake tasks for user and subscription creation
