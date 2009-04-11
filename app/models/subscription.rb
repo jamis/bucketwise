@@ -13,6 +13,13 @@ class Subscription < ActiveRecord::Base
   has_many :tags
 
   has_many :events do
+    def create_for(user, attributes)
+      returning build(attributes) do |event|
+        event.user = user
+        event.save
+      end
+    end
+
     def recent(n=5)
       find(:all, :order => "created_at DESC", :limit => n, :include => :account_items)
     end

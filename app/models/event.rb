@@ -2,8 +2,6 @@ class Event < ActiveRecord::Base
   belongs_to :subscription
   belongs_to :user
 
-  attr_protected :subscription_id
-
   has_many :line_items, :dependent => :destroy do
     def for_role(name)
       name = name.to_s
@@ -27,6 +25,9 @@ class Event < ActiveRecord::Base
 
   alias_method :original_line_items_assignment, :line_items=
   alias_method :original_tagged_items_assignment, :tagged_items=
+
+  attr_accessible :occurred_on, :actor, :check_number, :memo
+  attr_accessible :line_items, :tagged_items, :role
 
   after_save :realize_line_items, :realize_tagged_items
 

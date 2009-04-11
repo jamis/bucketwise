@@ -102,8 +102,8 @@ class Account < ActiveRecord::Base
 
     def set_starting_balance
       if starting_balance && !starting_balance[:amount].to_i.zero?
-        subscription.events.create(:occurred_on => starting_balance[:occurred_on],
-          :actor => "Starting balance", :user_id => user_id,
+        subscription.events.create_for(author,
+          :occurred_on => starting_balance[:occurred_on], :actor => "Starting balance",
           :line_items => [{:account_id => id, :bucket_id => buckets.default.id,
             :amount => starting_balance[:amount], :role => "deposit"}])
         reload # make sure the balance is set correctly

@@ -10,7 +10,7 @@ class EventTest < ActiveSupport::TestCase
     @event_base[:line_items][0][:account_id] = 12345
     assert_no_difference "Event.count" do
       assert_raise(ActiveRecord::RecordNotFound) do
-        subscriptions(:john).events.create(@event_base)
+        subscriptions(:john).events.create_for(users(:john), @event_base)
       end
     end
   end
@@ -19,7 +19,7 @@ class EventTest < ActiveSupport::TestCase
     @event_base[:line_items][0][:account_id] = accounts(:tim_checking).id
     assert_no_difference "Event.count" do
       assert_raise(ActiveRecord::RecordNotFound) do
-        subscriptions(:john).events.create(@event_base)
+        subscriptions(:john).events.create_for(users(:john), @event_base)
       end
     end
   end
@@ -29,7 +29,7 @@ class EventTest < ActiveSupport::TestCase
     @event_base[:line_items][0][:bucket_id] = 12345
     assert_no_difference "Event.count" do
       assert_raise(ActiveRecord::RecordNotFound) do
-        subscriptions(:john).events.create(@event_base)
+        subscriptions(:john).events.create_for(users(:john), @event_base)
       end
     end
   end
@@ -38,13 +38,13 @@ class EventTest < ActiveSupport::TestCase
     @event_base[:line_items][0][:bucket_id] = buckets(:tim_checking_general).id
     assert_no_difference "Event.count" do
       assert_raise(ActiveRecord::RecordNotFound) do
-        subscriptions(:john).events.create(@event_base)
+        subscriptions(:john).events.create_for(users(:john), @event_base)
       end
     end
   end
 
   test "create with existing buckets should associate line items with those buckets" do
-    event = subscriptions(:john).events.create(@event_base)
+    event = subscriptions(:john).events.create_for(users(:john), @event_base)
     assert_equal [-25_75, -15_25], event.line_items.map(&:amount)
     assert_equal [buckets(:john_checking_groceries), buckets(:john_checking_household)], event.line_items.map(&:bucket)
     assert buckets(:john_checking_groceries, :reload).updated_at > 1.second.ago.utc
@@ -55,7 +55,7 @@ class EventTest < ActiveSupport::TestCase
     @event_base[:line_items][0][:bucket_id] = "n:Dining"
     @event_base[:line_items][1][:bucket_id] = "n:Gambling"
     assert_difference "accounts(:john_checking).buckets.count" do
-      event = subscriptions(:john).events.create(@event_base)
+      event = subscriptions(:john).events.create_for(users(:john), @event_base)
       assert_equal [-25_75, -15_25], event.line_items.map(&:amount)
       gambling = accounts(:john_checking).buckets.detect { |b| b.name == "Gambling" }
       assert gambling
@@ -68,7 +68,7 @@ class EventTest < ActiveSupport::TestCase
     @event_base[:line_items][0][:bucket_id] = "r:default"
     @event_base[:line_items][1][:bucket_id] = "r:custom"
     assert_difference "accounts(:john_checking).buckets.count" do
-      event = subscriptions(:john).events.create(@event_base)
+      event = subscriptions(:john).events.create_for(users(:john), @event_base)
       assert_equal [-25_75, -15_25], event.line_items.map(&:amount)
       custom = accounts(:john_checking).buckets.for_role("custom", users(:john))
       assert custom
@@ -93,13 +93,13 @@ class EventTest < ActiveSupport::TestCase
         :role       => 'aside' }
     ]
 
-    event = subscriptions(:john).events.create(@event_base)
+    event = subscriptions(:john).events.create_for(users(:john), @event_base)
     assert_equal [["Checking", 0], ["Mastercard", -25_00]],
       event.account_items.map { |i| [i.account.name, i.amount] }.sort
   end
 
   test "create with tagged_items should generate tagged_items for event" do
-    event = subscriptions(:john).events.create(@event_base.merge(
+    event = subscriptions(:john).events.create_for(users(:john), @event_base.merge(
       :tagged_items => [ { :tag_id => tags(:john_lunch).id, :amount => 500 } ]))
     assert_equal 1, event.tagged_items.length
     assert_equal [500], event.tagged_items.map(&:amount)
@@ -107,7 +107,7 @@ class EventTest < ActiveSupport::TestCase
   end
 
   test "create with named tagged_items should find or create tagged_items" do
-    event = subscriptions(:john).events.create(@event_base.merge(
+    event = subscriptions(:john).events.create_for(users(:john), @event_base.merge(
       :tagged_items => [ { :tag_id => "n:milk", :amount => 500 },
                          { :tag_id => "n:fruit", :amount => 750 } ]))
     assert_equal 2, event.tagged_items.length
@@ -213,7 +213,6 @@ class EventTest < ActiveSupport::TestCase
       @event_base = {
         :occurred_on => 3.days.ago.to_date,
         :actor => "Something",
-        :user => users(:john),
         :line_items => [
           { :account_id => accounts(:john_checking).id,
             :bucket_id  => buckets(:john_checking_groceries).id,
