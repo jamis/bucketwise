@@ -9,9 +9,16 @@ class Account < ActiveRecord::Base
   attr_accessible :name, :role, :starting_balance
 
   has_many :buckets do
+    def create_for(author, attributes)
+      returning build(attributes) do |bucket|
+        bucket.author = author
+        bucket.save
+      end
+    end
+
     def for_role(role, user)
-      find_or_create_by_role(:role => role.downcase, :name => role.downcase.capitalize,
-        :author => user)
+      role = role.downcase
+      find_by_role(role) || create_for(user, :name => role.capitalize, :role => role)
     end
 
     def sorted
@@ -90,7 +97,7 @@ class Account < ActiveRecord::Base
   protected
 
     def create_default_buckets
-      buckets.create(:name => DEFAULT_BUCKET_NAME, :role => "default", :author => author)
+      buckets.create_for(author, :name => DEFAULT_BUCKET_NAME, :role => "default")
     end
 
     def set_starting_balance

@@ -18,6 +18,8 @@ class Bucket < ActiveRecord::Base
     end
   end
 
+  attr_accessible :name, :role
+
   def self.default
     Temp.new("r:default", "General", "default", 0)
   end

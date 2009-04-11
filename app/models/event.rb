@@ -102,7 +102,7 @@ class Event < ActiveRecord::Base
 
           bucket_id = item.delete(:bucket_id)
           item[:bucket] = if bucket_id =~ /^n:(.*)/
-            account.buckets.find_or_create_by_name(:name => $1, :author => user)
+            account.buckets.find_by_name($1) || account.buckets.create_for(user, :name => $1)
           elsif bucket_id =~ /^r:(.*)/
             account.buckets.for_role($1, user)
           else
