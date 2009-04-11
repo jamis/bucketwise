@@ -493,6 +493,18 @@ div#cloud a:hover {
   color: #00f;
 }
 
+label.option {
+  display: block;
+  padding: 1em;
+  border: 1px solid #eee;
+  margin: 0.25em;
+}
+
+label.selected {
+  background: #ff7;
+  border: 1px solid #ccc;
+}
+
 /* ------------------------------------------------------------------ *
  * LOGIN PAGE
  * ------------------------------------------------------------------ */

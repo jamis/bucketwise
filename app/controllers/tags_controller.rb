@@ -10,6 +10,19 @@ class TagsController < ApplicationController
     tag_ref.update_attributes(params[:tag])
   end
 
+  def destroy
+    if params[:receiver_id].present?
+      receiver = subscription.tags.find(params[:receiver_id])
+      receiver.assimilate(tag_ref)
+      redirect_to(receiver)
+    else
+      tag_ref.destroy
+      redirect_to(subscription)
+    end
+  rescue ActiveRecord::RecordNotSaved => error
+    head :unprocessable_entity
+  end
+
   protected
 
     # can't call it 'tag' because that conflicts with the Rails 'tag()'
