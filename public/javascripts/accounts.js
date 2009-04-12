@@ -12,14 +12,18 @@ var Accounts = {
   },
 
   hideForm: function() {
-    Accounts.reset();
-    $('new_account').hide();
-
-    if($('blankslate')) {
-      $('blankslate').show();
+    if(Accounts.origin) {
+      window.location = Accounts.origin;
     } else {
-      $('data').show();
-      $('links').show();
+      Accounts.reset();
+      $('new_account').hide();
+
+      if($('blankslate')) {
+        $('blankslate').show();
+      } else {
+        $('data').show();
+        $('links').show();
+      }
     }
   },
 

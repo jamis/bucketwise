@@ -8,6 +8,7 @@ immediately:
 * Reallocating a bucket doesn't change the updated_at field for the bucket?
 * "move in" and "move out" links on dashboard don't use existing form -- they go to events/new
 * make all autocompleting fields refresh their source array after event creation
+* tags don't work when reallocating buckets via the /events/new form
 
 before inviting other users to "beta test":
 * validations

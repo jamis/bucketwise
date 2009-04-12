@@ -8,6 +8,9 @@ class Account < ActiveRecord::Base
   attr_accessor :starting_balance
   attr_accessible :name, :role, :starting_balance
 
+  validates_presence_of :name
+  validates_uniqueness_of :name, :scope => :subscription_id, :case_sensitive => false
+
   has_many :buckets do
     def create_for(author, attributes)
       returning build(attributes) do |bucket|

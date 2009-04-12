@@ -8,6 +8,11 @@ class AccountsControllerTest < ActionController::TestCase
     assert_response :missing
   end
 
+  test "new should 404 when user without permissions requests page" do
+    get :new, :subscription_id => subscriptions(:tim).id
+    assert_response :missing
+  end
+
   test "create should 404 when when user without permissions requests page" do
     assert_no_difference "Account.count" do
       post :create, {
@@ -25,6 +30,13 @@ class AccountsControllerTest < ActionController::TestCase
     assert_equal subscriptions(:john), assigns(:subscription)
   end
 
+  test "new should load subscription and render page" do
+    get :new, :subscription_id => subscriptions(:john).id
+    assert_response :success
+    assert_template "accounts/new"
+    assert_equal subscriptions(:john), assigns(:subscription)
+  end
+
   test "create should load subscription and create account and redirect" do
     assert_difference "subscriptions(:john).accounts.count" do
       post :create, {
@@ -35,6 +47,16 @@ class AccountsControllerTest < ActionController::TestCase
 
     assert_equal subscriptions(:john), assigns(:subscription)
     assert assigns(:account)
+  end
+
+  test "create with invalid record should render 'new' action" do
+    assert_no_difference "Account.count" do
+      post :create, :subscription_id => subscriptions(:john).id,
+        :account => { :name => "Checking", :role => "checking" }
+      assert_response :success
+      assert_template "accounts/new"
+      assert assigns(:account) && !assigns(:account).valid?
+    end
   end
 
   test "destroy should 404 when user without permission requests page" do

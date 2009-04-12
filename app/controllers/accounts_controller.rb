@@ -1,15 +1,23 @@
 class AccountsController < ApplicationController
-  before_filter :find_account, :except => :create
-  before_filter :find_subscription, :only => :create
+  before_filter :find_account, :except => %w(create new)
+  before_filter :find_subscription, :only => %w(create new)
 
   def show
     @page = (params[:page] || 0).to_i
     @more_pages, @items = account.account_items.page(@page)
   end
 
+  def new
+  end
+
   def create
     @account = subscription.accounts.create_for(user, params[:account])
-    redirect_to(subscription_url(subscription))
+
+    if @account.valid?
+      redirect_to(subscription_url(subscription))
+    else
+      render :action => "new"
+    end
   end
 
   def destroy

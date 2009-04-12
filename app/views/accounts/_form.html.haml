@@ -1,4 +1,13 @@
-- form_for(:account, :url => subscription_accounts_path(subscription), :html => { :onsubmit => "if(!Accounts.submit()) return false", :id => "new_account_form" }) do |form|
+- form_for(:account, @account, :url => subscription_accounts_path(subscription), :html => { :onsubmit => "if(!Accounts.submit()) return false", :id => "new_account_form" }) do |form|
+  - if form.object && !form.object.errors.empty?
+    %fieldset.errors
+      %legend Errors
+
+      %p The account could not be saved because of the following error(s):
+      %ul
+        - form.object.errors.each_full do |message|
+          %li&= message
+
   %fieldset
     %legend Account info
 
@@ -12,27 +21,25 @@
         = form.select :role, [["Checking", "checking"], ["Credit card", "credit-card"], ["Other", "other"]]
 
   - if form.object.nil? || form.object.new_record?
-    - form.fields_for :starting_balance do |balance|
+    %fieldset
+      %legend Starting balance
 
-      %fieldset
-        %legend Starting balance
+      .instructions
+        %p <b>Take a look at your latest statement for this account.</b>
+        %p Note the <em>current balance</em> from the statement, as |
+          well as the <em>date the statement was issued</em>, and enter |
+          them below. |
+      = hidden_field_tag "account[starting_balance][amount]", ""
 
-        .instructions
-          %p <b>Take a look at your latest statement for this account.</b>
-          %p Note the <em>current balance</em> from the statement, as |
-            well as the <em>date the statement was issued</em>, and enter |
-            them below. |
-        = balance.hidden_field :amount
+      %p
+        %label
+          What is the <strong>current balance</strong>:
+          == $#{text_field_tag :current_balance, account_starting_balance_amount, :class => "number", :size => 8}
 
-        %p
-          %label
-            What is the <strong>current balance</strong>:
-            == $#{text_field_tag :current_balance, "", :class => "number", :size => 8}
-
-        %p
-          %label
-            <strong>When</strong> was the statement issued:
-            = calendar_date_select_tag "account[starting_balance][occurred_on]", Date.today, :size => 9
+      %p
+        %label
+          <strong>When</strong> was the statement issued:
+          = calendar_date_select_tag "account[starting_balance][occurred_on]", account_starting_balance_occurred_on, :size => 9
 
   %p
     = submit_tag "Create this account"

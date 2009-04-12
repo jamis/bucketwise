@@ -7,6 +7,11 @@ body {
   margin: 0;
 }
 
+.fieldWithErrors {
+  padding: 1px;
+  background: red;
+}
+
 a {
   color: #00f;
   text-decoration: none;
@@ -357,6 +362,20 @@ td.zoom tr.even td {
   font-weight: bold;
   background: white;
   padding: 0 0.4em;
+}
+
+.form fieldset.errors {
+  border: 2px solid #f77;
+  background: #fcc;
+}
+
+.form fieldset.errors legend {
+  color: red;
+  background: #fcc;
+}
+
+.form fieldset.errors li {
+  color: red;
 }
 
 .form p {
