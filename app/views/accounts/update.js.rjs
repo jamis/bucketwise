@@ -1,3 +1,8 @@
-page[dom_id(account, :name)].replace_html :partial => "accounts/name",
-  :locals => { :account => account }
-page[dom_id(account, :buckets)].replace_html("Buckets in #{h(account.name)}")
+if account.valid?
+  page[dom_id(account, :name)].replace_html :partial => "accounts/name",
+    :locals => { :account => account }
+  page[dom_id(account, :buckets)].replace_html("Buckets in #{h(account.name)}")
+else
+  errors = account.errors.full_messages.join("\n")
+  page.alert("The account could not be updated:\n\n" + errors)
+end
