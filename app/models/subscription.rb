@@ -1,25 +1,10 @@
 class Subscription < ActiveRecord::Base
   belongs_to :owner, :class_name => "User"
 
-  has_many :accounts do
-    def create_for(author, attributes)
-      returning build(attributes) do |account|
-        account.author = author
-        account.save
-      end
-    end
-  end
-
+  has_many :accounts
   has_many :tags
 
   has_many :events do
-    def create_for(user, attributes)
-      returning build(attributes) do |event|
-        event.user = user
-        event.save
-      end
-    end
-
     def recent(n=5)
       find(:all, :order => "created_at DESC", :limit => n, :include => :account_items)
     end

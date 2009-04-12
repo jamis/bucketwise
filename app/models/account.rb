@@ -12,16 +12,9 @@ class Account < ActiveRecord::Base
   validates_uniqueness_of :name, :scope => :subscription_id, :case_sensitive => false
 
   has_many :buckets do
-    def create_for(author, attributes)
-      returning build(attributes) do |bucket|
-        bucket.author = author
-        bucket.save
-      end
-    end
-
     def for_role(role, user)
       role = role.downcase
-      find_by_role(role) || create_for(user, :name => role.capitalize, :role => role)
+      find_by_role(role) || create({:name => role.capitalize, :role => role}, :author => user)
     end
 
     def sorted
@@ -100,15 +93,16 @@ class Account < ActiveRecord::Base
   protected
 
     def create_default_buckets
-      buckets.create_for(author, :name => DEFAULT_BUCKET_NAME, :role => "default")
+      buckets.create({:name => DEFAULT_BUCKET_NAME, :role => "default"}, :author => author)
     end
 
     def set_starting_balance
       if starting_balance && !starting_balance[:amount].to_i.zero?
-        subscription.events.create_for(author,
-          :occurred_on => starting_balance[:occurred_on], :actor => "Starting balance",
-          :line_items => [{:account_id => id, :bucket_id => buckets.default.id,
-            :amount => starting_balance[:amount], :role => "deposit"}])
+        subscription.events.create({:occurred_on => starting_balance[:occurred_on],
+            :actor => "Starting balance",
+            :line_items => [{:account_id => id, :bucket_id => buckets.default.id,
+              :amount => starting_balance[:amount], :role => "deposit"}]
+          }, :user => author)
         reload # make sure the balance is set correctly
       end
     end

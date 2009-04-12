@@ -14,3 +14,7 @@ vendor/plugins/project_search:
   :type: git
   :repository: git://github.com/37signals/project_search.git
   :revision: 5d243711fbbd69ac08ba86418316bd15cffa0642
+vendor/plugins/safe_mass_assignment:
+  :type: git
+  :repository: git://github.com/jamis/safe_mass_assignment.git
+  :revision: 7d7e24e551254e0651f5cfb93d876beaed9ed7f7

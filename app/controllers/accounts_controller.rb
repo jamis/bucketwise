@@ -11,13 +11,11 @@ class AccountsController < ApplicationController
   end
 
   def create
-    @account = subscription.accounts.create_for(user, params[:account])
-
-    if @account.valid?
-      redirect_to(subscription_url(subscription))
-    else
-      render :action => "new"
-    end
+    @account = subscription.accounts.create!(params[:account], :author => user)
+    redirect_to(subscription_url(subscription))
+  rescue ActiveRecord::RecordInvalid => error
+    @account = error.record
+    render :action => "new"
   end
 
   def destroy

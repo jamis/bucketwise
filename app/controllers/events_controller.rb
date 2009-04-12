@@ -13,7 +13,7 @@ class EventsController < ApplicationController
   end
 
   def create
-    @event = subscription.events.create_for(user, params[:event])
+    @event = subscription.events.create(params[:event], :user => user)
   end
 
   def update

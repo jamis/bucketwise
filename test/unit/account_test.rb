@@ -104,6 +104,6 @@ class AccountTest < ActiveSupport::TestCase
       options = {:name => "Visa",
                  :role => "credit-card"}.merge(options)
 
-      subscription.accounts.create_for(users(:john), options)
+      subscription.accounts.create(options, :author => users(:john))
     end
 end
