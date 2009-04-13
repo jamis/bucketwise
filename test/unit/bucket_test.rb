@@ -35,4 +35,34 @@ class BucketTest < ActiveSupport::TestCase
       end
     end
   end
+
+  test "blank names should be disallowed" do
+    assert_no_difference "Bucket.count" do
+      bucket = accounts(:john_checking).buckets.create(
+        { :name => "", :role => "" },
+        :author => users(:john))
+
+      assert bucket.errors.on(:name)
+    end
+  end
+
+  test "duplicate names are allowed for different accounts" do
+    assert_difference "Bucket.count" do
+      bucket = accounts(:john_savings).buckets.create(
+        { :name => buckets(:john_checking_dining).name, :role => "" },
+        :author => users(:john))
+
+      assert bucket.errors.on(:name).blank?
+    end
+  end
+
+  test "duplicate names are disallowed within the same account" do
+    assert_no_difference "Bucket.count" do
+      bucket = accounts(:john_checking).buckets.create(
+        { :name => buckets(:john_checking_dining).name, :role => "" },
+        :author => users(:john))
+
+      assert bucket.errors.on(:name)
+    end
+  end
 end

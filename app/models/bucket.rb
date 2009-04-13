@@ -20,6 +20,9 @@ class Bucket < ActiveRecord::Base
 
   attr_accessible :name, :role
 
+  validates_presence_of :name
+  validates_uniqueness_of :name, :scope => :account_id, :case_sensitive => false
+
   def self.default
     Temp.new("r:default", "General", "default", 0)
   end
