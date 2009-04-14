@@ -43,6 +43,274 @@ class EventTest < ActiveSupport::TestCase
     end
   end
 
+  test "create without actor should not pass validation" do
+    @event_base.delete(:actor)
+    assert_no_difference "Event.count" do
+      event = subscriptions(:john).events.create(@event_base, :user => users(:john))
+      assert event.errors.on(:actor)
+    end
+  end
+
+  test "create with blank actor should not pass validation" do
+    @event_base[:actor] = ""
+    assert_no_difference "Event.count" do
+      event = subscriptions(:john).events.create(@event_base, :user => users(:john))
+      assert event.errors.on(:actor)
+    end
+  end
+
+  test "create without occurred_on should not pass validation" do
+    @event_base.delete(:occurred_on)
+    assert_no_difference "Event.count" do
+      event = subscriptions(:john).events.create(@event_base, :user => users(:john))
+      assert event.errors.on(:occurred_on)
+    end
+  end
+
+  test "create without line items should not pass validation" do
+    @event_base.delete(:line_items)
+    assert_no_difference "Event.count" do
+      event = subscriptions(:john).events.create(@event_base, :user => users(:john))
+      assert event.errors.on(:line_items)
+    end
+  end
+
+  test "create with empty line items should not pass validation" do
+    @event_base[:line_items] = []
+    assert_no_difference "Event.count" do
+      event = subscriptions(:john).events.create(@event_base, :user => users(:john))
+      assert event.errors.on(:line_items)
+    end
+  end
+
+  test "create with unrecognized event role should fail validation" do
+    @event_base[:line_items][0][:role] = "bogus"
+    assert_no_difference "Event.count" do
+      event = subscriptions(:john).events.create(@event_base, :user => users(:john))
+      assert event.errors.on(:line_item)
+    end
+  end
+
+  test "create with mismatched line item roles should fail validation" do
+    @event_base[:line_items] = [
+      { :account_id => accounts(:john_checking).id,
+        :bucket_id  => buckets(:john_checking_groceries).id,
+        :amount     => -25_75,
+        :role       => 'transfer_from' },
+      { :account_id => accounts(:john_checking).id,
+        :bucket_id  => buckets(:john_checking_dining).id,
+        :amount     => 25_75,
+        :role       => 'deposit' }
+    ]
+
+    assert_no_difference "Event.count" do
+      event = subscriptions(:john).events.create(@event_base, :user => users(:john))
+      assert event.errors.on(:line_items)
+    end
+  end
+
+  test "create transfer with only a single account should not pass validation" do
+    @event_base[:line_items] = [
+      { :account_id => accounts(:john_checking).id,
+        :bucket_id  => buckets(:john_checking_groceries).id,
+        :amount     => -25_75,
+        :role       => 'transfer_from' },
+      { :account_id => accounts(:john_checking).id,
+        :bucket_id  => buckets(:john_checking_dining).id,
+        :amount     => 25_75,
+        :role       => 'transfer_to' }
+    ]
+
+    assert_no_difference "Event.count" do
+      event = subscriptions(:john).events.create(@event_base, :user => users(:john))
+      assert event.errors.on(:line_items)
+    end
+  end
+
+  test "create transfer without balancing amounts should not pass validation" do
+    @event_base[:line_items] = [
+      { :account_id => accounts(:john_checking).id,
+        :bucket_id  => buckets(:john_checking_groceries).id,
+        :amount     => -25_75,
+        :role       => 'transfer_from' },
+      { :account_id => accounts(:john_savings).id,
+        :bucket_id  => buckets(:john_savings_general).id,
+        :amount     => 26_75,
+        :role       => 'transfer_to' }
+    ]
+
+    assert_no_difference "Event.count" do
+      event = subscriptions(:john).events.create(@event_base, :user => users(:john))
+      assert event.errors.on(:line_items)
+    end
+  end
+
+  test "create transfer should have correct sign for balance of from and to accounts" do
+    @event_base[:line_items] = [
+      { :account_id => accounts(:john_checking).id,
+        :bucket_id  => buckets(:john_checking_groceries).id,
+        :amount     => 25_75,
+        :role       => 'transfer_from' },
+      { :account_id => accounts(:john_savings).id,
+        :bucket_id  => buckets(:john_savings_general).id,
+        :amount     => -25_75,
+        :role       => 'transfer_to' }
+    ]
+
+    assert_no_difference "Event.count" do
+      event = subscriptions(:john).events.create(@event_base, :user => users(:john))
+      assert event.errors.on(:line_item)
+    end
+  end
+
+  test "create expense with repayment options should require amounts to balance" do
+    @event_base[:line_items] = [
+      { :account_id => accounts(:john_checking).id,
+        :bucket_id  => buckets(:john_checking_groceries).id,
+        :amount     => -25_75,
+        :role       => 'payment_source' },
+      { :account_id => accounts(:john_checking).id,
+        :bucket_id  => buckets(:john_checking_aside).id,
+        :amount     => 25_76,
+        :role       => 'aside' },
+      { :account_id => accounts(:john_mastercard).id,
+        :bucket_id  => buckets(:john_mastercard_general).id,
+        :amount     => -25_75,
+        :role       => 'credit_options' },
+    ]
+
+    assert_no_difference "Event.count" do
+      event = subscriptions(:john).events.create(@event_base, :user => users(:john))
+      assert event.errors.on(:line_items)
+    end
+  end
+
+  test "create expense with repayment options should include aside role" do
+    @event_base[:line_items] = [
+      { :account_id => accounts(:john_checking).id,
+        :bucket_id  => buckets(:john_checking_groceries).id,
+        :amount     => -25_75,
+        :role       => 'payment_source' },
+      { :account_id => accounts(:john_mastercard).id,
+        :bucket_id  => buckets(:john_mastercard_general).id,
+        :amount     => -25_75,
+        :role       => 'credit_options' },
+    ]
+
+    assert_no_difference "Event.count" do
+      event = subscriptions(:john).events.create(@event_base, :user => users(:john))
+      assert event.errors.on(:line_items)
+    end
+  end
+
+  test "create expense should have negative balance for payment_source" do
+    @event_base[:line_items] = [
+      { :account_id => accounts(:john_checking).id,
+        :bucket_id  => buckets(:john_checking_groceries).id,
+        :amount     => 25_75,
+        :role       => 'payment_source' },
+    ]
+
+    assert_no_difference "Event.count" do
+      event = subscriptions(:john).events.create(@event_base, :user => users(:john))
+      assert event.errors.on(:line_items)
+    end
+  end
+
+  test "create expense should have negative balance for credit_options" do
+    @event_base[:line_items] = [
+      { :account_id => accounts(:john_checking).id,
+        :bucket_id  => buckets(:john_checking_groceries).id,
+        :amount     => -25_75,
+        :role       => 'payment_source' },
+      { :account_id => accounts(:john_checking).id,
+        :bucket_id  => buckets(:john_checking_aside).id,
+        :amount     => 25_75,
+        :role       => 'aside' },
+      { :account_id => accounts(:john_mastercard).id,
+        :bucket_id  => buckets(:john_mastercard_general).id,
+        :amount     => 25_75,
+        :role       => 'credit_options' },
+    ]
+
+    assert_no_difference "Event.count" do
+      event = subscriptions(:john).events.create(@event_base, :user => users(:john))
+      assert event.errors.on(:line_items)
+    end
+  end
+
+  test "create expense should have positive balance for aside" do
+    @event_base[:line_items] = [
+      { :account_id => accounts(:john_checking).id,
+        :bucket_id  => buckets(:john_checking_groceries).id,
+        :amount     => -25_75,
+        :role       => 'payment_source' },
+      { :account_id => accounts(:john_checking).id,
+        :bucket_id  => buckets(:john_checking_aside).id,
+        :amount     => -25_75,
+        :role       => 'aside' },
+      { :account_id => accounts(:john_mastercard).id,
+        :bucket_id  => buckets(:john_mastercard_general).id,
+        :amount     => -25_75,
+        :role       => 'credit_options' },
+    ]
+
+    assert_no_difference "Event.count" do
+      event = subscriptions(:john).events.create(@event_base, :user => users(:john))
+      assert event.errors.on(:line_items)
+    end
+  end
+
+  test "create deposit should have positive balance" do
+    @event_base[:line_items] = [
+      { :account_id => accounts(:john_checking).id,
+        :bucket_id  => buckets(:john_checking_groceries).id,
+        :amount     => -1500,
+        :role       => 'deposit' },
+    ]
+
+    assert_no_difference "Event.count" do
+      event = subscriptions(:john).events.create(@event_base, :user => users(:john))
+      assert event.errors.on(:line_items)
+    end
+  end
+
+  test "create bucket reallocation with multiple accounts should not pass validation" do
+    @event_base[:line_items] = [
+      { :account_id => accounts(:john_checking).id,
+        :bucket_id  => buckets(:john_checking_groceries).id,
+        :amount     => 25_75,
+        :role       => 'primary' },
+      { :account_id => accounts(:john_savings).id,
+        :bucket_id  => buckets(:john_savings_general).id,
+        :amount     => -25_75,
+        :role       => 'reallocate_from' }
+    ]
+
+    assert_no_difference "Event.count" do
+      event = subscriptions(:john).events.create(@event_base, :user => users(:john))
+      assert event.errors.on(:line_items)
+    end
+  end
+
+  test "create bucket reallocation without balancing amounts should not pass validation" do
+    @event_base[:line_items] = [
+      { :account_id => accounts(:john_checking).id,
+        :bucket_id  => buckets(:john_checking_groceries).id,
+        :amount     => 25_75,
+        :role       => 'primary' },
+      { :account_id => accounts(:john_checking).id,
+        :bucket_id  => buckets(:john_checking_dining).id,
+        :amount     => -35_75,
+        :role       => 'reallocate_from' }
+    ]
+
+    assert_no_difference "Event.count" do
+      event = subscriptions(:john).events.create(@event_base, :user => users(:john))
+      assert event.errors.on(:line_items)
+    end
+  end
+
   test "create with existing buckets should associate line items with those buckets" do
     event = subscriptions(:john).events.create(@event_base, :user => users(:john))
     assert_equal [-25_75, -15_25], event.line_items.map(&:amount)
@@ -132,11 +400,11 @@ class EventTest < ActiveSupport::TestCase
       :line_items => [
         { :account_id => accounts(:john_savings).id,
           :bucket_id => buckets(:john_savings_general).id,
-          :amount => 200_00,
+          :amount => -200_00,
           :role => "payment_source" }]
 
     assert !items.any? { |item| LineItem.exists?(item.id) }
-    assert_equal 200_00, events(:john_lunch, :reload).balance
+    assert_equal -200_00, events(:john_lunch, :reload).balance
   end
 
   test "update without tagged items should leave exising tagged items alone" do

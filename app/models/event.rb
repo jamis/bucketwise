@@ -31,6 +31,9 @@ class Event < ActiveRecord::Base
 
   after_save :realize_line_items, :realize_tagged_items
 
+  validates_presence_of :actor, :occurred_on
+  validate :line_item_validations
+
   def balance
     @balance ||= account_items.sum(:amount) || 0
   end
@@ -92,6 +95,28 @@ class Event < ActiveRecord::Base
 
   protected
 
+    def line_item_validations
+      if @line_items_to_realize
+        if @line_items_to_realize.empty?
+          errors.add(:line_items, "must be provided")
+        else
+          ensure_line_item_roles_are_valid
+          role = ensure_line_items_use_consistent_roles
+          
+          case role
+          when :expense then ensure_expense_is_valid
+          when :deposit then ensure_deposit_is_valid
+          when :transfer then ensure_transfer_is_valid
+          when :reallocation then ensure_reallocation_is_valid
+          end
+        end
+      elsif new_record?
+        errors.add(:line_items, "must be provided")
+      end
+    end
+
+  protected
+
     def realize_line_items
       if @line_items_to_realize
         line_items.destroy_all
@@ -139,5 +164,176 @@ class Event < ActiveRecord::Base
 
         @tagged_items_to_realize = nil
       end
+    end
+
+  private
+
+    ROLE_FROM_LINE_ITEM = {
+      "payment_source"  => :expense,
+      "credit_options"  => :expense,
+      "aside"           => :expense,
+      "deposit"         => :deposit,
+      "transfer_from"   => :transfer,
+      "transfer_to"     => :transfer,
+      "reallocate_from" => :reallocation,
+      "reallocate_to"   => :reallocation
+    }
+
+    def ensure_line_item_roles_are_valid
+      @line_items_to_realize.each do |item|
+        if item[:role].blank?
+          errors.add(:line_item, "is missing the required `role' attribute")
+          return false
+        elsif !LineItem::VALID_ROLES.include?(item[:role].to_s)
+          errors.add(:line_item, "contains unrecognized role #{item[:role].inspect}")
+          return false
+        end
+      end
+
+      return true
+    end
+
+    def ensure_line_items_use_consistent_roles
+      roles = @line_items_to_realize.map { |item| item[:role].to_s }
+      primary = roles.select { |role| role == "primary" }
+
+      if primary.length > 1
+        errors.add :line_items,
+          "may include at most one `primary' role (#{primary.length} found)"
+        return false
+      end
+
+      aside = roles.select { |role| role == "aside" }
+
+      if aside.length > 1
+        errors.add :line_items,
+          "may include at most one `aside' role (#{aside.length} found)"
+        return false
+      end
+
+      discriminant = roles.detect { |role| role != "primary" }
+
+      if discriminant.nil?
+        errors.add :line_items, "must include at least one non-primary role"
+        return false
+      end
+
+      illegal = roles - (LineItem::VALID_ROLE_GROUPS[discriminant] || [])
+
+      if illegal.any?
+        errors.add :line_items, "include mismatched roles: " +
+          "#{discriminant.inspect} cannot accompany #{illegal.inspect}"
+        return false
+      end
+
+      return ROLE_FROM_LINE_ITEM[discriminant]
+    end
+
+    def ensure_expense_is_valid
+      unless @line_items_to_realize.any? { |item| item[:role].to_s == "payment_source" }
+        errors.add :line_items, "must include a payment_source role for expense scenarios"
+        return false
+      end
+
+      payment = credit = aside = 0
+      @line_items_to_realize.each do |item|
+        case item[:role].to_s
+        when "payment_source" then payment += item[:amount].to_i
+        when "credit_options" then credit += item[:amount].to_i
+        when "aside"          then aside += item[:amount].to_i
+        end
+      end
+
+      if payment >= 0
+        errors.add :line_items, "in payment_source role must have a negative amount"
+        return false
+      elsif @line_items_to_realize.any? { |item| item[:role].to_s == "credit_options" }
+        if credit >= 0
+          errors.add :line_items, "in credit_options role must have a negative amount"
+          return false
+        elsif aside <= 0
+          errors.add :line_items, "in aside role must have a positive amount"
+          return false
+        elsif payment != credit
+          errors.add :line_items, "for payment_source and credit_options must sum to identical balance"
+          return false
+        elsif payment.abs != aside
+          errors.add :line_items, "for payment_source and aside must balance"
+          return false
+        end
+      end
+
+      return true
+    end
+
+    def ensure_deposit_is_valid
+      if @line_items_to_realize.any? { |item| item[:amount].to_i <= 0 }
+        errors.add :line_items, "for deposit must all have positive amounts"
+        return false
+      end
+
+      return true
+    end
+
+    def ensure_transfer_is_valid
+      roles = @line_items_to_realize.map { |item| item[:role].to_s }.uniq.sort
+      if roles != %w(transfer_from transfer_to)
+        errors.add :line_items, "must contain both transfer_from and transfer_to roles in a transfer scenario"
+        return false
+      end
+
+      accounts = @line_items_to_realize.map { |item| item[:account_id].to_i }
+      if accounts.uniq.length != 2
+        errors.add :line_items, "must reference exactly two accounts in a transfer scenario"
+        return false
+      end
+
+      balances = @line_items_to_realize.inject(Hash.new(0)) do |map, item|
+        map[item[:account_id].to_i] += item[:amount].to_i
+        map
+      end
+
+      if balances.values.sum != 0
+        errors.add :line_items, "must have a zero balance in a transfer scenario"
+        return false
+      end
+
+      @line_items_to_realize.each do |item|
+        if item[:role].to_s == "transfer_from" && item[:amount].to_i >= 0
+          errors.add :line_item, "with transfer_from role must have a negative amount"
+          return false
+        elsif item[:role].to_s == "transfer_to" && item[:amount].to_i <= 0
+          errors.add :line_item, "with transfer_to role must have a positive amount"
+          return false
+        end
+      end
+
+      return true
+    end
+
+    def ensure_reallocation_is_valid
+      unless @line_items_to_realize.any? { |item| item[:role].to_s == "primary" }
+        errors.add :line_items, "must include a `primary' role for bucket reallocation scenario"
+        return false
+      end
+
+      accounts = @line_items_to_realize.map { |item| item[:account_id].to_i }.uniq
+      if accounts.length != 1
+        errors.add :line_items,
+          "for bucket reallocation scenario must reference exactly one account"
+        return false
+      end
+
+      balances = @line_items_to_realize.inject(Hash.new(0)) do |map, item|
+        map[item[:role]] += item[:amount].to_i
+        map
+      end
+
+      if balances.values.sum != 0
+        errors.add :line_items, "must balance to zero for bucket reallocation scenario"
+        return false
+      end
+
+      return true
     end
 end

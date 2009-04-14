@@ -123,7 +123,7 @@ class EventsControllerTest < ActionController::TestCase
         :line_items => [
           { :account_id => accounts(account).id.to_s,
             :bucket_id  => buckets(bucket).id.to_s,
-            :amount     => "2000",
+            :amount     => "-2000",
             :role       => "payment_source" }
           ],
           :tagged_items => [] }
