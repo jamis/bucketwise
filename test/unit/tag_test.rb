@@ -35,4 +35,17 @@ class TagTest < ActiveSupport::TestCase
     assert !Tag.exists?(tags(:john_lunch).id)
     assert items.all? { |item| TaggedItem.exists?(item.id) }
   end
+
+  test "duplicates should be allowed for different subscriptions" do
+    assert_difference "Tag.count" do
+      subscriptions(:tim).tags.create(:name => "lunch")
+    end
+  end
+
+  test "duplicates should be forbidden within a subscription" do
+    assert_no_difference "Tag.count" do
+      tag = subscriptions(:john).tags.create(:name => "lunch")
+      assert tag.errors.on(:name)
+    end
+  end
 end

@@ -17,6 +17,8 @@ class Tag < ActiveRecord::Base
 
   attr_accessible :name
 
+  validates_uniqueness_of :name, :scope => :subscription_id, :case_sensitive => false
+
   def assimilate(tag)
     raise ActiveRecord::RecordNotSaved, "cannot assimilate self" if tag == self
 
