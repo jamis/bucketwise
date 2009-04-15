@@ -22,6 +22,11 @@ class User < ActiveRecord::Base
     hash == user.password_hash ? user : nil
   end
 
+  def to_xml(options={})
+    append_to_options(options, :except, [:password_hash, :salt])
+    super(options)
+  end
+
   protected
 
     def set_password_hash_and_salt

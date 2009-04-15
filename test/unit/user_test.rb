@@ -45,4 +45,11 @@ class UserTest < ActiveSupport::TestCase
       flunk "expected create to fail"
     end
   end
+
+  test "user as xml should not emit password_hash or salt" do
+    xml = users(:john).to_xml
+    user = Hash.from_xml(xml)["user"]
+    assert !user.key?("password_hash")
+    assert !user.key?("salt")
+  end
 end
