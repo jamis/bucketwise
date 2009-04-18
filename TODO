@@ -12,7 +12,6 @@ immediately:
 
 before inviting other users to "beta test":
 * API
-  - bucket (show, index, create, update, delete)
   - events (show, index, create, update, delete)
   - tags (show, index, create, update, delete)
 

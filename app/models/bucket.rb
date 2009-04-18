@@ -31,6 +31,11 @@ class Bucket < ActiveRecord::Base
     Temp.new("r:aside", "Aside", "aside", 0)
   end
 
+  def self.template
+    new :name => "Bucket name (e.g. Groceries)",
+      :role => "aside | default | nil"
+  end
+
   def assimilate(bucket)
     if bucket == self
       raise ArgumentError, "cannot assimilate self"
@@ -47,5 +52,10 @@ class Bucket < ActiveRecord::Base
       update_attribute :balance, balance + bucket.balance
       bucket.destroy
     end
+  end
+
+  def to_xml(options={})
+    options[:only] = %w(name role) if new_record?
+    super(options)
   end
 end

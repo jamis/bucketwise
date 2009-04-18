@@ -133,6 +133,13 @@ class AccountsControllerTest < ActionController::TestCase
     end
   end
 
+  test "update via API with validation errors should respond with 422" do
+    put :update, :id => accounts(:john_checking).id, :account => { :name => "Mastercard" }, :format => "xml"
+    assert_response :unprocessable_entity
+    xml = Hash.from_xml(@response.body)
+    assert xml["errors"].any?
+  end
+
   test "update via API should update record and respond with 200" do
     put :update, :id => accounts(:john_checking).id, :account => { :name => "Hi!" }, :format => "xml"
     assert_response :success

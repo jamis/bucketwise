@@ -1,5 +1,5 @@
 class AccountsController < ApplicationController
-  include OptionHandler
+  acceptable_includes :author, :buckets
 
   before_filter :find_account, :except => %w(index create new)
   before_filter :find_subscription, :only => %w(index create new)
@@ -51,11 +51,16 @@ class AccountsController < ApplicationController
   end
 
   def update
-    account.update_attributes(params[:account])
+    account.update_attributes!(params[:account])
 
     respond_to do |format|
       format.js
       format.xml { render :xml => account.to_xml }
+    end
+  rescue ActiveRecord::RecordInvalid
+    respond_to do |format|
+      format.js
+      format.xml { render :status => :unprocessable_entity, :xml => account.errors.to_xml }
     end
   end
 
@@ -79,18 +84,5 @@ class AccountsController < ApplicationController
       else
         super
       end
-    end
-
-  private
-
-    ACCEPTIBLE_INCLUDES = %w(author buckets)
-
-    def eager_options(options={})
-      if params[:include]
-        list = params[:include].split(/,/) & ACCEPTIBLE_INCLUDES
-        append_to_options(options, :include, list.map(&:to_sym)) if list.any?
-      end
-
-      return options
     end
 end
