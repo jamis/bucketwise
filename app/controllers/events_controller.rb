@@ -33,15 +33,41 @@ class EventsController < ApplicationController
   end
 
   def create
-    @event = subscription.events.create(params[:event], :user => user)
+    @event = subscription.events.create!(params[:event], :user => user)
+    respond_to do |format|
+      format.js
+      format.xml do
+        render :status => :created, :location => event_url(@event),
+          :xml => @event.to_xml(:include => [:line_items, :tagged_items])
+      end
+    end
+  rescue ActiveRecord::RecordInvalid => error 
+    @event = error.record
+    respond_to do |format|
+      format.js
+      format.xml { render :status => :unprocessable_entity, :xml => @event.errors }
+    end
   end
 
   def update
-    event.update_attributes(params[:event])
+    event.update_attributes!(params[:event])
+    respond_to do |format|
+      format.js
+      format.xml { render :xml => event.to_xml(:include => [:line_items, :tagged_items]) }
+    end
+  rescue ActiveRecord::RecordInvalid => error
+    respond_to do |format|
+      format.js
+      format.xml { render :status => :unprocessable_entity, :xml => event.errors }
+    end
   end
 
   def destroy
     event.destroy
+    respond_to do |format|
+      format.js
+      format.xml { head :ok }
+    end
   end
 
   protected

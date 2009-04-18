@@ -202,6 +202,55 @@ class EventsControllerTest < ActionController::TestCase
     assert_equal ['transfer_from', 'transfer_to'], event["line_items"].map { |i| i["role"] }.sort
   end
 
+  test "create via API with validation errors should return 422 with errors" do
+    data = simple_event(:john_checking, :john_checking_dining)
+    data[:actor] = ""
+
+    assert_no_difference "Event.count" do
+      post :create, :subscription_id => subscriptions(:john).id, :event => data, :format => "xml"
+      assert_response :unprocessable_entity
+    end
+
+    assert Hash.from_xml(@response.body).key?("errors")
+  end
+
+  test "create via API should return 201 and new event record" do
+    assert_difference "Event.count" do
+      post :create, :subscription_id => subscriptions(:john).id,
+        :event => simple_event(:john_checking, :john_checking_dining), :format => "xml"
+      assert_response :created
+    end
+
+    assert Hash.from_xml(@response.body).key?("event")
+    assert @response.headers['Location']
+  end
+
+  test "update via API with validation errors should return 422 with errors" do
+    event = events(:john_checking_starting_balance)
+    put :update, :id => event.id,
+      :event => { :occurred_on => event.occurred_on.to_s, :actor => "" },
+      :format => "xml"
+    assert_response :unprocessable_entity
+    assert Hash.from_xml(@response.body).key?("errors")
+  end
+
+  test "update via API should return 200 and updated event record" do
+    event = events(:john_checking_starting_balance)
+    put :update, :id => event.id,
+      :event => { :occurred_on => event.occurred_on.to_s, :actor => "Updated!" },
+      :format => "xml"
+    assert_response :success
+    assert Hash.from_xml(@response.body).key?("event")
+    assert_equal "Updated!", event.reload.actor
+  end
+
+  test "destroy via API should destroy record and return 200" do
+    assert_difference "Event.count", -1 do
+      delete :destroy, :id => events(:john_lunch).id, :format => "xml"
+      assert_response :success
+    end
+  end
+
   private
 
     def simple_event(account, bucket)
