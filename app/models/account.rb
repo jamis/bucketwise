@@ -53,6 +53,11 @@ class Account < ActiveRecord::Base
 
   after_create :create_default_buckets, :set_starting_balance
 
+  def self.template
+    new :name => "Account name (e.g. Checking)", :role => "checking | credit-card | nil",
+      :starting_balance => { :amount => 0, :occurred_on => Date.today }
+  end
+
   def available_balance
     @available_balance ||= balance - unavailable_balance
   end
@@ -88,6 +93,17 @@ class Account < ActiveRecord::Base
 
       Account.delete(id)
     end
+  end
+
+  def to_xml(options={})
+    if new_record?
+      options[:only] = %w(name role)
+      options[:procs] = Proc.new do |opts|
+        starting_balance.to_xml(opts.merge(:root => "starting-balance"))
+      end
+    end
+
+    super(options)
   end
 
   protected

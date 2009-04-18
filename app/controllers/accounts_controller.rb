@@ -1,30 +1,62 @@
 class AccountsController < ApplicationController
-  before_filter :find_account, :except => %w(create new)
-  before_filter :find_subscription, :only => %w(create new)
+  include OptionHandler
+
+  before_filter :find_account, :except => %w(index create new)
+  before_filter :find_subscription, :only => %w(index create new)
+
+  def index
+    respond_to do |format|
+      format.xml { render :xml => subscription.accounts.to_xml(eager_options(:root => "accounts")) }
+    end
+  end
 
   def show
-    @page = (params[:page] || 0).to_i
-    @more_pages, @items = account.account_items.page(@page)
+    respond_to do |format|
+      format.html do
+        @page = (params[:page] || 0).to_i
+        @more_pages, @items = account.account_items.page(@page)
+      end
+
+      format.xml { render :xml => account.to_xml(eager_options) }
+    end
   end
 
   def new
+    respond_to do |format|
+      format.html
+      format.xml { render :xml => Account.template.to_xml }
+    end
   end
 
   def create
     @account = subscription.accounts.create!(params[:account], :author => user)
-    redirect_to(subscription_url(subscription))
+    respond_to do |format|
+      format.html { redirect_to(subscription_url(subscription)) }
+      format.xml  { render :xml => @account.to_xml, :status => :created, :location => account_url(@account) }
+    end
   rescue ActiveRecord::RecordInvalid => error
     @account = error.record
-    render :action => "new"
+    respond_to do |format|
+      format.html { render :action => "new" }
+      format.xml  { render :status => :unprocessable_entity, :xml => @account.errors.to_xml }
+    end
   end
 
   def destroy
     account.destroy
-    redirect_to(subscription_url(subscription))
+    respond_to do |format|
+      format.html { redirect_to(subscription_url(subscription)) }
+      format.xml  { head :ok }
+    end
   end
 
   def update
     account.update_attributes(params[:account])
+
+    respond_to do |format|
+      format.js
+      format.xml { render :xml => account.to_xml }
+    end
   end
 
   protected
@@ -47,5 +79,18 @@ class AccountsController < ApplicationController
       else
         super
       end
+    end
+
+  private
+
+    ACCEPTIBLE_INCLUDES = %w(author buckets)
+
+    def eager_options(options={})
+      if params[:include]
+        list = params[:include].split(/,/) & ACCEPTIBLE_INCLUDES
+        append_to_options(options, :include, list.map(&:to_sym)) if list.any?
+      end
+
+      return options
     end
 end

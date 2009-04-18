@@ -87,4 +87,63 @@ class AccountsControllerTest < ActionController::TestCase
     assert_equal accounts(:john_checking), assigns(:account)
     assert_equal "Hi!", accounts(:john_checking, :reload).name
   end
+
+  # == API tests ========================================================================
+
+  test "index via API should return account list" do
+    get :index, :subscription_id => subscriptions(:john).id, :format => "xml"
+    assert_response :success
+    xml = Hash.from_xml(@response.body)
+    assert_equal subscriptions(:john).accounts.length, xml["accounts"].length
+  end
+
+  test "show via API should return account record" do
+    get :show, :id => accounts(:john_checking).id, :format => "xml"
+    assert_response :success
+    xml = Hash.from_xml(@response.body)
+    assert_equal accounts(:john_checking).id, xml["account"]["id"]
+  end
+
+  test "new via API should return a template XML response" do
+    get :new, :subscription_id => subscriptions(:john).id, :format => "xml"
+    assert_response :success
+    xml = Hash.from_xml(@response.body)
+    assert xml["account"]
+    assert !xml["account"]["id"]
+  end
+
+  test "create via API should return 422 with error messages when validations fail" do
+    post :create,
+      :subscription_id => subscriptions(:john).id,
+      :account => { :name => "Checking", :role => "" },
+      :format => "xml"
+    assert_response :unprocessable_entity
+    xml = Hash.from_xml(@response.body)
+    assert xml["errors"].any?
+  end
+
+  test "create via API should create record and respond with 201" do
+    assert_difference "subscriptions(:john).accounts.count" do
+      post :create,
+        :subscription_id => subscriptions(:john).id,
+        :account => { :name => "Mortgage", :role => "" },
+        :format => "xml"
+      assert_response :created
+      assert @response.headers["Location"]
+    end
+  end
+
+  test "update via API should update record and respond with 200" do
+    put :update, :id => accounts(:john_checking).id, :account => { :name => "Hi!" }, :format => "xml"
+    assert_response :success
+    xml = Hash.from_xml(@response.body)
+    assert_equal "Hi!", xml["account"]["name"]
+  end
+
+  test "destroy via API should remove record and respond with 200" do
+    assert_difference "Account.count", -1 do
+      delete :destroy, :id => accounts(:john_mastercard).id, :format => "xml"
+      assert_response :success
+    end
+  end
 end

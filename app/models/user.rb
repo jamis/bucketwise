@@ -1,6 +1,8 @@
 require 'digest/sha1'
 
 class User < ActiveRecord::Base
+  include OptionHandler
+
   has_many :user_subscriptions
   has_many :subscriptions, :through => :user_subscriptions
 

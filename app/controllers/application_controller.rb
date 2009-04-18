@@ -23,10 +23,6 @@ class ApplicationController < ActionController::Base
       end
     end
 
-    def find_subscription
-      @subscription = Subscription.find(1)
-    end
-
     def current_location
       controller_name
     end

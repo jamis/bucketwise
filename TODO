@@ -12,16 +12,19 @@ immediately:
 
 before inviting other users to "beta test":
 * API
+  - bucket (show, index, create, update, delete)
+  - events (show, index, create, update, delete)
+  - tags (show, index, create, update, delete)
+
 * rake tasks for user and subscription creation
 * change style for event detail view: "window shade" style isn't really working
-* spinner for ajax actions
-* user info page (for password change)
-* password reset from login page
-* cache balances on events (?)
 * README with installation instructions
 * CHANGELOG
 
 future
+* spinner for ajax actions
+* user info page (for password change)
+* password reset from login page
 * signup process
 * exception notifier (?)
 * /subscriptions index
@@ -32,7 +35,7 @@ future
 * transaction templates ("saved" or "memorized" transactions)
 * scheduled transactions (occur automatically at specified intervals)
 * show check numbers in event detail view
-* add a memo field for events
+* show memo in event detail view
 * print stylesheet
 * oauth authentication for API
 * filter event views to show only events with a non-zero balance for the account in question
@@ -41,3 +44,4 @@ future
 * full-text searching on the memo field
 * show bucket and account balances next to names in drop-downs
 * make bucket reallocation work from bucket perma
+* support for multiple 'aside' buckets in a single account
