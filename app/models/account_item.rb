@@ -6,6 +6,8 @@
 # record for each Account that the Event references.
 
 class AccountItem < ActiveRecord::Base
+  include Pageable
+
   belongs_to :event
   belongs_to :account
 

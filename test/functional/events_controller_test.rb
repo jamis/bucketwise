@@ -116,6 +116,92 @@ class EventsControllerTest < ActionController::TestCase
     assert_select "#reallocate_from", false
   end
 
+  # == API tests ========================================================================
+
+  test "index via API should return first page of recent events for subscription" do
+    get :index, :subscription_id => subscriptions(:john).id, :format => "xml"
+    assert_response :success
+    xml = Hash.from_xml(@response.body)
+    assert xml["events"].any?
+  end
+
+  test "index via API should return first page of events for specified account" do
+    get :index, :account_id => accounts(:john_checking).id, :format => "xml"
+    assert_response :success
+    xml = Hash.from_xml(@response.body)
+    assert xml["events"].any?
+  end
+
+  test "index via API should return first page of events for specified bucket" do
+    get :index, :bucket_id => buckets(:john_checking_dining).id, :format => "xml"
+    assert_response :success
+    xml = Hash.from_xml(@response.body)
+    assert xml["events"].any?
+  end
+
+  test "index via API should return first page of events for specified tag" do
+    get :index, :tag_id => tags(:john_lunch).id, :format => "xml"
+    assert_response :success
+    xml = Hash.from_xml(@response.body)
+    assert xml["events"].any?
+  end
+
+  test "index via API with page and limit should return given page of events" do
+    get :index, :bucket_id => buckets(:john_checking_dining).id, :format => "xml", :page => 1, :size => 2
+    assert_response :success
+    xml = Hash.from_xml(@response.body)
+    assert_equal [events(:john_lunch_again).id, events(:john_lunch).id],
+      xml["events"].map { |event| event["id"] }
+  end
+
+  test "index via API with include should return events with line items" do
+    get :index, :bucket_id => buckets(:john_checking_dining).id, :format => "xml", :include => "line_items"
+    assert_response :success
+    xml = Hash.from_xml(@response.body)
+    assert xml["events"].all? { |event| event["line_items"] }
+  end
+
+  test "index via API with include should return events with tagged items" do
+    get :index, :bucket_id => buckets(:john_checking_dining).id, :format => "xml", :include => "tagged_items"
+    assert_response :success
+    xml = Hash.from_xml(@response.body)
+    assert xml["events"].all? { |event| event["tagged_items"] }
+  end
+
+  test "show via API should return requested event record" do
+    get :show, :id => events(:john_lunch).id, :format => "xml"
+    assert_response :success
+    assert Hash.from_xml(@response.body)["event"]
+  end
+
+  test "new via API for reallocation should return template for reallocation" do
+    get :new, :subscription_id => subscriptions(:john).id, :role => "reallocation", :format => "xml"
+    assert_response :success
+    event = Hash.from_xml(@response.body)["event"]
+    assert_equal ['primary', 'reallocate_from | reallocate_to'], event["line_items"].map { |i| i["role"] }.sort
+  end
+
+  test "new via API for expense should return template for expense" do
+    get :new, :subscription_id => subscriptions(:john).id, :role => "expense", :format => "xml"
+    assert_response :success
+    event = Hash.from_xml(@response.body)["event"]
+    assert_equal ['aside', 'credit_options', 'payment_source'], event["line_items"].map { |i| i["role"] }.sort
+  end
+
+  test "new via API for deposit should return template for deposit" do
+    get :new, :subscription_id => subscriptions(:john).id, :role => "deposit", :format => "xml"
+    assert_response :success
+    event = Hash.from_xml(@response.body)["event"]
+    assert_equal ['deposit'], event["line_items"].map { |i| i["role"] }.sort
+  end
+
+  test "new via API for transfer should return template for transfer" do
+    get :new, :subscription_id => subscriptions(:john).id, :role => "transfer", :format => "xml"
+    assert_response :success
+    event = Hash.from_xml(@response.body)["event"]
+    assert_equal ['transfer_from', 'transfer_to'], event["line_items"].map { |i| i["role"] }.sort
+  end
+
   private
 
     def simple_event(account, bucket)

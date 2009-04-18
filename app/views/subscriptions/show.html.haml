@@ -14,7 +14,7 @@
 #data.content{:style => visible?(!blank_slate?)}
   %h2 Recent transactions
 
-  %table#recent_entries.entries= render(subscription.events.recent)
+  %table#recent_entries.entries= render(subscription.events.recent.last)
 
   %h2#accounts_summary_header
     %span.actions= link_to_function "Add an account", "Accounts.revealForm()"

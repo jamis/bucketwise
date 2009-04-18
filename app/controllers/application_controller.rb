@@ -40,11 +40,11 @@ class ApplicationController < ActionController::Base
   private
 
     def self.acceptable_includes(*list)
-      includes = read_inheritable_attribute(:accessible_includes) || []
+      includes = read_inheritable_attribute(:acceptable_includes) || []
 
       if list.any?
         includes = Set.new(list.map(&:to_s)) + includes
-        write_inheritable_attribute(:accessible_includes, includes)
+        write_inheritable_attribute(:acceptable_includes, includes)
       end
 
       includes

@@ -1,6 +1,5 @@
 class Account < ActiveRecord::Base
   DEFAULT_BUCKET_NAME = "General"
-  DEFAULT_PAGE_SIZE = 100
 
   belongs_to :subscription
   belongs_to :author, :class_name => "User", :foreign_key => "user_id"
@@ -38,18 +37,7 @@ class Account < ActiveRecord::Base
   end
 
   has_many :line_items
-
-  has_many :account_items do
-    def page(n, options={})
-      size = options.fetch(:size, DEFAULT_PAGE_SIZE)
-      records = find(:all, :include => { :event => :line_items },
-        :order => "occurred_on DESC",
-        :limit => size + 1,
-        :offset => n * size)
-
-      [records.length > size, records[0,size]]
-    end
-  end
+  has_many :account_items
 
   after_create :create_default_buckets, :set_starting_balance
 

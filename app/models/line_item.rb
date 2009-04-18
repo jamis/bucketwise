@@ -1,4 +1,6 @@
 class LineItem < ActiveRecord::Base
+  include Pageable
+
   VALID_ROLES = %w(payment_source
                    credit_options
                    transfer_to
@@ -27,6 +29,12 @@ class LineItem < ActiveRecord::Base
 
   after_create :increment_bucket_balance
   before_destroy :decrement_bucket_balance
+
+  def to_xml(options={})
+    options[:except] = Array(options[:except])
+    options[:except].concat [:event_id, :occurred_on, :id]
+    super(options)
+  end
 
   protected
 

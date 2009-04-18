@@ -34,6 +34,8 @@ class Event < ActiveRecord::Base
   validates_presence_of :actor, :occurred_on
   validate :line_item_validations
 
+  attr_accessor :amount
+
   def balance
     @balance ||= account_items.sum(:amount) || 0
   end
@@ -91,6 +93,39 @@ class Event < ActiveRecord::Base
       else
         :transfer
       end
+  end
+
+  def to_xml(options={})
+    methods = Array(options[:methods])
+    methods << :amount if amount
+
+    except = Array(options[:except])
+    if new_record?
+      except += [:created_at, :subscription_id, :updated_at, :user_id]
+
+      if line_items.empty?
+        case role
+        when :deposit then
+          line_items.build(:role => "deposit", :amount => 1000)
+        when :expense then
+          line_items.build(:role => "payment_source", :amount => -1000)
+          line_items.build(:role => "credit_options", :amount => -1000)
+          line_items.build(:role => "aside", :amount => 1000)
+        when :reallocation then
+          line_items.build(:role => 'primary')
+          line_items.build(:role => 'reallocate_from | reallocate_to')
+        when :transfer then
+          line_items.build(:role => 'transfer_from', :amount => -1000)
+          line_items.build(:role => 'transfer_to', :amount => 1000)
+        end
+      end
+
+      if tagged_items.empty?
+        tagged_items.build
+      end
+    end
+
+    super(options.merge(:methods => methods, :except => except))
   end
 
   protected
