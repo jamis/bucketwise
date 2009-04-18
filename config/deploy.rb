@@ -2,4 +2,4 @@
 # recipe file, so that the real stuff can exist locally without being
 # checked into the main repo.
 
-load File.expand_path("~/.buckets/Capfile")
+load File.expand_path("~/.bucketwise/Capfile")
