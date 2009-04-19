@@ -58,6 +58,20 @@ div#container {
   margin: 0 auto;
 }
 
+div#version {
+  margin-top: 2em;
+  border-top: 1px solid #ddd;
+  color: #ccc;
+  font-size: 80%;
+  text-align: right;
+  padding-top: 0.5em;
+  line-height: 1.2em;
+}
+
+div#version .version {
+  font-weight: bold;
+}
+
 .header {
   border-bottom: 1px solid #ccc;
 }

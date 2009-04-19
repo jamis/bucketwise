@@ -16,4 +16,10 @@
         %span.actions
           = link_to "logout", session_path, :method => :delete
         BucketWise
-    #container= yield
+
+    #container
+      = yield
+      #version
+        == BucketWise version: <span class="version">#{application_version}</span>
+        %br
+        == Last deployed: <span class="version">#{application_last_deployed}</span>
