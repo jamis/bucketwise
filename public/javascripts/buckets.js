@@ -17,13 +17,21 @@ var Buckets = {
   },
 
   transferTo: function(account_id, bucket_id) {
-    Buckets.configureEvent();
-    Events.revealReallocationForm('to', account_id, bucket_id);
+    if(Buckets.newEventUrl) {
+      window.location = Buckets.newEventUrl + "?role=reallocation&to=" + bucket_id;
+    } else {
+      Buckets.configureEvent();
+      Events.revealReallocationForm('to', account_id, bucket_id);
+    }
   },
 
   transferFrom: function(account_id, bucket_id) {
-    Buckets.configureEvent();
-    Events.revealReallocationForm('from', account_id, bucket_id);
+    if(Buckets.newEventUrl) {
+      window.location = Buckets.newEventUrl + "?role=reallocation&from=" + bucket_id;
+    } else {
+      Buckets.configureEvent();
+      Events.revealReallocationForm('from', account_id, bucket_id);
+    }
   },
 
   view: function() {

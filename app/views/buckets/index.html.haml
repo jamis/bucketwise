@@ -1,3 +1,6 @@
+:javascript
+  Buckets.newEventUrl = #{new_subscription_event_path(subscription).to_json}
+
 #data.content
   .navigation
     = link_to "Dashboard", subscription_path(subscription)

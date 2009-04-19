@@ -1,14 +1,15 @@
 immediately:
 * after saving a reallocation event, the line items don't reset
+* Reallocating a bucket doesn't change the updated_at field for the bucket?
+* tags don't work when reallocating buckets via the /events/new form
 * green "your transaction has been recorded" notice doesn't disappear when starting a new event
 * date column for event row is squashed in safari
 * "Add a new bucket" should set focus on new bucket line
 * check # and "select repayment options" links are out of whack when editing an event
 * deleting event from account perma results in ajax error (maybe only when there is only a single event in the account?)
-* Reallocating a bucket doesn't change the updated_at field for the bucket?
-* "move in" and "move out" links on dashboard don't use existing form -- they go to events/new
 * make all autocompleting fields refresh their source array after event creation
-* tags don't work when reallocating buckets via the /events/new form
+* "payee" vs. "memo" is very, very confusing in deposit scenario
+* some of the unicode icons are broken in Windows
 
 before inviting other users to "beta test":
 * README with installation instructions
