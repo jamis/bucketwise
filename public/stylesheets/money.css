@@ -299,7 +299,6 @@ table.entries tr.zoomed {
 table.entries td.zoom {
   padding: 0;
   background: #eee;
-  border-top: 3px solid #777;
   border-bottom: 1px solid #ccc;
 }
 
@@ -312,7 +311,7 @@ table.entries tr.even.hover td {
 }
 
 td.zoom div.detail {
-  margin: -3px 7.5em 1em 7.5em;
+  margin: 0em 6em 1em;
 }
 
 div.detail p.tags {
@@ -331,9 +330,16 @@ div.detail p.tags a:hover {
   color: #00c;
 }
 
+div.detail p.memo {
+  border: 1px solid #ccc;
+  background: white;
+  color: #555;
+  font-size: 80%;
+  margin-top: 0.5em;
+  padding: 0.5em;
+}
+
 td.zoom table {
-  border-right: 3px solid #777;
-  border-bottom: 3px solid #777;
   background: #ffd;
   margin: 0;
   width: auto;

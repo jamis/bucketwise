@@ -11,7 +11,6 @@ immediately:
 * tags don't work when reallocating buckets via the /events/new form
 
 before inviting other users to "beta test":
-* change style for event detail view: "window shade" style isn't really working
 * README with installation instructions
 * CHANGELOG
 
@@ -28,8 +27,6 @@ future
 * account reconciliation
 * transaction templates ("saved" or "memorized" transactions)
 * scheduled transactions (occur automatically at specified intervals)
-* show check numbers in event detail view
-* show memo in event detail view
 * print stylesheet
 * oauth authentication for API
 * filter event views to show only events with a non-zero balance for the account in question
