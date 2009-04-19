@@ -482,6 +482,14 @@ var Events = {
     Events.addLineItemTo(section, true);
   },
 
+  resetReallocationForm: function(direction) {
+    var section = 'reallocate_' + direction;
+    if($(section).visible()) {
+      $(section + ".line_items").innerHTML = "";
+      Events.addLineItemTo(section, true);
+    }
+  },
+
   revealTags: function() {
     $('tags_collapsed').hide();
     $('tags').show();
@@ -503,7 +511,11 @@ var Events = {
     ['credit_options', 'payment_source', 'deposit', 'transfer_from', 'transfer_to'].each(
       function(section) {
         Events.handleAccountChange($('account_for_' + section), section);
-      })
+      });
+
+    ['from', 'to'].each(function(direction) {
+      Events.resetReallocationForm(direction);
+    });
 
     $('tag_items').hide();
     $('tag_items_collapsed').show();

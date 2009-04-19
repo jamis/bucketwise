@@ -1,5 +1,4 @@
 immediately:
-* after saving a reallocation event, the line items don't reset
 * Reallocating a bucket doesn't change the updated_at field for the bucket?
 * tags don't work when reallocating buckets via the /events/new form
 * green "your transaction has been recorded" notice doesn't disappear when starting a new event
