@@ -194,7 +194,7 @@ class Event < ActiveRecord::Base
             subscription.tags.find(item[:tag_id])
           end
 
-          tagged_items.create(item.merge(:occurred_on => occurred_on))
+          tagged_items.create(item, :occurred_on => occurred_on)
         end
 
         @tagged_items_to_realize = nil
