@@ -1,7 +1,7 @@
 require 'test_helper'
 
 class SubscriptionsControllerTest < ActionController::TestCase
-  setup :login_as_john
+  setup :login_default_user
 
   test "index should redirect to sole subscription if there is only one" do
     login! :tim
@@ -41,9 +41,24 @@ class SubscriptionsControllerTest < ActionController::TestCase
     assert_equal subscriptions(:john), assigns(:subscription)
   end
 
-  protected
+  # == API tests ========================================================================
 
-    def login_as_john
-      login! :john
-    end
+  test "index via API should return list of all subscriptions available to user" do
+    get :index, :format => "xml"
+    assert_response :success
+    xml = Hash.from_xml(@response.body)
+    assert xml.key?("subscriptions")
+  end
+
+  test "show via API should return 404 for inaccessible subscription" do
+    get :show, :id => subscriptions(:tim).id, :format => "xml"
+    assert_response :missing
+  end
+
+  test "show should return requested subscription record" do
+    get :show, :id => subscriptions(:john).id, :format => "xml"
+    assert_response :success
+    xml = Hash.from_xml(@response.body)
+    assert xml.key?("subscription")
+  end
 end
