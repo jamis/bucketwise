@@ -193,16 +193,20 @@ var Events = {
     Events.updateUnassignedFor('transfer_to');
   },
 
-  computeUnassignedFor: function(section) {
-    var total = Money.parse('expense_total');
-    var unassigned = total;
+  computeTotalForLineItems: function(section) {
+    var total = 0;
 
     var line_items = $(section + ".line_items");
     line_items.select("input[type=text]").each(function(field) {
-      var value = Money.parse(field);
-      unassigned -= value;
+      total += Money.parse(field);
     });
 
+    return total;
+  },
+
+  computeUnassignedFor: function(section) {
+    var total = Money.parse('expense_total');
+    var unassigned = total - Events.computeTotalForLineItems(section);
     return { 'total': total, 'unassigned': unassigned };
   },
 
@@ -364,7 +368,7 @@ var Events = {
     var tagList = $F('event_tags_list').strip();
     if(tagList.empty()) return;
 
-    var total = Money.parse('expense_total');
+    var total = Events.computeTotal();
     tagList.split(",").each(function(name) {
       Events.addTaggedItemRecord(request, total, "n:" + name.strip());
     });
@@ -378,6 +382,16 @@ var Events = {
         Events.addTaggedItemRecord(request, amount, "n:" + name);
       }
     });
+  },
+
+  computeTotal: function() {
+    if($('reallocate_to') && $('reallocate_to').visible()) {
+      return Events.computeTotalForLineItems('reallocate_to');
+    } else if($('reallocate_from') && $('reallocate_from').visible()) {
+      return Events.computeTotalForLineItems('reallocate_from');
+    } else {
+      return Money.parse('expense_total');
+    }
   },
 
   addTaggedItemRecord: function(request, amount, tag_id) {
