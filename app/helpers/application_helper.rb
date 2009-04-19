@@ -19,7 +19,7 @@ module ApplicationHelper
   def application_last_deployed
     @application_last_deployed ||= if File.exists?("#{RAILS_ROOT}/REVISION")
       deployed_at = File.stat("#{RAILS_ROOT}/REVISION").ctime
-      time_ago_in_words(deployed_at)
+      time_ago_in_words(deployed_at) + " ago"
     else
       "(not deployed)"
     end
