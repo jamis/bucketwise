@@ -12,8 +12,8 @@ immediately:
 
 before inviting other users to "beta test":
 * API
-  - events (show, index, create, update, delete)
-  - tags (show, index, create, update, delete)
+  - authentication
+  - tagged-items (create, delete)
 
 * rake tasks for user and subscription creation
 * change style for event detail view: "window shade" style isn't really working

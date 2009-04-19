@@ -10,10 +10,4 @@ class SubscriptionsController < ApplicationController
 
   def show
   end
-
-  protected
-
-    def find_subscription
-      @subscription = user.subscriptions.find(params[:id])
-    end
 end

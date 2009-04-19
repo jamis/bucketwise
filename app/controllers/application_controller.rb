@@ -17,6 +17,10 @@ class ApplicationController < ActionController::Base
     attr_reader :subscription, :user
     helper_method :subscription, :user
 
+    def find_subscription
+      @subscription = user.subscriptions.find(params[:subscription_id] || params[:id])
+    end
+
     def authenticate
       if session[:user_id]
         @user = User.find(session[:user_id])
@@ -33,7 +37,7 @@ class ApplicationController < ActionController::Base
     def render_404
       respond_to do |format|
         format.html { render :file => "#{RAILS_ROOT}/public/404.html", :status => :not_found }
-        format.xml  { head :missing }
+        format.xml  { head :not_found }
       end
     end
 

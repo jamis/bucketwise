@@ -1,7 +1,7 @@
 require 'test_helper'
 
 class TagsControllerTest < ActionController::TestCase
-  setup :login_as_john
+  setup :login_default_user
 
   test "show should 404 for invalid tag" do
     assert !Tag.exists?(1)
@@ -82,9 +82,89 @@ class TagsControllerTest < ActionController::TestCase
     assert_equal balance + tagged_items(:john_lunch_lunch).amount, tags(:john_fuel, :reload).balance
   end
 
-  protected
+  # == API tests ========================================================================
 
-    def login_as_john
-      login! :john
+  test "index via API for inaccessible subscription should 404" do
+    get :index, :subscription_id => subscriptions(:tim).id, :format => "xml"
+    assert_response :missing
+  end
+
+  test "index via API should return list of all tags for given subscription" do
+    get :index, :subscription_id => subscriptions(:john).id, :format => "xml"
+    assert_response :success
+    xml = Hash.from_xml(@response.body)
+    assert xml.key?("tags")
+  end
+
+  test "show via API should return record for the given tag" do
+    get :show, :id => tags(:john_tip).id, :format => "xml"
+    assert_response :success
+    xml = Hash.from_xml(@response.body)
+    assert_equal tags(:john_tip).id, xml["tag"]["id"]
+  end
+
+  test "new via API should return template record" do
+    get :new, :subscription_id => subscriptions(:john).id, :format => "xml"
+    assert_response :success
+    xml = Hash.from_xml(@response.body)
+    assert xml.key?("tag")
+  end
+
+  test "create via API for inaccessible subscription should 404" do
+    assert_no_difference "Tag.count" do
+      post :create, :subscription_id => subscriptions(:tim).id, :format => "xml",
+        :tag => { :name => "testing" }
+      assert_response :missing
     end
+  end
+
+  test "create via API should return 201 and set location header" do
+    assert_difference "Tag.count" do
+      post :create, :subscription_id => subscriptions(:john).id, :format => "xml",
+        :tag => { :name => "testing" }
+      assert_response :success
+      assert @response.headers['Location']
+      xml = Hash.from_xml(@response.body)
+      assert xml.key?("tag")
+    end
+  end
+
+  test "create via API should return 422 with errors if validations fail" do
+    assert_no_difference "Tag.count" do
+      post :create, :subscription_id => subscriptions(:john).id, :format => "xml",
+        :tag => { :name => "tip" }
+      assert_response :unprocessable_entity
+      xml = Hash.from_xml(@response.body)
+      assert xml.key?("errors")
+    end
+  end
+
+  test "update via API for inaccessible tag should 404" do
+    put :update, :id => tags(:tim_milk).id, :tag => { :name => "milkshake" }, :format => "xml"
+    assert_response :missing
+    assert_equal "milk", tags(:tim_milk, :reload).name
+  end
+
+  test "update via API should change tag name and return 200" do
+    put :update, :id => tags(:john_tip).id, :tag => { :name => "gratuity" }, :format => "xml"
+    assert_response :success
+    xml = Hash.from_xml(@response.body)
+    assert xml.key?("tag")
+    assert_equal "gratuity", tags(:john_tip, :reload).name
+  end
+
+  test "update via API should return 422 with errors if validations fail" do
+    put :update, :id => tags(:john_tip).id, :tag => { :name => "lunch" }, :format => "xml"
+    assert_response :unprocessable_entity
+    xml = Hash.from_xml(@response.body)
+    assert xml.key?("errors")
+    assert_equal "tip", tags(:john_tip, :reload).name
+  end
+
+  test "destroy via API should remove tag and return 200" do
+    assert_difference "Tag.count", -1 do
+      delete :destroy, :id => tags(:john_tip).id, :format => "xml"
+      assert_response :success
+    end
+  end
 end

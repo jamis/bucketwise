@@ -5,7 +5,12 @@ class Tag < ActiveRecord::Base
 
   attr_accessible :name
 
+  validates_presence_of :name
   validates_uniqueness_of :name, :scope => :subscription_id, :case_sensitive => false
+
+  def self.template
+    new :name => "name of tag"
+  end
 
   def assimilate(tag)
     raise ActiveRecord::RecordNotSaved, "cannot assimilate self" if tag == self
@@ -21,5 +26,10 @@ class Tag < ActiveRecord::Base
       update_attribute :balance, balance + tag.balance
       tag.destroy
     end
+  end
+
+  def to_xml(options={})
+    options[:only] = Array(options[:only]) + [:name] if new_record?
+    super(options)
   end
 end

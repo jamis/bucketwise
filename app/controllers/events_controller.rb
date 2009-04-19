@@ -75,10 +75,6 @@ class EventsController < ApplicationController
     attr_reader :event, :container, :account, :bucket, :tag, :events
     helper_method :event
 
-    def find_subscription
-      @subscription = user.subscriptions.find(params[:subscription_id])
-    end
-
     def find_event
       @event = Event.find(params[:id])
       @subscription = user.subscriptions.find(@event.subscription_id)
