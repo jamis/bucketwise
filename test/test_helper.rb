@@ -21,4 +21,11 @@ class ActiveSupport::TestCase
     def logout!
       @request.session[:user_id] = nil
     end
+
+    def api_login!(who, password)
+      logout!
+      @user = Symbol === who ? users(who) : who
+      token = Base64.encode64("#{@user.user_name}:#{password}")
+      @request.env['HTTP_AUTHORIZATION'] = "Basic: #{token}"
+    end
 end

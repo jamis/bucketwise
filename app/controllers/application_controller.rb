@@ -24,6 +24,10 @@ class ApplicationController < ActionController::Base
     def authenticate
       if session[:user_id]
         @user = User.find(session[:user_id])
+      elsif via_api?
+        authenticate_or_request_with_http_basic do |user_name, password|
+          @user = User.authenticate(user_name, password)
+        end
       else
         redirect_to(new_session_url)
       end
@@ -40,6 +44,11 @@ class ApplicationController < ActionController::Base
         format.xml  { head :not_found }
       end
     end
+
+    def via_api?
+      request.format == Mime::XML
+    end
+    helper_method :via_api?
 
   private
 

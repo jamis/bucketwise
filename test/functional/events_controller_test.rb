@@ -118,6 +118,13 @@ class EventsControllerTest < ActionController::TestCase
 
   # == API tests ========================================================================
 
+  test "index via API should authenticate correctly via HTTP basic authentication" do
+    logout!
+    api_login! :john, "testing"
+    get :index, :subscription_id => subscriptions(:john).id, :format => "xml"
+    assert_response :success
+  end
+
   test "index via API should return first page of recent events for subscription" do
     get :index, :subscription_id => subscriptions(:john).id, :format => "xml"
     assert_response :success
