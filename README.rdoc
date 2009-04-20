@@ -1,0 +1,67 @@
+= BucketWise
+
+* http://github.com/jamis/bucketwise
+
+== DESCRIPTION:
+
+BucketWise is a web application (written in Ruby on Rails) for managing your personal finances. It features an emphasis on budgeting (using a version of the envelope system) and avoiding debt. BucketWise is highly opinionated: it was written for one man's specific needs, and as an experiment, and while it is working very well for that one man, there is no guarantee it will do what you want. (See FEATURES, below).
+
+== FEATURES:
+
+* Multiple users
+* Track multiple accounts
+* Accounts may be partitioned into "buckets", as a means of budgeting and saving money
+* Earmark funds for each credit-card purchase to avoid overspending
+
+Things it intentionally does *not* do:
+
+* It does NOT automatically pull your transactions from your bank account, and in all likelihood, never will.
+* It does NOT intelligently learn from your purchases and try to guess how to categorize them, and in all likelihood, never will.
+* It does NOT provide a social forum for you to share thoughts with other users, and DEFINITELY never will.
+
+== REQUIREMENTS:
+
+Essentially, all you need is Ruby, Rake, and version 2.3 of the Ruby on Rails framework. To run locally, it is recommended you also have sqlite3 installed, as well as the sqlite3-ruby bindings.
+
+== INSTALL:
+
+Installation is about as convenient as it is for any other Ruby on Rails application. It goes something like this (and please excuse the gratuitous hand-waving):
+
+* Get a server on which to install it
+* Install all the software it needs
+* Configure the database
+* Deploy the application
+
+To get started quickly, you can just run it locally. Setting that up goes something like this:
+
+* "rake db:schema:load" to prepare the database
+* "rake user:create" to create your first user, and note the user-id
+* "rake subscription:create USER_ID=<id>" to create your first "subscription" (a container for your financial account data).
+* "script/server", and then go to http://localhost:3000/ to log in and get started!
+
+If you want to use Capistrano to deploy BucketWise to a server of your own, you can simply create a file at ~/.bucketwise/Capfile, which should contain your custom deployment instructions. If that file exists, BucketWise's own config/deploy.rb will load it automatically.
+
+== LICENSE:
+
+(The MIT License)
+
+Copyright (c) 2009 Jamis Buck <jamis@jamisbuck.org>
+
+Permission is hereby granted, free of charge, to any person obtaining
+a copy of this software and associated documentation files (the
+'Software'), to deal in the Software without restriction, including
+without limitation the rights to use, copy, modify, merge, publish,
+distribute, sublicense, and/or sell copies of the Software, and to
+permit persons to whom the Software is furnished to do so, subject to
+the following conditions:
+
+The above copyright notice and this permission notice shall be
+included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
