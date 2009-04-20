@@ -151,6 +151,10 @@ module EventsHelper
     section == :payment_source
   end
 
+  def event_wants_memo?
+    @event && @event.memo.present?
+  end
+
   def event_wants_section?(section)
     return true unless @event
 

@@ -445,6 +445,12 @@ var Events = {
     })
   },
 
+  revealMemo: function() {
+    $('memo_link').hide();
+    $('memo').show();
+    $('memo').down('textarea').focus();
+  },
+
   revealBasicForm: function() {
     $('new_event').show();
     $('success_notice').hide();
@@ -530,6 +536,11 @@ var Events = {
     ['from', 'to'].each(function(direction) {
       Events.resetReallocationForm(direction);
     });
+
+    if($('memo')) {
+      $('memo').hide();
+      $('memo_link').show();
+    }
 
     $('tag_items').hide();
     $('tag_items_collapsed').show();

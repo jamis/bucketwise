@@ -15,10 +15,15 @@
 
   %p
     %span.expense_label <strong>Who</strong> received the payment?
-    %span.deposit_label <strong>What</strong> was this deposit for?
+    %span.deposit_label <strong>Where</strong> did this deposit come from?
     %span.transfer_label <strong>What</strong> was this transfer for?
     = form.text_field :actor, :size => 30
 
-  %p
-    <strong>What</strong> was this for?
-    = form.text_field :memo, :size => 50
+  %p#memo_link{:style => visible?(!event_wants_memo?)}
+    <strong>Got more to say?</strong>
+    = link_to_function "Add a more verbose description...", "Events.revealMemo()"
+
+  %p#memo{:style => visible?(event_wants_memo?)}
+    Describe this transaction:
+    %br
+    = form.text_area :memo, :rows => 2, :cols => 70

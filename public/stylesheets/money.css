@@ -277,6 +277,11 @@ td.date, th.date {
   white-space: nowrap;
 }
 
+.optional {
+  font-size: 80%;
+  color: #777;
+}
+
 table.entries th {
   line-height: 2em;
   background: #bfb;
@@ -364,6 +369,10 @@ td.zoom tr.even td {
 }
 
 .form input {
+  font-size: 1em;
+}
+
+.form textarea {
   font-size: 1em;
 }
 
