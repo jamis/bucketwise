@@ -72,6 +72,12 @@ div#version .version {
   font-weight: bold;
 }
 
+div#version a {
+  color: #ccc;
+  font-weight: bold;
+  text-decoration: underline;
+}
+
 .header {
   border-bottom: 1px solid #ccc;
 }

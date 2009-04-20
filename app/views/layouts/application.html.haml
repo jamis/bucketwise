@@ -20,6 +20,6 @@
     #container
       = yield
       #version
-        == BucketWise version: <span class="version">v#{BucketWise::Version::STRING} (rev #{application_revision})</span>
+        == BucketWise version: <span class="version">v#{BucketWise::Version::STRING} (rev <a href="https://github.com/jamis/bucketwise/commit/#{application_revision}">#{application_revision}</a>)</span>
         %br
         == Last deployed: <span class="version">#{application_last_deployed}</span>
