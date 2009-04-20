@@ -1,7 +1,5 @@
 immediately:
 * some of the unicode icons are broken in Windows
-* "Add a new bucket" should set focus on new bucket line
-* focus on appropriate field after revealing new sections/line-items in event form
 * make all autocompleting fields refresh their source array after event creation
 
 before inviting other users to "beta test":

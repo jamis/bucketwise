@@ -148,6 +148,7 @@ var Events = {
       Events.populateBucket(li.down("select"), acctId,
         {'skipAside':(section=='credit_options')});
     }
+    li.down("input").focus();
   },
 
   removeLineItem: function(li) {
@@ -164,6 +165,7 @@ var Events = {
     ol.appendChild(li);
 
     Events.autocomplete_tag_field(id);
+    li.down("input").focus();
   },
 
   autocomplete_tag_field: function(id, options) {
@@ -513,6 +515,7 @@ var Events = {
   revealTags: function() {
     $('tags_collapsed').hide();
     $('tags').show();
+    $('tags').down("input").focus();
   },
 
   revealPartialTags: function() {
