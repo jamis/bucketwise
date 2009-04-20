@@ -602,11 +602,13 @@ var Events = {
     if($('zoomed_event_' + id)) $('zoomed_event_' + id).remove();
     var i = 1;
     table.select('tr').each(function(row) {
-      row.removeClassName('odd').removeClassName('even');
-      if(i % 2 == 0)
-        row.addClassName('even');
-      else
-        row.addClassName('odd');
+      if(i > 2) { // skip the balance and spacer rows
+        row.removeClassName('odd').removeClassName('even');
+        if(i % 2 == 0)
+          row.addClassName('even');
+        else
+          row.addClassName('odd');
+      }
       i++;
     })
   },

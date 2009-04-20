@@ -1,5 +1,4 @@
 immediately:
-* deleting sole event from account/bucket/tag perma results in ajax error
 * make all autocompleting fields refresh their source array after event creation
 * "payee" vs. "memo" is very, very confusing in deposit scenario
 * some of the unicode icons are broken in Windows
@@ -10,16 +9,16 @@ before inviting other users to "beta test":
 * README with installation instructions
 * CHANGELOG
 
-future
+future (in no particular order)
 * spinner for ajax actions
 * user info page (for password change)
 * password reset from login page
 * signup process
 * exception notifier (?)
 * /subscriptions index
-* autocomplete actor field in event form
 * better 404 and 500 error pages
-* searching & reporting
+* searching
+* reporting
 * account reconciliation
 * transaction templates ("saved" or "memorized" transactions)
 * scheduled transactions (occur automatically at specified intervals)
@@ -28,6 +27,7 @@ future
 * filter event views to show only events with a non-zero balance for the account in question
 * filter event views to show only deposits, or only expenses
 * normalize 'actor' so we can do actor-centric queries more efficiently
+* autocomplete actor field in event form
 * full-text searching on the memo field
 * show bucket and account balances next to names in drop-downs
 * make bucket reallocation work from bucket perma
