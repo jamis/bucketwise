@@ -1,11 +1,17 @@
-immediately:
-* make all autocompleting fields refresh their source array after event creation
-
 before inviting other users to "beta test":
 * README with installation instructions
 * CHANGELOG
 
-future (in no particular order)
+--------------------------------------------------------------------------
+KNOWN ISSUES
+--------------------------------------------------------------------------
+
+* After adding an event with a new tag, the tag autocompletion won't pick up the new tag until the page is reloaded.
+
+--------------------------------------------------------------------------
+FEATURES that would be nice to have someday (in no particular order)
+--------------------------------------------------------------------------
+
 * spinner for ajax actions
 * user info page (for password change)
 * password reset from login page

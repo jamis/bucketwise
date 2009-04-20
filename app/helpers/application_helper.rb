@@ -8,11 +8,11 @@ module ApplicationHelper
     end
   end
 
-  def application_version
-    @application_version ||= if File.exists?("#{RAILS_ROOT}/REVISION")
+  def application_revision
+    @application_revision ||= if File.exists?("#{RAILS_ROOT}/REVISION")
       File.read("#{RAILS_ROOT}/REVISION").strip
     else
-      "(development)"
+      "HEAD"
     end
   end
 
