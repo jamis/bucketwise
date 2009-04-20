@@ -1,6 +1,4 @@
 immediately:
-* green "your transaction has been recorded" notice doesn't disappear when starting a new event
-* date column for event row is squashed in safari
 * "Add a new bucket" should set focus on new bucket line
 * check # and "select repayment options" links are out of whack when editing an event
 * deleting sole event from account/bucket/tag perma results in ajax error

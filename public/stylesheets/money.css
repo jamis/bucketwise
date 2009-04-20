@@ -274,6 +274,7 @@ td.date, th.date {
   padding-left: 0.3em;
   padding-right: 0.5em;
   color: #888;
+  white-space: nowrap;
 }
 
 table.entries th {
