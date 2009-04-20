@@ -1,5 +1,7 @@
 === (new)
 
+* fix incorrect rails gem reference in config/environment.rb [Jamis Buck]
+
 * fix reference to ~/.bucketwise/Capfile so it only loads if the file exists [Jamis Buck]
 
 
