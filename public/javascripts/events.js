@@ -4,7 +4,7 @@ var Events = {
   updateBucketsFor: function(section, reset) {
     var skipAside = section == 'credit_options';
     var acctField = $('account_for_' + section);
-    var disabled = acctField.tagName == "SELECT" && acctField.selectedIndex == 0;
+    var disabled = acctField.tagName == "SELECT" && $F(acctField).empty();
     var acctId = disabled ? null : $F(acctField);
 
     Events.getBucketSelects(section).each(function(bucketSelect) {
@@ -68,7 +68,7 @@ var Events = {
 
     if(Events.sectionWantsCheckOptions(section)) $(section + '.check_options').hide();
 
-    if(select.selectedIndex > 0) {
+    if(!$F(select).empty()) {
       var acctId = parseInt(select.options[select.selectedIndex].value);
       var account = Events.accounts[acctId];
 

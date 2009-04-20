@@ -193,11 +193,13 @@ module EventsHelper
   end
 
   def check_options_visible_for?(section)
-    @event && @event.line_items.for_role(section).first.account.role == "checking"
+    @event && @event.account_for(section).checking?
   end
 
   def repayment_options_visible_for?(section)
-    @event && section == :payment_source && @event.line_items.for_role('credit_options').empty?
+    @event && section == :payment_source &&
+      @event.account_for(:payment_source).credit_card? &&
+      @event.line_items.for_role('credit_options').empty?
   end
 
   def section_has_single_bucket?(section)

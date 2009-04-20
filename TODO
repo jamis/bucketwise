@@ -1,10 +1,9 @@
 immediately:
-* "Add a new bucket" should set focus on new bucket line
-* check # and "select repayment options" links are out of whack when editing an event
 * deleting sole event from account/bucket/tag perma results in ajax error
 * make all autocompleting fields refresh their source array after event creation
 * "payee" vs. "memo" is very, very confusing in deposit scenario
 * some of the unicode icons are broken in Windows
+* "Add a new bucket" should set focus on new bucket line
 * focus on appropriate field after revealing new sections/line-items in event form
 
 before inviting other users to "beta test":

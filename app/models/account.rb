@@ -46,6 +46,14 @@ class Account < ActiveRecord::Base
       :starting_balance => { :amount => 0, :occurred_on => Date.today }
   end
 
+  def credit_card?
+    role == 'credit-card'
+  end
+
+  def checking?
+    role == 'checking'
+  end
+
   def available_balance
     @available_balance ||= balance - unavailable_balance
   end
