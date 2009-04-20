@@ -1,0 +1,165 @@
+= BucketWise API
+
+BucketWise provides a simple, REST API for programmatically querying and manipulating the information it stores. Authentication is done via HTTP "basic" authentication, with the user's user name and password.
+
+If a user tries to access a resource that they do not have permission to see, they will generally get a 404 "Not Found" response. (This is intentional; sending a 403 "Forbidden" response lets potential attackers know that there is a valid resource there, while a 404 exposes no such information.)
+
+
+== Subscriptions
+
+Subscriptions are containers for Accounts and Tags. The Subscriptions API exposes two resources:
+
+=== GET /subscriptions.xml
+
+This returns the list of subscriptions accessible to the authenticated user.
+
+=== GET /subscriptions/1.id
+
+This returns the subscription record with id #1.
+
+
+== Accounts
+
+Accounts represent things like bank accounts or credit card accounts, and are containers for Buckets and Events. The Accounts API exposes six resources:
+
+=== GET /subscriptions/1/accounts.xml
+
+Returns all accounts for subscription #1. You can pass an "include" query parameter to pull additional information in with the response; it may be a comma-delimited list of "author" and/or "buckets". Including "author" will expand the user-id to include the full author record for each account (detailing who created the account record). Including "buckets" will nest the list of bucket records for each account in the response.
+
+=== GET /accounts/1.xml
+
+Returns the record for the account with id #1. As above, you can pass "include" with either "author" or "buckets", or both.
+
+=== GET /subscriptions/1/accounts/new.xml
+
+Returns a blank template record showing which fields may be specified when creating a new account.
+
+=== POST /subscriptions/1/accounts.xml
+
+Creates a new account. The request body should describe the account to create. On success, this will respond with a 201 status code, and will set the Location header to the URL of the new account. The new account will also be included in the response body.
+
+=== PUT /accounts/1.xml
+
+Updates the given account. The request body should describe the attributes of the account to update. On success, this will respond with a 200 status code, with the updated account record in the response body.
+
+=== DELETE /accounts/1.xml
+
+Destroys the given account and all transactions referenced by it. On success, this will respond with a 200 status code.
+
+
+== Buckets
+
+Buckets represent virtual partitions of a specific account, and are containers for Events. The Buckets API exposes six resources:
+
+=== GET /accounts/1/buckets.xml
+
+Returns all buckets for account #1. You can pass an "include" query parameter to pull additional information with the response; it current supports only the "author" value, to include information about the creator of the bucket record.
+
+=== GET /buckets/1.xml
+
+Returns the given bucket record.
+
+=== GET /accounts/1/buckets/new.xml
+
+Returns a template record showing which fields may be specified when creating a new bucket.
+
+=== POST /accounts/1/buckets.xml
+
+Creates a new bucket. The request body should describe the bucket to create. On success, this will respond with a 201 status code, and will set the Location header to the URL of the new bucket. The new bucket will also be included in the response body.
+
+=== PUT /buckets/1.xml
+
+Updates the given bucket. The request body should describe the attributes of the bucket to update. On success, this will respond with a 200 status code, with the updated bucket record in the response body.
+
+=== DELETE /buckets/1.xml
+
+Destroys the given bucket and all transactions referenced by it. Alternatively, you can pass a "receiver_id" query parameter, referencing the bucket ID that you want merge this bucket with. In that case, the transactions are not deleted; they are merely moved to the other bucket.
+
+
+== Tags
+
+Tags represent arbitrary names given to amounts of money, and associated (via "tagged items") with events. The Tags API exposes six resources:
+
+=== GET /subscriptions/1/tags.xml
+
+Returns a list of all tags known to the given subscription.
+
+=== GET /tags/1.xml
+
+Returns the given tag record.
+
+=== GET /subscriptions/1/tags/new.xml
+
+Returns a template record indicating what fields may be specified when creating a new tag.
+
+=== POST /subscriptions/1/tags.xml
+
+Creates a new tag. The request body should describe the tag to create. On success, this will respond with a 201 status code, and will set the Location header to the URL of the new tag. The new tag will also be included in the response body.
+
+=== PUT /tags/1.xml
+
+Updates the given tag. The request body should describe the attributes of the tag to update. On success, this will respond with a 200 status code, with the updated tag record in the response body.
+
+=== DELETE /tags/1.xml
+
+Destroys the given tag, and all associated tagged items. Referenced events are *not* destroyed.
+
+
+== Events
+
+Events are transactions. (They're called "events" instead of "transactions" because "transaction" is used internally by Rails.) Each Event consists of one or more line-items that reference both an account and a bucket. An Event may also contain tagged items, that associate tags with the event.
+
+=== GET /subscriptions/1/events.xml
+
+Returns the most recent events to have been added to BucketWise. They will be sorted by the date they were added, not by the date they were specified to have occurred. You can specify "page" and "size" query parameters to control how many records are returned (defaults to 5), and which page of results you want.
+
+You can also specify the "include" query parameter as a comma-delimited list of any combination of "user", "line_items", and "tagged_items". Specifying "user" will include the user who created the event in the response. "line_items" will nest the line-items for the event in the response. "tagged_items" will nest the tagged items for the event in the response.
+
+=== GET /accounts/1/events.xml
+
+Returns a single page of events associated with the given account, ordered by the date they were said to have occurred. As above, it accepts both "page" and "size" query parameters to control which page, and how many results are returned.
+
+=== GET /buckets/1/events.xml
+
+Returns a single page of events associated with the given bucket, ordered by the date they were said to have occurred. As above, it accepts both "page" and "size" query parameters to control which page, and how many results are returned.
+
+=== GET /tags/1/events.xml
+
+Returns a single page of events associated with the given tag, ordered by the date they were said to have occurred. As above, it accepts both "page" and "size" query parameters to control which page, and how many results are returned.
+
+=== GET /events/1.xml
+
+Returns the given event record (may specify the "include" query parameter, as described above).
+
+=== GET /subscriptions/1/events/new.xml
+
+Returns a template record for showing how to specify the data for a new event. You should also specify which role you want, via the "role" query parameter, which may be "expense" (to return the template for a new expense), "transfer" (for a transfer of funds between different accounts), "deposit" (for depositing funds into an account), or "reallocation" (for indicating that funds are being reallocated between buckets in a single account).
+
+=== POST /subscriptions/1/events.xml
+
+Creates a new event. The input should have the same format as the output of new.xml (above). On success, returns a 201 and sets the Location header for the new event. The new record is also included in the output.
+
+Some shortcuts are provided to make it easier to deal with both tags and buckets. When specifying the bucket-id for a line-item, you can give a numeric id for a specific bucket, as usual. However, you can also specify the first bucket for a particular role by giving the id as "r:role" (where "role" is the name of the role, like "aside" or "default"). You can also specify the bucket by name, by giving the id as "n:name" (where "name" is the name of the bucket). In either case, the bucket will be created if it does not already exist.
+
+Likewise, when specifying tagged items, you can give the tag-id as either a numeric id, or as "n:name" (where "name" is the name of the tag to use). In the latter instance, the tag will be created if it does not already exist.
+
+=== PUT /events/1.xml
+
+Updates an existing event. Note that there is no way to tweak a specific line-item directly, so to modify an event, you need to resave the entire thing. Tags, though, may be added or removed directly via the the Tagged Item API (see below).
+
+=== DELETE /events/1.xml
+
+Deletes the given event from the database.
+
+
+== Tagged Items
+
+Tagged Items associate a Tag with an Event. Events may have multiple Tagged Items. The Tagged Items API exposes two resources:
+
+=== POST /events/1/tagged_items.xml
+
+Associates a new tag and amount with the given event.
+
+=== DELETE /tagged_items/1.xml
+
+Removes the given tagged item from the database. This disassociates its event from its tag.
