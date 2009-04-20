@@ -20,7 +20,11 @@ This returns the subscription record with id #1.
 
 == Accounts
 
-Accounts represent things like bank accounts or credit card accounts, and are containers for Buckets and Events. The Accounts API exposes six resources:
+Accounts represent things like bank accounts or credit card accounts, and are containers for Buckets and Events.
+
+Accounts may have an optional "role", which indicates how the account is intended to be used. The two supported values are "checking" and "credit-card"; other account types should leave the role field blank.
+
+The Accounts API exposes six resources:
 
 === GET /subscriptions/1/accounts.xml
 
@@ -49,7 +53,11 @@ Destroys the given account and all transactions referenced by it. On success, th
 
 == Buckets
 
-Buckets represent virtual partitions of a specific account, and are containers for Events. The Buckets API exposes six resources:
+Buckets represent virtual partitions of a specific account, and are containers for Events.
+
+Buckets have an optional "role" field that indicates how the bucket is intended to be used. There are two supported values: "default" (for the default bucket) and "aside" (for the aside bucket). Other bucket types should leave the role field blank.
+
+The Buckets API exposes six resources:
 
 === GET /accounts/1/buckets.xml
 
@@ -108,6 +116,18 @@ Destroys the given tag, and all associated tagged items. Referenced events are *
 == Events
 
 Events are transactions. (They're called "events" instead of "transactions" because "transaction" is used internally by Rails.) Each Event consists of one or more line-items that reference both an account and a bucket. An Event may also contain tagged items, that associate tags with the event.
+
+Line-items each have a "role" field that indicates how that line-item should be treated in the UI. Each different transaction scenario supports it's own set of roles.
+
+For deposits, all line-items must have the "deposit" role.
+
+For transfers, all line-items of the source account should have the "transfer_from" role, and all line-items of the destination account should have the "transfer_to" role.
+
+For bucket reallocations, one line-item should have the "primary" role (indicating the line item for the primary bucket, which will be treated specially in the UI). Then, if you are reallocating funds "from" that primary bucket, the other line-items should all have the "reallocate_from" role, and if you are reallocating funds "to" that primary bucket, the other line-items should all have the "reallocate_to" role.
+
+For expenses, you must put all line-items in the "payment_source" role. If the payment-source line-items all reference a credit card account, you can also specify the credit repayment options by giving additional line-items in the "credit_options" role, and one more line-item in the "aside" role. The line-items in payment_source should sum to the same amount as a those in credit_options, and the aside line-item should balance the credit_options line-items.
+
+That's a little confusing, I'm sure; it'll be easier to create a few transactions via the UI and then peek at them via the API.
 
 === GET /subscriptions/1/events.xml
 
