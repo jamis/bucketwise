@@ -13,7 +13,7 @@ Subscriptions are containers for Accounts and Tags. The Subscriptions API expose
 
 This returns the list of subscriptions accessible to the authenticated user.
 
-=== GET /subscriptions/1.id
+=== GET /subscriptions/1.xml
 
 This returns the subscription record with id #1.
 
