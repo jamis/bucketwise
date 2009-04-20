@@ -2,4 +2,5 @@
 # recipe file, so that the real stuff can exist locally without being
 # checked into the main repo.
 
-load File.expand_path("~/.bucketwise/Capfile")
+capfile = File.expand_path("~/.bucketwise/Capfile")
+load(capfile) if File.exists?(capfile)
