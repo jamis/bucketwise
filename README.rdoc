@@ -21,7 +21,7 @@ Things it intentionally does *not* do:
 
 == REQUIREMENTS:
 
-Essentially, all you need is Ruby, Rake, and version 2.3 of the Ruby on Rails framework. To run locally, it is recommended you also have sqlite3 installed, as well as the sqlite3-ruby bindings.
+Essentially, all you need is Ruby, Rake, and version 2.3 of the Ruby on Rails framework. To run locally, it is recommended you also have sqlite3 installed, as well as the sqlite3-ruby bindings. It's also easiest if you have Capistrano 2.5.x installed.
 
 == INSTALL:
 
@@ -34,6 +34,7 @@ Installation is about as convenient as it is for any other Ruby on Rails applica
 
 To get started quickly, you can just run it locally. Setting that up goes something like this:
 
+* "cap local externals:setup" to load up the dependencies that BucketWise needs. (You'll need to have git installed for this to work.)
 * "rake db:schema:load" to prepare the database
 * "rake user:create" to create your first user, and note the user-id
 * "rake subscription:create USER_ID=<id>" to create your first "subscription" (a container for your financial account data).
