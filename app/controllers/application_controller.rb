@@ -10,6 +10,8 @@ class ApplicationController < ActionController::Base
 
   before_filter :authenticate
 
+  filter_parameter_logging :password
+
   rescue_from ActiveRecord::RecordNotFound, :with => :render_404
 
   protected
