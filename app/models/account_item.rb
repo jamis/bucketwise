@@ -10,9 +10,30 @@ class AccountItem < ActiveRecord::Base
 
   belongs_to :event
   belongs_to :account
+  belongs_to :statement
 
   after_create :increment_balance
   before_destroy :decrement_balance
+
+  named_scope :uncleared, lambda { |*args| AccountItem.options_for_uncleared(*args) }
+  
+  def self.options_for_uncleared(*args)
+    raise ArgumentError, "too many arguments #{args.length} for 1" if args.length > 1
+
+    options = args.first || {}
+    raise ArgumentError, "expected Hash, got #{options.class}" unless options.is_a?(Hash)
+    options = options.dup
+
+    conditions = "statement_id IS NULL"
+    parameters = []
+
+    if options[:with]
+      conditions = "(#{conditions} OR statement_id = ?)"
+      parameters << options[:with]
+    end
+
+    { :conditions => [conditions, *parameters], :include => options[:include] }
+  end
 
   protected
 

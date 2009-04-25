@@ -617,3 +617,138 @@ body.login .notice {
 #blankslate p.create a {
   text-decoration: underline;
 }
+
+/* ------------------------------------------------------------------ *
+ * ACCOUNT RECONCILIATION
+ * ------------------------------------------------------------------ */
+
+.statement table.general {
+  margin: 0;
+  margin-bottom: 1em;
+}
+
+.statement table.general th {
+  font-size: 80%;
+  color: #777;
+  white-space: nowrap;
+}
+
+.statement table.general td.occurred_on,
+.statement table.general th.occurred_on {
+  width: 40%;
+}
+
+.statement table.general td.starting_balance,
+.statement table.general th.starting_balance {
+  width: 20%;
+  text-align: right;
+}
+
+.statement table.general td.ending_balance,
+.statement table.general th.ending_balance {
+  width: 40%;
+  text-align: right;
+}
+
+.statement fieldset {
+  padding: 0;
+}
+
+.statement .subtotal {
+  border-top: 1px solid #ccc;
+  font-size: 80%;
+}
+
+.statement .settled {
+  float: right;
+  padding: 0.5em;
+}
+
+.statement .remaining {
+  float: left;
+  padding: 0.5em;
+}
+
+.statement .remaining .balanced {
+  color: #070;
+  font-weight: bold;
+}
+
+.uncleared {
+  margin: 0.5em;
+}
+
+.uncleared.expenses {
+  height: 12em;
+  overflow: auto;
+}
+
+.uncleared.checks {
+  height: 12em;
+  overflow: auto;
+}
+
+.uncleared.deposits {
+  height: 5em;
+  overflow: auto;
+}
+
+.uncleared table {
+  margin: 0;
+}
+
+.uncleared tr {
+  height: 1.4em;
+  cursor: pointer;
+}
+
+.uncleared td {
+  font-size: 80%;
+  vertical-align: bottom;
+}
+
+.uncleared td.checkbox {
+  width: 1px;
+  padding-right: 1em;
+}
+
+.uncleared td.date {
+  color: black;
+  padding-right: 1em;
+}
+
+.uncleared td.check {
+  width: 1px;
+  padding-right: 1em;
+}
+
+.uncleared tr.cleared td {
+  text-decoration: line-through;
+  color: #777;
+}
+
+.uncleared td {
+  padding: 0.2em;
+}
+
+.uncleared input {
+  margin: 0;
+}
+
+#balanced {
+  border: 1px solid #aca;
+  background: #cfc;
+  margin: 1em 0;
+}
+
+#balanced h3 {
+  margin: 0;
+  border-bottom: 1px solid #aca;
+  background: #070;
+  color: white;
+  padding: 0.5em;
+}
+
+#balanced p {
+  margin: 1em;
+}

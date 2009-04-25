@@ -9,17 +9,19 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20090404154634) do
+ActiveRecord::Schema.define(:version => 20090421221109) do
 
   create_table "account_items", :force => true do |t|
-    t.integer "event_id",    :null => false
-    t.integer "account_id",  :null => false
-    t.integer "amount",      :null => false
-    t.date    "occurred_on", :null => false
+    t.integer "event_id",     :null => false
+    t.integer "account_id",   :null => false
+    t.integer "amount",       :null => false
+    t.date    "occurred_on",  :null => false
+    t.integer "statement_id"
   end
 
   add_index "account_items", ["account_id", "occurred_on"], :name => "index_account_items_on_account_id_and_occurred_on"
   add_index "account_items", ["event_id"], :name => "index_account_items_on_event_id"
+  add_index "account_items", ["statement_id", "occurred_on"], :name => "index_account_items_on_statement_id_and_occurred_on"
 
   create_table "accounts", :force => true do |t|
     t.integer  "subscription_id",                :null => false
@@ -74,6 +76,18 @@ ActiveRecord::Schema.define(:version => 20090404154634) do
   add_index "line_items", ["account_id"], :name => "index_line_items_on_account_id"
   add_index "line_items", ["bucket_id", "occurred_on"], :name => "index_line_items_on_bucket_id_and_occurred_on"
   add_index "line_items", ["event_id"], :name => "index_line_items_on_event_id"
+
+  create_table "statements", :force => true do |t|
+    t.integer  "account_id",       :null => false
+    t.date     "occurred_on",      :null => false
+    t.integer  "starting_balance"
+    t.integer  "ending_balance"
+    t.datetime "balanced_at"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "statements", ["account_id", "occurred_on"], :name => "index_statements_on_account_id_and_occurred_on"
 
   create_table "subscriptions", :force => true do |t|
     t.integer "owner_id", :null => false

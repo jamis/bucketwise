@@ -1,0 +1,55 @@
+#data.content
+  %h2== Balance your statement
+
+  .statement.edit.form
+
+    - form_for(statement) do |form|
+
+      %table.general
+        %tr
+          %th.occurred_on Statement date
+          %th.starting_balance Starting balance
+          %th.ending_balance Ending balance
+        %tr
+          %td.occurred_on= form.calendar_date_select :occurred_on, :size => 10
+          %td#starting_balance.starting_balance.number= format_cents(statement.starting_balance)
+          %td.ending_balance= "$" + form.text_field(:ending_balance, :size => 8, :class => "number", :value => format_cents(statement.ending_balance, :unit => ""), :onchange => "Statements.updateBalances()")
+        
+      - if uncleared.deposits.any?
+        %fieldset#deposits
+          %legend Deposits
+
+          .uncleared.deposits
+            %table= render :partial => "statements/uncleared", :collection => uncleared.deposits
+
+          = render :partial => "statements/subtotal", :object => statement.account_items.deposits.sum(&:amount)
+
+      - if uncleared.checks.any?
+        %fieldset#checks
+          %legend Checks
+
+          .uncleared.checks
+            %table= render :partial => "statements/uncleared", :collection => uncleared.checks
+
+          = render :partial => "statements/subtotal", :object => statement.account_items.checks.sum(&:amount)
+
+      - if uncleared.expenses.any?
+        %fieldset#expenses
+          %legend Other expenses
+
+          .uncleared.expenses
+            %table= render :partial => "statements/uncleared", :collection => uncleared.expenses
+
+          = render :partial => "statements/subtotal", :object => statement.account_items.expenses.sum(&:amount)
+
+      #balanced{:style => visible?(statement.balanced?)}
+        %h3 Congratulations!
+
+        %p Your records exactly match your account statement, and everything balances.
+
+        %p= form.submit "Close out this statement"
+
+      %p#actions{:style => visible?(!statement.balanced?)}
+        = form.submit "Save for later"
+        or
+        = link_to("abort this reconciliation", statement_path(statement), :method => :delete, :confirm => "Are you sure you want to discard this reconciliation?")

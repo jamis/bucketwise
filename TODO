@@ -18,7 +18,6 @@ FEATURES that would be nice to have someday (in no particular order)
 * better 404 and 500 error pages
 * searching
 * reporting
-* account reconciliation
 * transaction templates ("saved" or "memorized" transactions)
 * scheduled transactions (occur automatically at specified intervals)
 * print stylesheet
@@ -32,3 +31,5 @@ FEATURES that would be nice to have someday (in no particular order)
 * make bucket reallocation work from bucket perma
 * support for multiple 'aside' buckets in a single account
 * graphical icons to replace the textual icons for various actions
+* add/edit transactions from the reconciliation view
+* statement API

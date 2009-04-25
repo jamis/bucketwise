@@ -1,0 +1,9 @@
+%tr{:id => dom_id(uncleared), :class => uncleared_row_class(uncleared)}
+  %td.checkbox= check_box_tag "statement[cleared][]", uncleared.id, uncleared.statement_id, :id => dom_id(uncleared, :check), :onclick => "Statements.toggleCleared(#{uncleared.id})"
+  %td.date{:onclick => "Statements.clickItem(#{uncleared.id})"}= uncleared.occurred_on.strftime("%Y-%m-%d")
+  - if uncleared.event.check_number
+    %td.check{:onclick => "Statements.clickItem(#{uncleared.id})"}= "#" + uncleared.event.check_number.to_s
+  %td.actor{:onclick => "Statements.clickItem(#{uncleared.id})"}&= uncleared.event.actor
+  %td.number{:onclick => "Statements.clickItem(#{uncleared.id})"}
+    %span{:style => "display: none;", :id => dom_id(uncleared, :amount)}= uncleared.amount
+    = format_cents(uncleared.amount.abs)

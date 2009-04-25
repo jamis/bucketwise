@@ -24,4 +24,8 @@ module ApplicationHelper
       "(not deployed)"
     end
   end
+
+  def format_cents(amount, options={})
+    number_to_currency(amount/100.0, options)
+  end
 end

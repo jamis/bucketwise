@@ -7,6 +7,7 @@ john_checking_starting_balance:
   account: john_checking
   amount: 100000
   occurred_on: <%= 60.days.ago.to_date.to_s(:db) %>
+  statement: john
 
 john_lunch_mastercard:
   event: john_lunch
@@ -25,6 +26,7 @@ john_bill_pay_checking:
   account: john_checking
   amount: -775
   occurred_on: <%= 58.days.ago.utc.to_s(:db) %>
+  statement: john
 
 john_bill_pay_mastercard:
   event: john_bill_pay

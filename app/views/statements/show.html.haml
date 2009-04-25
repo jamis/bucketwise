@@ -1,0 +1,15 @@
+#data.content
+  .navigation
+    = link_to "Dashboard", subscription_path(subscription)
+    = link_to h(account.name), account_path(account)
+    = link_to "Prior statements", account_statements_path(account)
+
+  %h2
+    %span.actions
+      = link_to("Delete", statement_path(statement), :confirm => "Are you sure you want to delete this statement?", :method => :delete)
+    Statement for period ending
+    = statement.occurred_on.strftime("%Y-%m-%d")
+
+  %table.entries
+    = render :partial => "events/balance", :locals => { :container => statement }
+    = render(statement.account_items)

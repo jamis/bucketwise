@@ -37,7 +37,9 @@ class Account < ActiveRecord::Base
   end
 
   has_many :line_items
-  has_many :account_items
+  has_many :statements
+
+  has_many :account_items, :extend => CategorizedItems
 
   after_create :create_default_buckets, :set_starting_balance
 

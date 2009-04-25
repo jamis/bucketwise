@@ -1,0 +1,25 @@
+#data.content
+  %h2== Let's reconcile your #{h(account.name)} account
+
+  .form
+
+    - form_for([account, statement]) do |form|
+
+      %fieldset
+
+        %p First, take a look at the account statement from your bank or other financial institution.
+
+        %p If you haven't reconciled in a while, make sure you start with the <em>oldest</em> statement and work forward.
+        
+        %p
+          <strong>When</strong> was the statement printed?
+          = form.calendar_date_select :occurred_on, :size => 10
+        
+        %p
+          <strong>What</strong> is the ending balance?
+          = "$" + form.text_field(:ending_balance, :size => 8, :class => "number", :value => format_cents(statement.ending_balance, :unit => ""), :onchange => "this.value = Money.format(this)")
+
+      %p
+        = form.submit "Go to step #2"
+        or
+        = link_to("cancel", account_path(account))

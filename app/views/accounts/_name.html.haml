@@ -1,2 +1,13 @@
-%span.actions== #{link_to_function("Rename", "Accounts.rename(#{account_path(account).to_json}, #{account.name.to_json}, #{form_authenticity_token.to_json})")} | #{link_to("Delete", account_path(account), :method => :delete, :confirm => "Are you sure you want to delete this account?")}
+%span.actions
+  - if account.statements.pending.any?
+    = link_to("Resume reconciling", edit_statement_path(account.statements.pending.first))
+  - else
+    = link_to("Reconcile", new_account_statement_path(account))
+  |
+  - if account.statements.balanced.any?
+    = link_to("Prior statements", account_statements_path(account))
+    |
+  = link_to_function("Rename", "Accounts.rename(#{account_path(account).to_json}, #{account.name.to_json}, #{form_authenticity_token.to_json})")
+  |
+  = link_to("Delete", account_path(account), :method => :delete, :confirm => "Are you sure you want to delete this account?")
 &= account.name

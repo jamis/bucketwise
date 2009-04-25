@@ -1,6 +1,10 @@
 %tr.current_balance
-  %th.date= Date.today.strftime("%Y-%m-%d")
-  %th Current balance
+  - if container.is_a?(Statement)
+    %th.date= statement.occurred_on.strftime("%Y-%m-%d")
+    %th Ending balance
+  - else
+    %th.date= Date.today.strftime("%Y-%m-%d")
+    %th Current balance
   %th.number.total.balance{:colspan => 2}= balance_cell(container, :tag => "span", :id => "balance")
 %tr.spacer
   %td{:colspan => 4}

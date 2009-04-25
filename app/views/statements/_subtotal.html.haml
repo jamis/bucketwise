@@ -1,0 +1,8 @@
+.subtotal
+  .settled
+    Subtotal:
+    %span.subtotal_dollars= format_cents(subtotal)
+  .remaining
+    Remaining:
+    %span.remaining_dollars{:class => statement.unsettled_balance.zero? ? "balanced" : nil}
+      = format_cents(statement.unsettled_balance)
