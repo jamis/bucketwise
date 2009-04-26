@@ -80,6 +80,26 @@ class AccountTest < ActiveSupport::TestCase
     assert Bucket.find(:all, :conditions => { :account_id => accounts(:john_mastercard).id }).empty?
   end
 
+  test "destroy should translate orphaned transfer_to line items to deposit" do
+    assert_equal "transfer_to", line_items(:john_bill_pay_mastercard_general).role
+    accounts(:john_checking).destroy
+    assert_equal "deposit", line_items(:john_bill_pay_mastercard_general, :reload).role
+  end
+
+  test "destroy should translate orphaned transfer_from line items to payment_source" do
+    assert_equal "transfer_from", line_items(:john_bill_pay_checking_aside).role
+    accounts(:john_mastercard).destroy
+    assert_equal "payment_source", line_items(:john_bill_pay_checking_aside, :reload).role
+  end
+
+  test "destroy should translate orphaned credit_options items to bucket reallocation" do
+    assert_equal "credit_options", line_items(:john_lunch_checking_dining).role
+    assert_equal "aside", line_items(:john_lunch_checking_aside).role
+    accounts(:john_mastercard).destroy
+    assert_equal "reallocate_to", line_items(:john_lunch_checking_dining, :reload).role
+    assert_equal "primary", line_items(:john_lunch_checking_aside, :reload).role
+  end
+
   test "destroy should remove all events referencing only this account" do
     assert Event.exists?(events(:john_bare_mastercard).id)
     assert Event.exists?(events(:john_lunch).id)

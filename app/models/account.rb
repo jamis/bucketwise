@@ -69,25 +69,11 @@ class Account < ActiveRecord::Base
 
   def destroy
     transaction do
-      LineItem.delete_all :account_id => id
-      AccountItem.delete_all :account_id => id
-      Bucket.delete_all :account_id => id
-
-      tagged_items = TaggedItem.find_by_sql(<<-SQL.squish)
-        SELECT t.* FROM tagged_items t LEFT JOIN events e ON t.event_id = e.id
-         WHERE e.subscription_id = #{subscription_id}
-           AND NOT EXISTS (
-            SELECT * FROM account_items a WHERE a.event_id = e.id)
-      SQL
-
-      tagged_items.each { |item| item.destroy }
-
-      connection.delete(<<-SQL.squish)
-        DELETE FROM events
-         WHERE subscription_id = #{subscription_id}
-           AND NOT EXISTS (
-            SELECT * FROM account_items a WHERE a.event_id = events.id)
-      SQL
+      cleanup_account_items
+      cleanup_line_items
+      cleanup_buckets
+      cleanup_tagged_items
+      cleanup_events
 
       Account.delete(id)
     end
@@ -119,5 +105,63 @@ class Account < ActiveRecord::Base
           }, :user => author)
         reload # make sure the balance is set correctly
       end
+    end
+
+  private
+
+    def cleanup_line_items
+      LineItem.delete_all :account_id => id
+    end
+
+    def cleanup_account_items
+      items = account_items.find(:all, :include => { :event => [:line_items, :account_items] })
+
+      items.each do |item|
+        event = item.event
+        next unless event.account_items.length > 1
+
+        case event.role
+        when :transfer then
+          # if half of a transfer is being deleted, convert the other half to either a deposit
+          # or an expense, depending on whether the half being deleted is the negative or
+          # positive half.
+          event.line_items.update_all(:role => (item.amount < 0 ? 'deposit' : 'payment_source'))
+
+        when :expense then
+          # if the credit_options account is being deleted, we don't need to do anything,
+          # but if the payment_source account is being deleted, then we need to convert the
+          # credit_options items to a bucket reallocation.
+          if event.account_for(:payment_source) == self
+            event.line_items.update_all({:role => 'primary'}, :role => 'aside')
+            event.line_items.update_all({:role => 'reallocate_to'}, :role => 'credit_options')
+          end
+        end
+      end
+
+      AccountItem.delete_all :account_id => id
+    end
+
+    def cleanup_buckets
+      Bucket.delete_all :account_id => id
+    end
+
+    def cleanup_tagged_items
+      tagged_items = TaggedItem.find_by_sql(<<-SQL.squish)
+        SELECT t.* FROM tagged_items t LEFT JOIN events e ON t.event_id = e.id
+         WHERE e.subscription_id = #{subscription_id}
+           AND NOT EXISTS (
+            SELECT * FROM account_items a WHERE a.event_id = e.id)
+      SQL
+
+      tagged_items.each { |item| item.destroy }
+    end
+
+    def cleanup_events
+      connection.delete(<<-SQL.squish)
+        DELETE FROM events
+         WHERE subscription_id = #{subscription_id}
+           AND NOT EXISTS (
+            SELECT * FROM account_items a WHERE a.event_id = events.id)
+      SQL
     end
 end

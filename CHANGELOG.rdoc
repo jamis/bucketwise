@@ -1,5 +1,9 @@
 === (new)
 
+* Fix bug in account deletion that would leave (e.g.) transfer line items in an inconsistent state [Jamis Buck]
+
+* Account reconciliation [Jamis Buck]
+
 * filter password from logs [Jordan Brough]
 
 * fix incorrect rails gem reference in config/environment.rb [Jamis Buck]
