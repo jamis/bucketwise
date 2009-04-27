@@ -2,7 +2,7 @@
 %html
   %head
     %meta{"http-equiv" => "Content-Type", :content => "text/html; charset=utf-8"}/
-    %title Login to BucketWise
+    %title Log into BucketWise
     = stylesheet_link_tag "money"
     = javascript_include_tag "prototype"
 
@@ -19,7 +19,7 @@
         %p
           Password:
           = password_field_tag :password
-        %p= submit_tag "Log into Buckets"
+        %p= submit_tag "Log into BucketWise"
 
     :javascript
       window.onload = function() { $('user_name').focus(); }
