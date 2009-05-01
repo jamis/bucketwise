@@ -10,5 +10,38 @@
     = balance_cell(account, :classes => %w(total balance), :tag => "span")
     == Buckets in #{h(account.name)}
 
-  %table.account_summary
-    = render(account.buckets.sort_by(&:name))
+  = link_to_function(filter, "Filters.display()", :id => :filter_nubbin)
+
+  #filter_form{:style => "display: none"}
+    - form_tag(account_buckets_path(account), :method => :get) do
+      %p
+        Include:
+        %label
+          = check_box_tag(:expenses, "1", filter.expenses?)
+          Expenses
+        = "|"
+        %label
+          = check_box_tag(:deposits, "1", filter.deposits?)
+          Deposits
+        = "|"
+        %label
+          = check_box_tag(:reallocations, "1", filter.reallocations?)
+          Reallocations
+      %p
+        %label
+          From:
+          = calendar_date_select_tag :from, filter.from, :size => 9
+        %label
+          To:
+          = calendar_date_select_tag :to, filter.to, :size => 9
+
+      %p.actions
+        = submit_tag "Apply these criteria", :name => nil
+        or
+        = link_to_function "cancel", "Filters.hide()"
+        - if filter.any?
+          or
+          = link_to("reset this filter", account_buckets_path(account))
+
+  %table#accounts_summary
+    = render(buckets.sort_by(&:name))

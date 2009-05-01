@@ -94,7 +94,7 @@ div#version a {
 }
 
 .content h2 {
-  margin: 0 -0.5em 0.5em -0.5em;
+  margin: 0 -0.5em 0em -0.5em;
   padding: 0.2em 0.5em;
   background: #bfb;
   border-bottom: 1px solid #9c9;
@@ -168,6 +168,7 @@ h2 span.balance {
   width: 100%;
   border-collapse: collapse;
   margin-bottom: 2em;
+  clear: both;
 }
 
 td, th {
@@ -286,6 +287,14 @@ td.date, th.date {
 .optional {
   font-size: 80%;
   color: #777;
+}
+
+table#accounts_summary {
+  margin-top: 0.5em;
+}
+
+table.entries {
+  margin-top: 0.5em;
 }
 
 table.entries th {
@@ -539,6 +548,10 @@ div.tag_select strong {
   padding: 0;
 }
 
+div#cloud {
+  margin-top: 0.5em;
+}
+
 div#cloud a {
   color: #aaf;
   padding: 0.2em;
@@ -751,4 +764,56 @@ body.login .notice {
 
 #balanced p {
   margin: 1em;
+}
+
+/* ------------------------------------------------------------------ *
+ * FILTERING
+ * ------------------------------------------------------------------ */
+
+#filter_nubbin {
+  margin-top: 0;
+  float: right;
+  border: 1px solid #575;
+  border-top: none;
+  background: #797;
+  text-align: center;
+  color: white;
+  padding: 0.1em 2em;
+  font-size: 60%;
+  display: block;
+}
+
+#filter_nubbin:hover {
+  background: #7b7;
+}
+
+#filter_form {
+  border: 1px solid #575;
+  border-top: none;
+  padding: 0;
+  background: #dfd;
+  font-size: 90%;
+  position: absolute;
+  z-index: 999;
+}
+
+#filter_form form {
+  margin: 0;
+  padding: 0;
+}
+
+#filter_form p {
+  margin: 0;
+  padding: 0.5em 1em;
+}
+
+#filter_form p.actions {
+  border-top: 1px solid #575;
+  background: #aca;
+}
+
+#filter_form input {
+  margin: 0;
+  padding: 0;
+  font-size: 1em;
 }

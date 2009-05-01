@@ -65,4 +65,12 @@ class BucketTest < ActiveSupport::TestCase
       assert bucket.errors.on(:name)
     end
   end
+
+  test "balance should read computed_balance if that value is set" do
+    filter = QueryFilter.new(:expenses => true)
+    dining = accounts(:john_checking).buckets.filter(filter).find(:first, :conditions => { :name => "Dining" })
+    assert dining[:computed_balance]
+    assert_not_equal dining[:balance], dining[:computed_balance]
+    assert_equal dining[:computed_balance].to_i, dining.balance
+  end
 end

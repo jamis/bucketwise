@@ -5,9 +5,12 @@ class BucketsController < ApplicationController
   before_filter :find_bucket, :except => %w(index new create)
 
   def index
+    @filter = QueryFilter.new(params)
+    @buckets = account.buckets.filter(@filter)
+
     respond_to do |format|
       format.html
-      format.xml { render :xml => account.buckets.to_xml(eager_options(:root => "buckets")) }
+      format.xml { render :xml => @buckets.to_xml(eager_options(:root => "buckets")) }
     end
   end
 
@@ -66,8 +69,8 @@ class BucketsController < ApplicationController
 
   protected
 
-    attr_reader :account, :bucket
-    helper_method :account, :bucket
+    attr_reader :account, :bucket, :buckets, :filter
+    helper_method :account, :bucket, :buckets, :filter
 
     def find_account
       @account = Account.find(params[:account_id])

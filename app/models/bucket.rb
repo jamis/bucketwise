@@ -11,6 +11,56 @@ class Bucket < ActiveRecord::Base
   validates_presence_of :name
   validates_uniqueness_of :name, :scope => :account_id, :case_sensitive => false
 
+  named_scope :filter, lambda { |filter| Bucket.options_for_filter(filter) }
+  
+  def self.options_for_filter(filter)
+    return {} unless filter.any?
+
+    conditions = []
+    parameters = []
+
+    if filter.from?
+      conditions << "line_items.occurred_on >= ?"
+      parameters << filter.from
+    end
+
+    if filter.to?
+      conditions << "line_items.occurred_on <= ?"
+      parameters << filter.to
+    end
+
+    if filter.by_type?
+      roles = []
+
+      if filter.expenses?
+        roles << 'payment_source'
+        roles << 'transfer_from'
+        roles << 'credit_options'
+      end
+
+      if filter.deposits?
+        roles << 'deposit'
+        roles << 'transfer_to'
+      end
+
+      if filter.reallocations?
+        roles << 'primary'
+        roles << 'aside'
+        roles << 'credit_options'
+        roles << 'reallocation_from'
+        roles << 'reallocation_to'
+      end
+
+      conditions << "line_items.role IN (?)"
+      parameters << roles.uniq
+    end
+
+    { :joins => "LEFT OUTER JOIN line_items ON line_items.bucket_id = buckets.id",
+      :select => "buckets.*, SUM(line_items.amount) as computed_balance",
+      :conditions => [conditions.join(" AND "), *parameters],
+      :group => "buckets.id" }
+  end
+
   def self.default
     Temp.new("r:default", "General", "default", 0)
   end
@@ -22,6 +72,10 @@ class Bucket < ActiveRecord::Base
   def self.template
     new :name => "Bucket name (e.g. Groceries)",
       :role => "aside | default | nil"
+  end
+
+  def balance
+    (self[:computed_balance] || self[:balance]).to_i
   end
 
   def assimilate(bucket)
