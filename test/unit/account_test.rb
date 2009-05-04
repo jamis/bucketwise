@@ -116,6 +116,16 @@ class AccountTest < ActiveSupport::TestCase
     assert_equal 0, tags(:john_fuel, :reload).balance
   end
 
+  test "with_defaults should return a copy of the buckets with default and aside added" do
+    john_account = accounts(:john_savings)
+    real_buckets = john_account.buckets
+    assert (real_buckets.any? { |bucket| bucket.role == "default" }), "should have default bucket"
+    assert !(real_buckets.any? { |bucket| bucket.role == "aside" }), "should not have aside bucket"
+    default_buckets = john_account.buckets.with_defaults
+    assert_equal(real_buckets.size + 1, default_buckets.size)
+  end
+  
+
   private
 
     def new_account(options={})

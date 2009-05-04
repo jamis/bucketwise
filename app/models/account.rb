@@ -29,7 +29,7 @@ class Account < ActiveRecord::Base
     end
 
     def with_defaults
-      buckets = to_a
+      buckets = to_a.dup
       buckets << Bucket.default unless buckets.any? { |bucket| bucket.role == "default" }
       buckets << Bucket.aside unless buckets.any? { |bucket| bucket.role == "aside" }
       return buckets

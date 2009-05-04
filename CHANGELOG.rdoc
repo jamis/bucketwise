@@ -1,5 +1,7 @@
 === (new)
 
+* Fixed bug that included an implicit "aside" bucket in the total bucket count [Tony Eichelberger]
+
 * Simple budget reporting [Jamis Buck]
 
 * Fix bug in account deletion that would leave (e.g.) transfer line items in an inconsistent state [Jamis Buck]
