@@ -27,6 +27,15 @@ class AccountTest < ActiveSupport::TestCase
     end
   end
 
+  test "create with negative starting balance should initialize balance" do
+    assert_difference "subscriptions(:john).events.count" do
+      a = new_account :starting_balance => {
+        :occurred_on => 1.week.ago.utc, :amount => "-12345" }
+      assert_equal [a.buckets.default], a.line_items.map(&:bucket)
+      assert_equal -12345, a.balance
+    end
+  end
+
   test "create duplicate account should fail" do
     assert_no_difference "Account.count" do
       account = new_account :name => accounts(:john_checking).name.upcase

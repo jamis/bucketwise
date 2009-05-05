@@ -1,5 +1,7 @@
 === (new)
 
+* Fixed bug that wouldn't let you have a negative starting balance for new accounts [Jamis Buck]
+
 * Fixed bug that included an implicit "aside" bucket in the total bucket count [Tony Eichelberger]
 
 * Simple budget reporting [Jamis Buck]
