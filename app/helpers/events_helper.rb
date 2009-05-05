@@ -57,10 +57,13 @@ module EventsHelper
   end
 
   def select_bucket(section, options={})
+    splittable = options.fetch(:splittable, true)
+
     if options[:line_item]
       select_options = options_for_select(
         options[:line_item].account.buckets.sorted.map { |bucket| [bucket.name, bucket.id] },
         options[:line_item].bucket_id)
+      select_options += "<option value='+'>-- More than one --</option>" if splittable
       select_options += "<option value='++'>-- Add a new bucket --</option>"
       disabled = false
     else
@@ -68,7 +71,7 @@ module EventsHelper
       disabled = true
     end
 
-    classes = ["bucket_for_#{section}", options.fetch(:splittable, true) ? "splittable" : nil]
+    classes = ["bucket_for_#{section}", splittable ? "splittable" : nil]
 
     select_tag "event[#{section}][bucket_id]", select_options,
       :class => classes.compact.join(" "),
