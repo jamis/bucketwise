@@ -1,5 +1,9 @@
 === (new)
 
+* Allow bucket-reallocation line items to be removed [Jamis Buck]
+
+* Show bucket split option when editing single-line-item events [Jamis Buck]
+
 * Fixed bug that wouldn't let you have a negative starting balance for new accounts [Jamis Buck]
 
 * Fixed bug that included an implicit "aside" bucket in the total bucket count [Tony Eichelberger]
