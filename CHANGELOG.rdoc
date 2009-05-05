@@ -1,5 +1,7 @@
 === (new)
 
+* Don't save line-items if they are blank [Jamis Buck]
+
 * Allow bucket-reallocation line items to be removed [Jamis Buck]
 
 * Show bucket split option when editing single-line-item events [Jamis Buck]

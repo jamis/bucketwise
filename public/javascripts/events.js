@@ -412,9 +412,12 @@ var Events = {
 
     $(section + '.line_items').select('li').each(function(row) {
       bucket_id = $F(row.down('select'));
-      amount = (options.expense ? -1 : 1) * Money.parse(row.down('input[type=text]'));
-      value += amount;
-      Events.addLineItem(request, account_id, bucket_id, amount, section);
+      field = row.down('input[type=text]');
+      if(field.present()) {
+        amount = (options.expense ? -1 : 1) * Money.parse(field);
+        value += amount;
+        Events.addLineItem(request, account_id, bucket_id, amount, section);
+      }
     });
 
     return value;
