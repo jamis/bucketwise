@@ -9,7 +9,7 @@
       = link_to_remote("&#x24d8;", :url => event_path(event), :method => :get, :before => "Events.expand(#{event.id})", :html => { :class => "zoom" })
       %span.zooming &#x231b;
       = link_to_function("&#x2713;", "Events.collapse(#{event.id})", :class => "zoomed")
-    &= event.actor
+    &= event.actor_name
     - if event.check_number.present?
       %span.check== ##{event.check_number}
     - if account_links

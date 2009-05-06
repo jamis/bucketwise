@@ -288,7 +288,7 @@ var Events = {
       Events.serializeGeneralInformation(request);
     else {
       request['event']['occurred_on'] = Events.defaultDate;
-      request['event']['actor'] = Events.defaultActor;
+      request['event']['actor_name'] = Events.defaultActor;
     }
 
     for(section in Events.sections) {

@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20090421221109) do
+ActiveRecord::Schema.define(:version => 20090506161959) do
 
   create_table "account_items", :force => true do |t|
     t.integer "event_id",     :null => false
@@ -35,6 +35,17 @@ ActiveRecord::Schema.define(:version => 20090421221109) do
 
   add_index "accounts", ["subscription_id", "name"], :name => "index_accounts_on_subscription_id_and_name", :unique => true
 
+  create_table "actors", :force => true do |t|
+    t.integer  "subscription_id", :null => false
+    t.string   "name",            :null => false
+    t.string   "sort_name",       :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "actors", ["subscription_id", "sort_name"], :name => "index_actors_on_subscription_id_and_sort_name", :unique => true
+  add_index "actors", ["subscription_id", "updated_at"], :name => "index_actors_on_subscription_id_and_updated_at"
+
   create_table "buckets", :force => true do |t|
     t.integer  "account_id",                :null => false
     t.integer  "user_id",                   :null => false
@@ -52,14 +63,16 @@ ActiveRecord::Schema.define(:version => 20090421221109) do
     t.integer  "subscription_id", :null => false
     t.integer  "user_id",         :null => false
     t.date     "occurred_on",     :null => false
-    t.string   "actor",           :null => false
+    t.string   "actor_name",      :null => false
     t.integer  "check_number"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.text     "memo"
+    t.integer  "actor_id"
   end
 
-  add_index "events", ["subscription_id", "actor"], :name => "index_events_on_subscription_id_and_actor"
+  add_index "events", ["actor_id"], :name => "index_events_on_actor_id"
+  add_index "events", ["subscription_id", "actor_name"], :name => "index_events_on_subscription_id_and_actor"
   add_index "events", ["subscription_id", "check_number"], :name => "index_events_on_subscription_id_and_check_number"
   add_index "events", ["subscription_id", "created_at"], :name => "index_events_on_subscription_id_and_created_at"
   add_index "events", ["subscription_id", "occurred_on"], :name => "index_events_on_subscription_id_and_occurred_on"

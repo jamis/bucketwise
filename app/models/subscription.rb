@@ -5,6 +5,7 @@ class Subscription < ActiveRecord::Base
 
   has_many :accounts
   has_many :tags
+  has_many :actors
 
   has_many :events do
     def recent(n=0, options={})
@@ -24,7 +25,7 @@ class Subscription < ActiveRecord::Base
 
       case event.role
       when :reallocation
-        event.actor = "Bucket reallocation"
+        event.actor_name = "Bucket reallocation"
         if attrs[:from]
           bucket = Bucket.find(attrs[:from])
           account = @owner.accounts.find(bucket.account_id)

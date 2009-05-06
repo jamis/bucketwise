@@ -101,7 +101,7 @@ class Account < ActiveRecord::Base
         amount = starting_balance[:amount].to_i
         role = amount > 0 ? "deposit" : "payment_source"
         subscription.events.create({:occurred_on => starting_balance[:occurred_on],
-            :actor => "Starting balance",
+            :actor_name => "Starting balance",
             :line_items => [{:account_id => id, :bucket_id => buckets.default.id,
               :amount => amount, :role => role}]
           }, :user => author)

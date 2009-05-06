@@ -17,7 +17,7 @@
   - else
     :javascript
       Events.defaultDate = #{@event.occurred_on.strftime("%Y-%m-%d").to_json};
-      Events.defaultActor = #{@event.actor.to_json};
+      Events.defaultActor = #{@event.actor_name.to_json};
 
   - form_sections.each do |section|
     = render_event_form_section(form, section) if event_wants_section?(section)

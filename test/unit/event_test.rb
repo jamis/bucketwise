@@ -44,18 +44,18 @@ class EventTest < ActiveSupport::TestCase
   end
 
   test "create without actor should not pass validation" do
-    @event_base.delete(:actor)
+    @event_base.delete(:actor_name)
     assert_no_difference "Event.count" do
       event = subscriptions(:john).events.create(@event_base, :user => users(:john))
-      assert event.errors.on(:actor)
+      assert event.errors.on(:actor_name)
     end
   end
 
   test "create with blank actor should not pass validation" do
-    @event_base[:actor] = ""
+    @event_base[:actor_name] = ""
     assert_no_difference "Event.count" do
       event = subscriptions(:john).events.create(@event_base, :user => users(:john))
-      assert event.errors.on(:actor)
+      assert event.errors.on(:actor_name)
     end
   end
 
@@ -388,15 +388,15 @@ class EventTest < ActiveSupport::TestCase
   end
 
   test "update without line items should leave exising line items alone" do
-    events(:john_lunch).update_attributes :actor => "Somebody Else"
-    assert_equal "Somebody Else", events(:john_lunch, :reload).actor
+    events(:john_lunch).update_attributes :actor_name => "Somebody Else"
+    assert_equal "Somebody Else", events(:john_lunch, :reload).actor_name
     assert events(:john_lunch).line_items.any?
   end
 
   test "update with line items should replace all line items with those given" do
     items = events(:john_lunch).line_items.to_a
 
-    events(:john_lunch).update_attributes :actor => "Somebody Else",
+    events(:john_lunch).update_attributes :actor_name => "Somebody Else",
       :line_items => [
         { :account_id => accounts(:john_savings).id,
           :bucket_id => buckets(:john_savings_general).id,
@@ -408,15 +408,15 @@ class EventTest < ActiveSupport::TestCase
   end
 
   test "update without tagged items should leave exising tagged items alone" do
-    events(:john_lunch).update_attributes :actor => "Somebody Else"
-    assert_equal "Somebody Else", events(:john_lunch, :reload).actor
+    events(:john_lunch).update_attributes :actor_name => "Somebody Else"
+    assert_equal "Somebody Else", events(:john_lunch, :reload).actor_name
     assert events(:john_lunch).tagged_items.any?
   end
 
   test "update with tagged items should replace tagged line items with those given" do
     items = events(:john_lunch).tagged_items.to_a
 
-    events(:john_lunch).update_attributes :actor => "Somebody Else",
+    events(:john_lunch).update_attributes :actor_name => "Somebody Else",
       :tagged_items => [{ :tag_id => "n:testing", :amount => 311}]
 
     assert !items.any? { |item| TaggedItem.exists?(item.id) }
@@ -482,7 +482,7 @@ class EventTest < ActiveSupport::TestCase
     def prepare_basic_event_data
       @event_base = {
         :occurred_on => 3.days.ago.to_date,
-        :actor => "Something",
+        :actor_name => "Something",
         :line_items => [
           { :account_id => accounts(:john_checking).id,
             :bucket_id  => buckets(:john_checking_groceries).id,

@@ -17,7 +17,7 @@
     %span.expense_label <strong>Who</strong> received the payment?
     %span.deposit_label <strong>Where</strong> did this deposit come from?
     %span.transfer_label <strong>What</strong> was this transfer for?
-    = form.text_field :actor, :size => 30
+    = form.text_field :actor_name, :size => 30
 
   %p#memo_link{:style => visible?(!event_wants_memo?)}
     <strong>Got more to say?</strong>

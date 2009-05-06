@@ -58,19 +58,19 @@ class EventsControllerTest < ActionController::TestCase
 
     assert_template "events/create.js.rjs"
     assert_equal subscriptions(:john), assigns(:subscription)
-    assert_equal "Somebody", assigns(:event).actor
+    assert_equal "Somebody", assigns(:event).actor_name
   end
 
   test "update via ajax should load subscription and event, update event and render javascript" do
     event = events(:john_checking_starting_balance)
     xhr :post, :update, :id => event.id,
-      :event => { :occurred_on => event.occurred_on.to_s, :actor => "Updated: #{event.actor}" }
+      :event => { :occurred_on => event.occurred_on.to_s, :actor => "Updated: #{event.actor_name}" }
 
     assert_response :success
     assert_template "events/update.js.rjs"
     assert_equal subscriptions(:john), assigns(:subscription)
     assert_equal events(:john_checking_starting_balance), assigns(:event)
-    assert events(:john_checking_starting_balance, :reload).actor.starts_with?("Updated: ")
+    assert events(:john_checking_starting_balance, :reload).actor_name.starts_with?("Updated: ")
   end
 
   test "destroy via ajax should load subscription and event, destroy event and render javascript" do
@@ -211,7 +211,7 @@ class EventsControllerTest < ActionController::TestCase
 
   test "create via API with validation errors should return 422 with errors" do
     data = simple_event(:john_checking, :john_checking_dining)
-    data[:actor] = ""
+    data[:actor_name] = ""
 
     assert_no_difference "Event.count" do
       post :create, :subscription_id => subscriptions(:john).id, :event => data, :format => "xml"
@@ -235,7 +235,7 @@ class EventsControllerTest < ActionController::TestCase
   test "update via API with validation errors should return 422 with errors" do
     event = events(:john_checking_starting_balance)
     put :update, :id => event.id,
-      :event => { :occurred_on => event.occurred_on.to_s, :actor => "" },
+      :event => { :occurred_on => event.occurred_on.to_s, :actor_name => "" },
       :format => "xml"
     assert_response :unprocessable_entity
     assert Hash.from_xml(@response.body).key?("errors")
@@ -244,11 +244,11 @@ class EventsControllerTest < ActionController::TestCase
   test "update via API should return 200 and updated event record" do
     event = events(:john_checking_starting_balance)
     put :update, :id => event.id,
-      :event => { :occurred_on => event.occurred_on.to_s, :actor => "Updated!" },
+      :event => { :occurred_on => event.occurred_on.to_s, :actor_name => "Updated!" },
       :format => "xml"
     assert_response :success
     assert Hash.from_xml(@response.body).key?("event")
-    assert_equal "Updated!", event.reload.actor
+    assert_equal "Updated!", event.reload.actor_name
   end
 
   test "destroy via API should destroy record and return 200" do
@@ -261,7 +261,7 @@ class EventsControllerTest < ActionController::TestCase
   private
 
     def simple_event(account, bucket)
-      { :occurred_on => Date.today.to_s, :actor => "Somebody",
+      { :occurred_on => Date.today.to_s, :actor_name => "Somebody",
         :line_items => [
           { :account_id => accounts(account).id.to_s,
             :bucket_id  => buckets(bucket).id.to_s,

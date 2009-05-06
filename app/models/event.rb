@@ -1,6 +1,7 @@
 class Event < ActiveRecord::Base
   belongs_to :subscription
   belongs_to :user
+  belongs_to :actor
 
   has_many :line_items, :dependent => :destroy do
     def for_role(name)
@@ -26,12 +27,13 @@ class Event < ActiveRecord::Base
   alias_method :original_line_items_assignment, :line_items=
   alias_method :original_tagged_items_assignment, :tagged_items=
 
-  attr_accessible :occurred_on, :actor, :check_number, :memo
+  attr_accessible :occurred_on, :actor_name, :check_number, :memo
   attr_accessible :line_items, :tagged_items, :role
 
+  before_save :normalize_actor_name
   after_save :realize_line_items, :realize_tagged_items
 
-  validates_presence_of :actor, :occurred_on
+  validates_presence_of :actor_name, :occurred_on
   validate :line_item_validations
 
   attr_accessor :amount
@@ -151,6 +153,10 @@ class Event < ActiveRecord::Base
     end
 
   protected
+
+    def normalize_actor_name
+      self.actor = subscription.actors.normalize(actor_name)
+    end
 
     def realize_line_items
       if @line_items_to_realize

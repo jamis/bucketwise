@@ -5,7 +5,7 @@ class AccountItemTest < ActiveSupport::TestCase
     initial_amount = accounts(:john_checking).balance
 
     subscriptions(:john).events.create({:occurred_on => 3.days.ago.to_date,
-        :actor => "Something",
+        :actor_name => "Something",
         :line_items => [
           { :account_id => accounts(:john_checking).id,
             :bucket_id  => buckets(:john_checking_groceries).id,
