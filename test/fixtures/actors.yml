@@ -1,0 +1,49 @@
+# --------------------------------------------------------------
+# john
+# --------------------------------------------------------------
+
+john_starting_balance:
+  subscription: john
+  name: Starting balance
+  sort_name: STARTING BALANCE
+  created_at: <%= (60.days.ago + 1.hour).utc.to_s(:db) %>
+  updated_at: <%= (60.days.ago + 1.hour).utc.to_s(:db) %>
+
+john_sandwich_central:
+  subscription: john
+  name: Sandwich Central
+  sort_name: SANDWICH CENTRAL
+  created_at: <%= 59.days.ago.utc.to_s(:db) %>
+  updated_at: <%= 55.days.ago.utc.to_s(:db) %>
+
+john_mastercard_co:
+  subscription: john
+  name: MasterCard Co.
+  sort_name: MASTERCARD CO.
+  created_at: <%= 58.days.ago.utc.to_s(:db) %>
+  updated_at: <%= 58.days.ago.utc.to_s(:db) %>
+
+john_bucket_reallocation:
+  subscription: john
+  name: Bucket reallocation
+  sort_name: BUCKET REALLOCATION
+  created_at: <%= 57.days.ago.utc.to_s(:db) %>
+  updated_at: <%= 56.days.ago.utc.to_s(:db) %>
+
+john_auto_fuel:
+  subscription: john
+  name: Auto fuel
+  sort_name: AUTO FUEL
+  created_at: <%= 54.days.ago.utc.to_s(:db) %>
+  updated_at: <%= 54.days.ago.utc.to_s(:db) %>
+
+# --------------------------------------------------------------
+# tim
+# --------------------------------------------------------------
+
+tim_starting_balance:
+  subscription: tim
+  name: Starting balance
+  sort_name: STARTING BALANCE
+  created_at: <%= (59.days.ago + 1.hour).utc.to_s(:db) %>
+  updated_at: <%= (59.days.ago + 1.hour).utc.to_s(:db) %>

@@ -64,7 +64,7 @@ class EventsControllerTest < ActionController::TestCase
   test "update via ajax should load subscription and event, update event and render javascript" do
     event = events(:john_checking_starting_balance)
     xhr :post, :update, :id => event.id,
-      :event => { :occurred_on => event.occurred_on.to_s, :actor => "Updated: #{event.actor_name}" }
+      :event => { :occurred_on => event.occurred_on.to_s, :actor_name => "Updated: #{event.actor_name}" }
 
     assert_response :success
     assert_template "events/update.js.rjs"
