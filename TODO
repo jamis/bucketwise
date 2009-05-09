@@ -24,8 +24,6 @@ FEATURES that would be nice to have someday (in no particular order)
 * oauth authentication for API
 * filter event views to show only events with a non-zero balance for the account in question
 * filter event views to show only deposits, or only expenses
-* normalize 'actor' so we can do actor-centric queries more efficiently
-* autocomplete actor field in event form
 * full-text searching on the memo field
 * show bucket and account balances next to names in drop-downs
 * make bucket reallocation work from bucket perma

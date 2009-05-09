@@ -1,5 +1,7 @@
 === (new)
 
+* Actor name autocompletion in forms [Jamis Buck]
+
 * Don't save line-items if they are blank [Jamis Buck]
 
 * Allow bucket-reallocation line items to be removed [Jamis Buck]
