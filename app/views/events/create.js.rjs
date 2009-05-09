@@ -12,7 +12,6 @@ else
     :collection => subscription.accounts
   page.events.reset
   page[:success_notice].show
-  page << "Events.accounts = #{accounts_and_buckets_as_javascript}"
-  page << "Events.tags = #{tags_as_javascript}"
+  page << emit_account_data_assignments
   page.visual_effect :highlight, dom_id(event)
 end

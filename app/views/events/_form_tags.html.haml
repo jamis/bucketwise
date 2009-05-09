@@ -12,9 +12,9 @@
     %br/
     %small Enter tag names, separated by commas, that will apply to this entire transaction.
 
-  #event_tags_list_select.tag_select{:style => "display: none"}
+  #event_tags_list_select.autocomplete_select{:style => "display: none"}
   :javascript
-    Events.autocomplete_tag_field('event_tags_list', {tokens: ','});
+    Events.autocompleteTagField('event_tags_list', {tokens: ','});
 
   %p#tag_items_collapsed{:style => event_has_partial_tags? ? "display: none" : nil}
     &rarr;

@@ -18,6 +18,8 @@
     %span.deposit_label <strong>Where</strong> did this deposit come from?
     %span.transfer_label <strong>What</strong> was this transfer for?
     = form.text_field :actor_name, :size => 30
+    #event_actor_name_select.autocomplete_select{:style => "display: none"}
+    = javascript_tag "Events.autocompleteActorField()"
 
   %p#memo_link{:style => visible?(!event_wants_memo?)}
     <strong>Got more to say?</strong>

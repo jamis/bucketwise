@@ -1,5 +1,13 @@
 module EventsHelper
-  def accounts_and_buckets_as_javascript
+  def emit_account_data_assignments
+    update_page do |page|
+      page.events.accounts = accounts_with_buckets
+      page.events.tags     = subscription.tags(:reload).map(&:name).sort
+      page.events.actors   = subscription.actors(:reload).sort_by(&:sort_name).map(&:name)
+    end
+  end
+
+  def accounts_with_buckets
     # This rule is so that standard buckets (like "aside") that have not
     # yet been created get sorted to the bottom. Until they're "real" they
     # are second-class citizens, but we still want to let people select them
@@ -9,7 +17,7 @@ module EventsHelper
       [Integer === bucket.id ? 0 : 1, bucket.name.downcase]
     end
 
-    hash = subscription.accounts.inject({}) do |hash, account|
+    subscription.accounts.inject({}) do |hash, account|
       buckets = account.buckets.with_defaults.sort_by(&sorter).map do |bucket|
         { :id => bucket.id, :name => bucket.name,
           :role => bucket.role, :balance => bucket.balance }
@@ -19,12 +27,6 @@ module EventsHelper
         :role => account.role, :buckets => buckets }
       hash
     end
-
-    hash.to_json
-  end
-
-  def tags_as_javascript
-    subscription.tags(:reload).map(&:name).sort.to_json
   end
 
   def links_to_accounts_for_event(event)
@@ -326,7 +328,7 @@ module EventsHelper
     completer_opts[:tokens] = "," if options.delete(:multiple)
 
     tag_field = text_field_tag(name, value, options)
-    dropdown = content_tag(:div, "", :style => "display: none", :class => "tag_select", :id => "#{options[:id]}_select")
+    dropdown = content_tag(:div, "", :style => "display: none", :class => "autocomplete_select", :id => "#{options[:id]}_select")
 
     tag_field + dropdown
   end

@@ -1,6 +1,4 @@
-:javascript
-  Events.accounts = #{accounts_and_buckets_as_javascript};
-  Events.tags = #{tags_as_javascript};
+= javascript_tag(emit_account_data_assignments)
 
 #templates{:style => "display: none"}
   - form_sections.each do |section|
