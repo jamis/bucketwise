@@ -1,5 +1,7 @@
 === (new)
 
+* Hide bucket list if there are less than 2 buckets for an account [Jamis Buck]
+
 * Increase "recent buckets" window size to 10 (from 5) [Jamis Buck]
 
 * Actor name autocompletion in forms [Jamis Buck]
