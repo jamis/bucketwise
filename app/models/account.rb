@@ -24,10 +24,6 @@ class Account < ActiveRecord::Base
       detect { |bucket| bucket.role == "default" }
     end
 
-    def recent(n=5)
-      find(:all, :limit => n, :order => "updated_at DESC").sort_by(&:name)
-    end
-
     def with_defaults
       buckets = to_a.dup
       buckets << Bucket.default unless buckets.any? { |bucket| bucket.role == "default" }

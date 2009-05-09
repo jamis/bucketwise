@@ -3,7 +3,7 @@
   = balance_cell(account, :classes => "total")
 - reset_cycle
 = render(account.buckets.recent)
-- if account.buckets.length > 5
+- if account.buckets.length > Bucket::RECENT_WINDOW_SIZE
   %tr.bucket
     %td.more{:colspan => 2}
       &rarr;

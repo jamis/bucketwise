@@ -1,4 +1,6 @@
 class Bucket < ActiveRecord::Base
+  RECENT_WINDOW_SIZE = 10
+
   Temp = Struct.new(:id, :name, :role, :balance)
 
   belongs_to :account
@@ -72,6 +74,10 @@ class Bucket < ActiveRecord::Base
   def self.template
     new :name => "Bucket name (e.g. Groceries)",
       :role => "aside | default | nil"
+  end
+
+  def self.recent(n=RECENT_WINDOW_SIZE)
+    find(:all, :limit => n, :order => "updated_at DESC").sort_by(&:name)
   end
 
   def balance

@@ -1,5 +1,7 @@
 === (new)
 
+* Increase "recent buckets" window size to 10 (from 5) [Jamis Buck]
+
 * Actor name autocompletion in forms [Jamis Buck]
 
 * Don't save line-items if they are blank [Jamis Buck]
