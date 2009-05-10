@@ -142,13 +142,19 @@ var Events = {
     var li = document.createElement("li");
     li.innerHTML = $('template.' + section).innerHTML;
     ol.appendChild(li);
+    var input = li.down("input");
     if(populate) {
       var acctSelect = $('account_for_' + section);
       var acctId = $F('account_for_' + section);
-      Events.populateBucket(li.down("select"), acctId,
+      var bucketSelect = li.down("select");
+      Events.populateBucket(bucketSelect, acctId,
         {'skipAside':(section=='credit_options')});
+      if(populate != true) {
+        bucketSelect.setValue(populate.bucket_id);
+        input.setValue(Money.formatValue(Math.abs(populate.amount)));
+      }
     }
-    li.down("input").focus();
+    input.focus();
   },
 
   removeLineItem: function(li) {
@@ -156,7 +162,7 @@ var Events = {
     Events.updateUnassigned();
   },
 
-  addTaggedItem: function() {
+  addTaggedItem: function(item) {
     var ol = $('tagged_items');
     var li = document.createElement("li");
     var content = $('template.tags').innerHTML;
@@ -166,6 +172,11 @@ var Events = {
 
     Events.autocompleteTagField(id);
     li.down("input").focus();
+
+    if(item) {
+      li.down("input.number").setValue(Money.formatValue(item.amount));
+      li.down("input.tag").setValue(item.name);
+    }
   },
 
   autocompleteTagField: function(id, options) {
@@ -195,6 +206,17 @@ var Events = {
 
     new Autocompleter.Local('event_actor_name', "event_actor_name_select",
       Events.actors, options);
+
+    var element = $('event_actor_name');
+
+    element.observe('keyup', function() {
+      Events.recalledEvents = null;
+      if(element.present()) {
+        $('recall_event').show();
+      } else {
+        $('recall_event').hide();
+      }
+    });
   },
 
   removeTaggedItem: function(li) {
@@ -536,14 +558,18 @@ var Events = {
     $('tags').down("input").focus();
   },
 
-  revealPartialTags: function() {
-    Events.addTaggedItem();
-    Events.addTaggedItem();
+  revealPartialTags: function(bare) {
+    if(!bare) {
+      Events.addTaggedItem();
+      Events.addTaggedItem();
+    }
 
     $('tag_items_collapsed').hide();
     $('tag_items').show();
 
-    $('tag_items').down('input').focus();
+    if(!bare) {
+      $('tag_items').down('input').focus();
+    }
   },
 
   reset: function() {
@@ -568,6 +594,8 @@ var Events = {
     $('tagged_items').innerHTML = "";
     $('tags').hide();
     $('tags_collapsed').show();
+
+    $('recall_event').hide();
   },
 
   cancel: function() {
@@ -647,5 +675,145 @@ var Events = {
 
   returnToCaller: function() {
     window.location.href = Events.return_to;
+  },
+
+  recallEvent: function(url) {
+    if(!Events.recalledEvents) {
+      Events.loadRecalledEvents(url);
+      return;
+    }
+
+    if(Events.recalledEvents.length == 0) {
+      alert("No transactions matched the criteria you specified.");
+      return;
+    }
+
+    Events.currentEvent = (Events.currentEvent + 1) % Events.recalledEvents.length;
+    var event = Events.recalledEvents[Events.currentEvent].event;
+
+    Events.rehydrate(event);
+  },
+
+  loadRecalledEvents: function(url) {
+    parameters = 'page=0&size=10&actor=' + encodeURIComponent($F('event_actor_name'));
+    new Ajax.Request(url, {
+      asynchronous:true,
+      evalScripts:true,
+      method:'get',
+      parameters:parameters
+    });
+  },
+
+  doneLoadingRecalledEvents: function(events) {
+    Events.recalledEvents = events;
+    Events.currentEvent = -1;
+    Events.recallEvent();
+  },
+
+  rehydrate: function(event) {
+    var saved_date = $F('event_occurred_on');
+    var saved_actor = $F('event_actor_name');
+
+    Events.reset();
+
+    $('event_occurred_on').value = saved_date;
+    $('event_actor_name').value = saved_actor;
+    $('expense_total').value = Money.formatValue(event.value);
+    $('event_memo').value = event.memo;
+    if($('event_memo').present()) Events.revealMemo();
+
+    $('recall_event').show();
+
+    switch(event.role) {
+      case "expense": 
+        Events.rehydrateExpenseEvent(event);
+        break;
+      case "deposit":
+        Events.rehydrateDepositEvent(event);
+        break;
+      case "transfer":
+        Events.rehydrateTransferEvent(event);
+        break;
+      case "reallocation":
+        alert("Not yet implemented: can't rehydrate bucket reallocations");
+        return;
+      default:
+        alert("Can't rehydrate '" + event.role + "' events");
+        return;
+    }
+
+    Events.rehydrateTagsForEvent(event);
+  },
+
+  rehydrateSection: function(section, event) {
+    var items = event.line_items.select(function(item) { return item.role == section; });
+    if(items.length == 0) return;
+
+    $(section).show();
+
+    var account = Events.accounts[items[0].account_id];
+    $('account_for_' + section).setValue(account.id);
+    if(account.role == "checking" && Events.sectionWantsCheckOptions(section)) {
+      $(section + '.check_options').show();
+      $('event_check_number').setValue(event.check_number);
+    }
+
+    Events.updateBucketsFor(section);
+
+    if(items.length == 1) {
+      var select = $(section + '.single_bucket').down('select');
+      Events.selectBucket(select, items[0].bucket_id);
+    } else {
+      $(section + '.multiple_buckets').show();
+      $(section + '.single_bucket').hide();
+
+      items.each(function(item) {
+        Events.addLineItemTo(section, item);
+      });
+    }
+  },
+
+  rehydrateExpenseEvent: function(event) {
+    Events.revealExpenseForm();
+    Events.rehydrateSection('payment_source', event);
+    Events.rehydrateSection('credit_options', event);
+  },
+
+  rehydrateDepositEvent: function(event) {
+    Events.revealDepositForm();
+    Events.rehydrateSection('deposit', event);
+  },
+
+  rehydrateTransferEvent: function(event) {
+    Events.revealTransferForm();
+    Events.rehydrateSection('transfer_from', event);
+    Events.rehydrateSection('transfer_to', event);
+  },
+
+  rehydrateTagsForEvent: function(event) {
+    var whole_tags = $A(), partial_tags = $A();
+
+    event.tagged_items.each(function(item) {
+      if(item.amount < event.value) {
+        partial_tags.push(item);
+      } else {
+        whole_tags.push(item);
+      }
+    });
+
+    if(whole_tags.length > 0 || partial_tags.length > 0) {
+      Events.revealTags();
+      if(whole_tags.length > 0) {
+        var tags = whole_tags.map(function(item) { return item.name }).join(", ")
+        $('tags').down('input').setValue(tags);
+      }
+
+      if(partial_tags.length > 0) {
+        Events.revealPartialTags(true);
+        partial_tags.each(function(item) {
+          Events.addTaggedItem(item);
+        });
+      }
+    }
   }
 }

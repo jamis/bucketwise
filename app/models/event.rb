@@ -130,6 +130,12 @@ class Event < ActiveRecord::Base
     super(options.merge(:methods => methods, :except => except))
   end
 
+  def to_json(options={})
+    methods = Array(options[:methods]).dup
+    methods |= [:balance, :value, :role]
+    super(options.merge(:methods => methods))
+  end
+
   protected
 
     def line_item_validations

@@ -3,6 +3,7 @@ KNOWN ISSUES
 --------------------------------------------------------------------------
 
 * After adding an event with a new tag, the tag autocompletion won't pick up the new tag until the page is reloaded.
+* After adding an event with a new actor, the actor autocompletion won't pick up the new actor until the page is reloaded.
 * Merging one bucket into another can result in events having two line-items referencing the same bucket.
 
 --------------------------------------------------------------------------
@@ -18,7 +19,6 @@ FEATURES that would be nice to have someday (in no particular order)
 * better 404 and 500 error pages
 * searching
 * reporting
-* transaction templates ("saved" or "memorized" transactions)
 * scheduled transactions (occur automatically at specified intervals)
 * print stylesheet
 * oauth authentication for API

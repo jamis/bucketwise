@@ -9,6 +9,8 @@ class TaggedItem < ActiveRecord::Base
 
   attr_accessible :tag, :tag_id, :amount
 
+  delegate :name, :to => :tag
+
   def tag_id=(value)
     case value
     when Fixnum, /^\s*\d+\s*$/ then super(value)

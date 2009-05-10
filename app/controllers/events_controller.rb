@@ -7,6 +7,13 @@ class EventsController < ApplicationController
 
   def index
     respond_to do |format|
+      format.js do
+        json = events.to_json(eager_options(:root => "events", :include => { :tagged_items => { :only => [:amount, :id], :methods => :name }, :line_items => { :only => [:account_id, :bucket_id, :amount, :role], :methods => [] }}))
+
+        render :update do |page|
+          page << "Events.doneLoadingRecalledEvents(#{json})"
+        end
+      end
       format.xml do
         render :xml => events.to_xml(eager_options(:root => "events"))
       end
@@ -73,7 +80,7 @@ class EventsController < ApplicationController
   protected
 
     attr_reader :event, :container, :account, :bucket, :tag, :events
-    helper_method :event
+    helper_method :event, :container, :account, :bucket
 
     def find_event
       @event = Event.find(params[:id])
@@ -114,7 +121,7 @@ class EventsController < ApplicationController
         raise ArgumentError, "unsupported container type #{container.class}"
       end
 
-      more_pages, list = container.send(association).send(method, params[:page], :size => params[:size])
+      more_pages, list = container.send(association).send(method, params[:page], :size => params[:size], :actor => params[:actor])
       unless list.first.is_a?(Event)
         list = list.map do |item| 
           event = item.event

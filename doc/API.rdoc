@@ -135,6 +135,8 @@ Returns the most recent events to have been added to BucketWise. They will be so
 
 You can also specify the "include" query parameter as a comma-delimited list of any combination of "user", "line_items", and "tagged_items". Specifying "user" will include the user who created the event in the response. "line_items" will nest the line-items for the event in the response. "tagged_items" will nest the tagged items for the event in the response.
 
+Lastly, you can specify the "actor" query parameter to return only transactions where the given actor is involved.
+
 === GET /accounts/1/events.xml
 
 Returns a single page of events associated with the given account, ordered by the date they were said to have occurred. As above, it accepts both "page" and "size" query parameters to control which page, and how many results are returned.

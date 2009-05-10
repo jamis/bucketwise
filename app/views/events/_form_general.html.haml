@@ -8,18 +8,21 @@
     = form.calendar_date_select :occurred_on, :size => 10
 
   %p
-    %span.expense_label <strong>How much</strong> was paid?
-    %span.deposit_label <strong>How much</strong> was deposited?
-    %span.transfer_label <strong>How much</strong> was transferred?
-    == $#{text_field_tag :amount, event_amount_value, :size => 8, :id => "expense_total", :class => "number", :onchange => "Events.updateUnassigned()"}
-
-  %p
     %span.expense_label <strong>Who</strong> received the payment?
     %span.deposit_label <strong>Where</strong> did this deposit come from?
     %span.transfer_label <strong>What</strong> was this transfer for?
     = form.text_field :actor_name, :size => 30
-    #event_actor_name_select.autocomplete_select{:style => "display: none"}
-    = javascript_tag "Events.autocompleteActorField()"
+    - if form.object.new_record?
+      %span#recall_event{:style => "display: none"}= link_to_function "(recall)", "Events.recallEvent(#{subscription_events_path(subscription).to_json})"
+
+  #event_actor_name_select.autocomplete_select{:style => "display: none"}
+  = javascript_tag "Events.autocompleteActorField()"
+
+  %p
+    %span.expense_label <strong>How much</strong> was paid?
+    %span.deposit_label <strong>How much</strong> was deposited?
+    %span.transfer_label <strong>How much</strong> was transferred?
+    == $#{text_field_tag :amount, event_amount_value, :size => 8, :id => "expense_total", :class => "number", :onchange => "Events.updateUnassigned()"}
 
   %p#memo_link{:style => visible?(!event_wants_memo?)}
     <strong>Got more to say?</strong>
