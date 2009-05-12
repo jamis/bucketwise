@@ -57,4 +57,30 @@ class Subscription < ActiveRecord::Base
 
   has_many :user_subscriptions
   has_many :users, :through => :user_subscriptions
+
+  # removes everything from the subscription, without deleting the subscription
+  def clean
+    transaction do
+      connection.delete "DELETE FROM line_items WHERE event_id IN (SELECT id FROM events WHERE subscription_id = #{id})"
+      connection.delete "DELETE FROM account_items WHERE event_id IN (SELECT id FROM events WHERE subscription_id = #{id})"
+      connection.delete "DELETE FROM tagged_items WHERE event_id IN (SELECT id FROM events WHERE subscription_id = #{id})"
+
+      connection.delete "DELETE FROM buckets WHERE account_id IN (SELECT id FROM accounts WHERE subscription_id = #{id})"
+      connection.delete "DELETE FROM statements WHERE account_id IN (SELECT id FROM accounts WHERE subscription_id = #{id})"
+
+      connection.delete "DELETE FROM actors WHERE subscription_id = #{id}"
+      connection.delete "DELETE FROM events WHERE subscription_id = #{id}"
+      connection.delete "DELETE FROM accounts WHERE subscription_id = #{id}"
+      connection.delete "DELETE FROM tags WHERE subscription_id = #{id}"
+    end
+  end
+
+  # an optimized destroy to avoid costly dependency cascades
+  def destroy
+    transaction do
+      clean
+      connection.delete "DELETE FROM user_subscriptions WHERE subscription_id = #{id}"
+      connection.delete "DELETE FROM subscriptions WHERE id = #{id}"
+    end
+  end
 end
