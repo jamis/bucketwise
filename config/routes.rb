@@ -8,5 +8,8 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :tags, :has_many => :events
   map.resources :tagged_items, :statements
 
-  map.connect "", :controller => "subscriptions", :action => "index"
+  map.with_options :controller => "subscriptions", :action => "index" do |home|
+    home.root
+    home.connect ""
+  end
 end

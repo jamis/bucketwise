@@ -15,7 +15,8 @@
       %h1
         %span.actions
           = link_to "log out", session_path, :method => :delete
-        BucketWise
+        %span.title
+          = link_to "BucketWise", root_path
 
     #container
       = yield
