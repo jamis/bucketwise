@@ -21,6 +21,9 @@
     = render_event_form_section(form, section) if event_wants_section?(section)
 
   %p
-    %input{:type => "submit", :value => "Record this transaction"}/
+    - if !event_for_form.new_record?
+      %input{:type => "submit", :value => "Edit this transaction"}/
+    - else
+      %input{:type => "submit", :value => "Record this transaction"}/
     or
     = link_to_function "cancel", "Events.cancel()"
