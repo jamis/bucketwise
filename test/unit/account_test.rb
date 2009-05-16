@@ -141,7 +141,8 @@ class AccountTest < ActiveSupport::TestCase
       subscription = options.delete(:subscription) || subscriptions(:john)
 
       options = {:name => "Visa",
-                 :role => "credit-card"}.merge(options)
+                 :role => "credit-card",
+                 :limit => 5000}.merge(options)
 
       subscription.accounts.create(options, :author => users(:john))
     end

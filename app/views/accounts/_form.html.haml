@@ -18,7 +18,12 @@
     %p
       %label
         <strong>What kind</strong> of account is this?
-        = form.select :role, [["Checking", "checking"], ["Credit card", "credit-card"], ["Other", "other"]]
+        = form.select :role, [["Checking", "checking"], ["Credit card", "credit-card"], ["Other", "other"]], {}, :onchange => "Accounts.showOrHideCreditLimit(this.value);"
+
+    %p{:style => 'display: none;', :id => 'credit_limit_div'}
+      %label
+        What is the <strong>credit limit</strong>:
+        == $#{form.text_field :limit, :class => "number", :size => 8}
 
   - if form.object.nil? || form.object.new_record?
     %fieldset

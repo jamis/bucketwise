@@ -1,4 +1,7 @@
 %span.actions
+  - if account.credit_card?
+    = link_to_function("Adjust Limit", "Accounts.adjustLimit(#{account_path(account).to_json}, #{account.limit.to_json}, #{form_authenticity_token.to_json})")
+  |
   - if account.statements.pending.any?
     = link_to("Resume reconciling", edit_statement_path(account.statements.pending.first))
   - else

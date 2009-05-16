@@ -266,6 +266,10 @@ td.number, th.number {
   white-space: nowrap;
 }
 
+td.current_balance, th.current_balance {
+  color: #999;
+}
+
 span.real_balance {
   font-size: 80%;
   color: #999;
@@ -278,6 +282,22 @@ span.check {
 
 .negative {
   color: red;
+}
+
+.critical {
+  color: red !important;
+}
+
+.high {
+  color: brown !important;
+}
+
+.medium {
+  color: sandybrown !important;
+}
+
+.low {
+  color: green !important;
 }
 
 td.date, th.date {
