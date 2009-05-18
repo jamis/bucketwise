@@ -1,6 +1,8 @@
 === (unreleased)
 
-* Make "BucketWise" in header a link to the root path [Kieran P]
+* Change text on "save" button in event form to reflect edit vs. new [Kieran Pilkington]
+
+* Make "BucketWise" in header a link to the root path [Kieran Pilkington]
 
 
 === 1.1.0 / 14 May 2009
