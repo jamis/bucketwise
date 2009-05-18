@@ -14,7 +14,7 @@ class Statement < ActiveRecord::Base
 
   def ending_balance=(amount)
     if amount.is_a?(Float) || amount =~ /[.,]/
-      amount = (amount.to_s.tr(",", "").to_f * 100).to_i
+      amount = (amount.to_s.tr(",", "").to_f * 100).round
     end
 
     super(amount)

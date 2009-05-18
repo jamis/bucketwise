@@ -77,4 +77,9 @@ class StatementTest < ActiveSupport::TestCase
       :cleared => statements(:john).account_items.map(&:id)
     assert !statements(:john).balanced?(true)
   end
+  
+  test "ending_balance should not have truncation errors" do
+    statements(:john).update_attribute :ending_balance, 2557.68
+    assert statements(:john).ending_balance == 255768
+  end
 end
