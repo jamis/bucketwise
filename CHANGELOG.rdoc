@@ -1,3 +1,8 @@
+=== (unreleased)
+
+* Make "BucketWise" in header a link to the root path [Kieran P]
+
+
 === 1.1.0 / 14 May 2009
 
 * Recall previously entered transactions for easy entry of similar events [Jamis Buck]
