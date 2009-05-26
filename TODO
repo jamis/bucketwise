@@ -31,3 +31,4 @@ FEATURES that would be nice to have someday (in no particular order)
 * graphical icons to replace the textual icons for various actions
 * add/edit transactions from the reconciliation view
 * statement API
+* show percentage of credit limit consumed, rather than simply using text color

@@ -1,5 +1,7 @@
 === (unreleased)
 
+* Track limit on credit card accounts [Kieran Pilkington]
+
 * Change text on "save" button in event form to reflect edit vs. new [Kieran Pilkington]
 
 * Make "BucketWise" in header a link to the root path [Kieran Pilkington]
