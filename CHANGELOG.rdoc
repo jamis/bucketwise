@@ -1,5 +1,7 @@
 === (unreleased)
 
+* Fix rounding error on ending balance for new statements [Cody Maggard]
+
 * Track limit on credit card accounts [Kieran Pilkington]
 
 * Change text on "save" button in event form to reflect edit vs. new [Kieran Pilkington]
