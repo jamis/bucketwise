@@ -13,8 +13,9 @@ class Populator
     @posts = []
   end
 
-  def account(name, role, starting_balance, balance_date)
-    @accounts << { :name => name, :role => role,
+  def account(name, role, starting_balance, balance_date, limit=nil)
+    raise "you have to specify a limit for credit-card accounts" if role == "credit-card" && limit.nil?
+    @accounts << { :name => name, :role => role, :limit => limit,
         :starting_balance => { :amount => starting_balance, :occurred_on => balance_date }}
   end
 
