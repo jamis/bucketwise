@@ -37,6 +37,7 @@ namespace :externals do
   DESC
   task :setup, :except => { :no_release => true } do
     require 'capistrano/recipes/deploy/scm'
+    require 'fileutils.rb'
 
     external_modules.each do |path, options|
       puts "configuring #{path}"
@@ -72,3 +73,4 @@ end
 # fail and leaving some assets temporally out of sync, potentially, with
 # the other servers.
 before "deploy:finalize_update", "externals:setup"
+
