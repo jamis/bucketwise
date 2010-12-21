@@ -13,8 +13,17 @@ class Statement < ActiveRecord::Base
   validates_presence_of :occurred_on, :ending_balance
 
   def ending_balance=(amount)
-    if amount.is_a?(Float) || amount =~ /[.,]/
+    if amount.is_a?(Float)
       amount = (amount.to_s.tr(",", "").to_f * 100).round
+    elsif amount =~ /[.,]/
+      dollars, cents = amount.split(".")
+      dollars = dollars.tr(",", "").to_i
+
+      cents = cents[0,2]
+      cents << "0" while cents.length < 2
+      cents = cents.to_i
+
+      amount = dollars * 100 + cents
     end
 
     super(amount)
