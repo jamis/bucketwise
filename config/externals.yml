@@ -1,7 +1,7 @@
 vendor/rails:
   :type: git
   :repository: git://github.com/rails/rails.git
-  :revision: v2.3.2.1
+  :revision: v2.3.11
 vendor/plugins/calendar_date_select:
   :type: git
   :repository: git://github.com/timcharper/calendar_date_select.git
@@ -9,7 +9,7 @@ vendor/plugins/calendar_date_select:
 vendor/plugins/haml:
   :type: git
   :repository: git://github.com/nex3/haml.git
-  :revision: 2.0.9
+  :revision: 3.0.25
 vendor/plugins/project_search:
   :type: git
   :repository: git://github.com/37signals/project_search.git
