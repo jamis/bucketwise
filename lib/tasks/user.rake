@@ -10,7 +10,7 @@ namespace :user do
     user_name = ui.ask("User name: ")
     password = ui.ask("Password: ")
 
-    user = User.create(:name => name, :email => email,
+    user = User.create!(:name => name, :email => email,
       :user_name => user_name, :password => password)
 
     puts "User `#{user_name}' created: ##{user.id}"
