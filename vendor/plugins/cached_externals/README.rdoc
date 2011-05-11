@@ -18,7 +18,7 @@ This means your deploys only have to add a single symbolic link for each externa
 
 == Assumptions
 
-The Cached Externals plugin assumes that your external dependencies are under version control somewhere, and the repositories are accessible both locally and from your deployment targets.
+The Cached Externals plugin assumes that your external dependencies are either a gem, or under version control somewhere, and the gem sources and repositories are accessible both locally and from your deployment targets.
 
 == Usage
 
@@ -41,6 +41,9 @@ Next, tell Capistrano about your external dependencies. This is done via a YAML 
     :type: git
     :repository: git://github.com/rails/exception_notification.git
     :revision: ed0b914ff493f9137abc4f68ee08e3c3cd7a3211
+  vendor/libs/tzinfo:
+    :type: gem
+    :version: 0.3.18
 
 Specify as many as you like. Although it is best to specify an exact revision, you can also give any revision identifier that capistrano understands (git branches, HEAD, etc.). If you do, though, Capistrano will have to resolve those pseudo-revision identifiers every time, which can slow things down a little.
 

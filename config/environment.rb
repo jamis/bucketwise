@@ -11,7 +11,7 @@ RAILS_GEM_VERSION = '2.3.2' unless defined? RAILS_GEM_VERSION
 require File.join(File.dirname(__FILE__), 'boot')
 
 Rails::Initializer.run do |config|
-  config.load_paths += %W( #{RAILS_ROOT}/app/concerns )
+  config.autoload_paths += %W( #{RAILS_ROOT}/app/concerns )
   config.time_zone = 'UTC'
   config.action_controller.session = YAML.load_file("#{RAILS_ROOT}/config/session.yml")
 end
