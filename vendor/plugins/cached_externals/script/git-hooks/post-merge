@@ -1,6 +1,0 @@
-#!/bin/sh
-
-if [ -d vendor/plugins/cached_externals ];
-then
-  cap -q -f vendor/plugins/cached_externals/recipes/cached_externals.rb local externals:setup
-fi;

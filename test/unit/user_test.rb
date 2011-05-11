@@ -36,7 +36,7 @@ class UserTest < ActiveSupport::TestCase
 
   test "creating new user with duplicate user name should fail" do
     begin
-      subscriptions(:john).users.create(:name => "James Johnson",
+      subscriptions(:john).users.create!(:name => "James Johnson",
         :email => "james.johnson@domain.test", :user_name => "jjohnson",
         :password => "ponies!")
     rescue ActiveRecord::RecordInvalid => error
