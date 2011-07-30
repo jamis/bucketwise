@@ -8,7 +8,7 @@ class EventsController < ApplicationController
   def index
     respond_to do |format|
       format.js do
-        json = events.to_json(eager_options(:root => "events", :include => { :tagged_items => { :only => [:amount, :id], :methods => :name }, :line_items => { :only => [:account_id, :bucket_id, :amount, :role], :methods => [] }}))
+        json = events.to_json(eager_options(:root => "event", :include => { :tagged_items => { :only => [:amount, :id], :methods => :name }, :line_items => { :only => [:account_id, :bucket_id, :amount, :role], :methods => [] }}))
 
         render :update do |page|
           page << "Events.doneLoadingRecalledEvents(#{json})"
