@@ -8,7 +8,7 @@ vendor/plugins/calendar_date_select:
   :revision: 88b7caf7acecf31186661c0efd6bc606cdcc666d
 vendor/plugins/haml:
   :type: git
-  :repository: git://github.com/nex3/haml.git
+  :repository: git://github.com/haml/haml.git
   :revision: 3.0.25
 vendor/plugins/project_search:
   :type: git
