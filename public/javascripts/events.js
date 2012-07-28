@@ -469,6 +469,9 @@ var Events = {
 
       options.method = "post";
       options.contentType = "application/xml";
+      options.requestHeaders = {
+        'X-CSRF-Token': $F(form['authenticity_token'])
+      };
       options.postBody = Events.buildXMLStringFor(Events.serialize(form));
 
       return new Ajax.Request(action, options);
