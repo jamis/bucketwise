@@ -1,4 +1,4 @@
-class InitialSchema < ActiveRecord::Migration
+class InitialSchema < ActiveRecord::Migration[4.2]
   def self.up
     create_table :subscriptions do |t|
       t.integer :owner_id, :null => false

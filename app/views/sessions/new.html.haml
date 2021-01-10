@@ -12,7 +12,7 @@
         .alert The user name or password you gave was incorrect. Please try again.
       - if flash[:logged_out]
         .notice You have been logged out.
-      - form_tag(:session, :url => session_path) do
+      = form_tag(:session, :url => session_path) do
         %p
           User name:
           = text_field_tag :user_name

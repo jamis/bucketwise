@@ -1,6 +1,6 @@
 %p#tags_collapsed{:style => event_has_tags? ? "display: none" : nil}
   &rarr;
-  = link_to_function "I'd like to add tags for this transaction...", "Events.revealTags()"
+  = link_to "I'd like to add tags for this transaction...", "#", onclick: "Events.revealTags()"
 
 %fieldset#tags{:style => event_has_tags? ? nil : "display: none"}
   %legend Tags
@@ -18,7 +18,7 @@
 
   %p#tag_items_collapsed{:style => event_has_partial_tags? ? "display: none" : nil}
     &rarr;
-    = link_to_function "I'd like to add tags for parts of this transaction...", "Events.revealPartialTags()"
+    = link_to "I'd like to add tags for parts of this transaction...", "#", onclick: "Events.revealPartialTags()"
 
   #tag_items{:style => event_has_partial_tags? ? nil : "display: none"}
     %p Specify an amount for each tag. That amount will then be marked by that tag.
@@ -27,4 +27,4 @@
       - for_each_partial_tagged_item do |item|
         %li= render :partial => "events/tagged_item", :locals => { :tagged_item => item }
 
-    %p= link_to_function "More tags, please!", "Events.addTaggedItem()"
+    %p= link_to "More tags, please!", "#", onclick: "Events.addTaggedItem()"

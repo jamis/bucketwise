@@ -3,7 +3,7 @@ class Tag < ActiveRecord::Base
 
   has_many :tagged_items, :dependent => :delete_all
 
-  attr_accessible :name
+  # attr_accessible :name
 
   validates_presence_of :name
   validates_uniqueness_of :name, :scope => :subscription_id, :case_sensitive => false

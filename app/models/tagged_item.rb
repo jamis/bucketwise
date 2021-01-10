@@ -7,7 +7,7 @@ class TaggedItem < ActiveRecord::Base
   before_create :ensure_consistent_tag, :increment_tag_balance, :ensure_occurred_on
   before_destroy :decrement_tag_balance
 
-  attr_accessible :tag, :tag_id, :amount
+  # attr_accessible :tag, :tag_id, :amount
 
   delegate :name, :to => :tag
 

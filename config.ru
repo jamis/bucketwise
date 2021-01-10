@@ -1,7 +1,6 @@
-require File.dirname(__FILE__) + '/config/environment'
+# This file is used by Rack-based servers to start the application.
 
-if Rails.env.development?
-  use Rails::Rack::Static
-end
+require_relative "config/environment"
 
-run ActionController::Dispatcher.new
+run Rails.application
+Rails.application.load_server

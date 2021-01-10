@@ -1,4 +1,4 @@
-== $#{text_field_tag "event[#{section}][amount]", line_item_amount_value(line_item), :size => 8, :class => "number", :onchange => "Events.updateUnassignedFor('#{section}')"}
+== $#{text_field_tag "event[#{section}][amount]", line_item_amount_value(defined?(line_item) && line_item || nil), :size => 8, :class => "number", :onchange => "Events.updateUnassignedFor('#{section}')"}
 = bucket_action_phrase_for(section)
-= select_bucket(section, :splittable => false, :line_item => line_item)
-= link_to_function "[x]", "Events.removeLineItem(this.up('li'))"
+= select_bucket(section, :splittable => false, :line_item => defined?(line_item) && line_item || nil)
+= link_to "[x]", '#', onclick: "Events.removeLineItem(this.up('li'))"

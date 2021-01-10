@@ -1,5 +1,5 @@
 class SubscriptionsController < ApplicationController
-  before_filter :find_subscription, :except => :index
+  before_action :find_subscription, :except => :index
 
   def index
     respond_to do |format|

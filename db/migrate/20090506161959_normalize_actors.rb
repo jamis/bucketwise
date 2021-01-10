@@ -1,4 +1,4 @@
-class NormalizeActors < ActiveRecord::Migration
+class NormalizeActors < ActiveRecord::Migration[4.2]
   def self.up
     rename_column :events, :actor, :actor_name
     add_column :events, :actor_id, :integer
@@ -15,7 +15,7 @@ class NormalizeActors < ActiveRecord::Migration
     add_index :actors, %w(subscription_id updated_at)
 
     say_with_time "normalizing all existing event actors" do
-      Event.find_each(:include => :subscription) do |event|
+      Event.includes(:subscription).each do |event|
         say "normalizing event #{event.id}: #{event.actor_name.inspect}"
         event.update_attribute :actor, event.subscription.actors.normalize(event.actor_name)
       end

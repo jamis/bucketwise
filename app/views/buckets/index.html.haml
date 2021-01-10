@@ -38,7 +38,7 @@
       %p.actions
         = submit_tag "Apply these criteria", :name => nil
         or
-        = link_to_function "cancel", "Filters.hide()"
+        = link_to "cancel", "#", onclick: "Filters.hide()"
         - if filter.any?
           or
           = link_to("reset this filter", account_buckets_path(account))

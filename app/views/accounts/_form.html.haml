@@ -1,4 +1,4 @@
-- form_for(:account, @account, :url => subscription_accounts_path(subscription), :html => { :onsubmit => "if(!Accounts.submit()) return false", :id => "new_account_form" }) do |form|
+= form_for(@account || Account.new, :url => subscription_accounts_path(subscription), :html => { :onsubmit => "if(!Accounts.submit()) return false", :id => "new_account_form" }) do |form|
   - if form.object && !form.object.errors.empty?
     %fieldset.errors
       %legend Errors
@@ -49,4 +49,4 @@
   %p
     = submit_tag "Create this account"
     or
-    = link_to_function "cancel", "Accounts.hideForm()"
+    = link_to "cancel", "#", onclick: "Accounts.hideForm()"

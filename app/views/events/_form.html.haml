@@ -5,10 +5,10 @@
     %div{:id => "template.#{section}"}
       = render :partial => template_partial_for(section), :locals => { :section => section }
 
-- form_for(:event, event_for_form, :url => event_form_action, :html => { :id => "event_form", :onsubmit => "Events.submit(this); return false" }) do |form|
+= form_for(event_for_form, :url => event_form_action, :html => { :id => "event_form", :onsubmit => "Events.submit(this); return false" }) do |form|
   #success_notice.notice{:style => "display: none"}
     %p== Your transaction has been recorded. You may enter another one, |
-         or #{link_to_function "close this form", "Events.cancel()"}. |
+         or #{link_to "close this form", "#", onclick: "Events.cancel()"}. |
 
   - if event_wants_section?('general_information')
     = render :partial => "events/form_general", :locals => { :form => form }
@@ -26,4 +26,4 @@
     - else
       %input{:type => "submit", :value => "Record this transaction"}/
     or
-    = link_to_function "cancel", "Events.cancel()"
+    = link_to "cancel", "#", onclick: "Events.cancel()"

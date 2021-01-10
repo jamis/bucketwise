@@ -13,7 +13,7 @@ class Account < ActiveRecord::Base
   belongs_to :author, :class_name => "User", :foreign_key => "user_id"
 
   attr_accessor :starting_balance
-  attr_accessible :name, :role, :limit, :starting_balance
+  # attr_accessible :name, :role, :limit, :starting_balance
 
   validates_presence_of :name
   validates_presence_of :limit, :if => :credit_card?

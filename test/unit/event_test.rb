@@ -1,7 +1,7 @@
 require 'test_helper'
 
 class EventTest < ActiveSupport::TestCase
-  self.use_transactional_fixtures = false
+  # self.use_transactional_fixtures = false
 
   setup :prepare_basic_event_data
 

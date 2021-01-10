@@ -1,6 +1,6 @@
 %span.actions
   - if account.credit_card?
-    = link_to_function("Adjust Limit", "Accounts.adjustLimit(#{account_path(account).to_json}, #{account.limit.to_json}, #{form_authenticity_token.to_json})")
+    = link_to("Adjust Limit", "#", onclick: "Accounts.adjustLimit(#{account_path(account).to_json}, #{account.limit.to_json}, #{form_authenticity_token.to_json})")
   |
   - if account.statements.pending.any?
     = link_to("Resume reconciling", edit_statement_path(account.statements.pending.first))
@@ -10,7 +10,7 @@
   - if account.statements.balanced.any?
     = link_to("Prior statements", account_statements_path(account))
     |
-  = link_to_function("Rename", "Accounts.rename(#{account_path(account).to_json}, #{account.name.to_json}, #{form_authenticity_token.to_json})")
+  = link_to("Rename", "#", onclick: "Accounts.rename(#{account_path(account).to_json}, #{account.name.to_json}, #{form_authenticity_token.to_json})")
   |
   = link_to("Delete", account_path(account), :method => :delete, :confirm => "Are you sure you want to delete this account?")
 &= account.name

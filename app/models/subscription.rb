@@ -22,12 +22,12 @@ class Subscription < ActiveRecord::Base
         parameters << Actor.normalize_name(options[:actor])
       end
 
-      records = find(:all, :joins => joins,
-        :conditions => conditions.any? ? [conditions.join(" AND "), *parameters] : nil,
-        :include => :account_items,
-        :order => "events.created_at DESC",
-        :limit => size + 1,
-        :offset => n * size)
+      records = joins(joins)
+                  .where(conditions.any? ? [conditions.join(" AND "), *parameters] : nil)
+                  .includes(:account_items)
+                  .order("events.created_at DESC")
+                  .limit(size + 1)
+                  offset(n * size)
 
       [records.length > size, records[0,size]]
     end

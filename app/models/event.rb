@@ -27,8 +27,8 @@ class Event < ActiveRecord::Base
   alias_method :original_line_items_assignment, :line_items=
   alias_method :original_tagged_items_assignment, :tagged_items=
 
-  attr_accessible :occurred_on, :actor_name, :check_number, :memo
-  attr_accessible :line_items, :tagged_items, :role
+  # attr_accessible :occurred_on, :actor_name, :check_number, :memo
+  # attr_accessible :line_items, :tagged_items, :role
 
   before_save :normalize_actor_name
   after_save :realize_line_items, :realize_tagged_items

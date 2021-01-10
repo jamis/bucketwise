@@ -6,7 +6,7 @@ class User < ActiveRecord::Base
   has_many :user_subscriptions
   has_many :subscriptions, :through => :user_subscriptions
 
-  attr_accessible :name, :email, :user_name, :password
+  # attr_accessible :name, :email, :user_name, :password
 
   attr_writer :password
 

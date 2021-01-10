@@ -15,4 +15,4 @@
     %p
       = submit_tag "Delete this tag"
       or
-      = link_to_function("Cancel", "Tags.cancelDelete()")
+      = link_to("Cancel", "#", onclick: "Tags.cancelDelete()")

@@ -1,5 +1,5 @@
 Reallocate
-= "$" + text_field_tag("amount", line_item_amount_value(reallocation_item), :class => "number", :size => 9)
+= "$" + text_field_tag("amount", line_item_amount_value(defined?(reallocation_item) && reallocation_item || nil), :class => "number", :size => 9)
 == <strong>#{reallocation_verbs_for(section).last}</strong>
-= select_bucket(section, :splittable => false, :line_item => reallocation_item)
-= link_to_function "[x]", "Events.removeLineItem(this.up('li'))"
+= select_bucket(section, :splittable => false, :line_item => defined?(reallocation_item) && reallocation_item || nil)
+= link_to "[x]", '#', onclick: "Events.removeLineItem(this.up('li'))"

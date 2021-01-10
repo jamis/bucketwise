@@ -1,7 +1,7 @@
-== $#{text_field_tag "event[tags][amount]", tagged_item_amount_value(tagged_item), :size => 8, :class => "number"}
+== $#{text_field_tag "event[tags][amount]", tagged_item_amount_value(defined?(tagged_item) && tagged_item || nil), :size => 8, :class => "number"}
 is tagged as
-= tag_entry_field "event[tags][name]", tagged_item_name_value(tagged_item), :size => 12, :class => "tag", :id => tagged_item ? dom_id(tagged_item, :tag_name) : "{ID}"
-- if tagged_item
+= tag_entry_field "event[tags][name]", tagged_item_name_value(defined?(tagged_item) && tagged_item || nil), :size => 12, :class => "tag", :id => (defined?(tagged_item) && tagged_item || nil) ? dom_id(tagged_item, :tag_name) : "{ID}"
+- if defined?(tagged_item) && tagged_item
   :javascript
     Events.autocompleteTagField('#{dom_id(tagged_item, :tag_name)}');
-= link_to_function "[x]", "Events.removeTaggedItem(this.up('li'))"
+= link_to "[x]", '#', onclick: "Events.removeTaggedItem(this.up('li'))"

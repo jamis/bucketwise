@@ -1,4 +1,4 @@
-class CacheBalancesOnBucketsAndAccounts < ActiveRecord::Migration
+class CacheBalancesOnBucketsAndAccounts < ActiveRecord::Migration[4.2]
   def self.up
     add_column :accounts, :balance, :integer, :null => false, :default => 0
     add_column :buckets, :balance, :integer, :null => false, :default => 0

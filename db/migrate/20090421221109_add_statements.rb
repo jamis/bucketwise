@@ -1,4 +1,4 @@
-class AddStatements < ActiveRecord::Migration
+class AddStatements < ActiveRecord::Migration[4.2]
   def self.up
     create_table :statements do |t|
       t.integer  :account_id, :null => false

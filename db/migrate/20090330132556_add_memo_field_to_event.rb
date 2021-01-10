@@ -1,4 +1,4 @@
-class AddMemoFieldToEvent < ActiveRecord::Migration
+class AddMemoFieldToEvent < ActiveRecord::Migration[4.2]
   def self.up
     add_column :events, :memo, :text
   end

@@ -8,7 +8,7 @@ class Statement < ActiveRecord::Base
   named_scope :pending, :conditions => { :balanced_at => nil }
   named_scope :balanced, :conditions => "balanced_at IS NOT NULL"
 
-  attr_accessible :occurred_on, :ending_balance, :cleared
+  # attr_accessible :occurred_on, :ending_balance, :cleared
 
   validates_presence_of :occurred_on, :ending_balance
 

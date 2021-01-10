@@ -13,7 +13,7 @@
     %span.transfer_label <strong>What</strong> was this transfer for?
     = form.text_field :actor_name, :size => 30
     - if form.object.new_record?
-      %span#recall_event{:style => "display: none"}= link_to_function "(recall)", "Events.recallEvent(#{subscription_events_path(subscription).to_json})"
+      %span#recall_event{:style => "display: none"}= link_to "(recall)", "#", onclick: "Events.recallEvent(#{subscription_events_path(subscription).to_json})"
 
   #event_actor_name_select.autocomplete_select{:style => "display: none"}
   = javascript_tag "Events.autocompleteActorField()"
@@ -26,7 +26,7 @@
 
   %p#memo_link{:style => visible?(!event_wants_memo?)}
     <strong>Got more to say?</strong>
-    = link_to_function "Add a more verbose description...", "Events.revealMemo()"
+    = link_to "Add a more verbose description...", "#", onclick: "Events.revealMemo()"
 
   %p#memo{:style => visible?(event_wants_memo?)}
     Describe this transaction:

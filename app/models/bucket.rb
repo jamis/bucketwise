@@ -8,12 +8,12 @@ class Bucket < ActiveRecord::Base
 
   has_many :line_items
 
-  attr_accessible :name, :role
+  # attr_accessible :name, :role
 
   validates_presence_of :name
   validates_uniqueness_of :name, :scope => :account_id, :case_sensitive => false
 
-  named_scope :filter, lambda { |filter| Bucket.options_for_filter(filter) }
+  # scope :filter, lambda { |filter| Bucket.options_for_filter(filter) }
   
   def self.options_for_filter(filter)
     return {} unless filter.any?

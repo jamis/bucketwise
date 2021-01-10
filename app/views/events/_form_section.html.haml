@@ -9,7 +9,7 @@
         == <strong>Check #</strong>#{form.text_field :check_number, :size => 6}
     - if section_wants_repayment_options?(section)
       %span.repayment_options{:id => "#{section}.repayment_options", :style => visible?(repayment_options_visible_for?(section))}
-        = "&rarr; " + link_to_function("Specify repayment options", "Events.showRepaymentOptions('#{section}')")
+        = "&rarr; " + link_to("Specify repayment options", "#", onclick: "Events.showRepaymentOptions('#{section}')")
 
   - if section_has_single_bucket?(section)
     %p{:id => "#{section}.single_bucket"}
@@ -26,4 +26,4 @@
     %ol{:id => "#{section}.line_items"}
       - for_each_line_item_in(section) do |item|
         %li= render :partial => "events/line_item", :object => item, :locals => { :section => section }
-    %p= link_to_function "More buckets, please!", "Events.addLineItemTo('#{section}', true)"
+    %p= link_to "More buckets, please!", "#", onclick: "Events.addLineItemTo('#{section}', true)"

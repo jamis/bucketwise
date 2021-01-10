@@ -11,4 +11,4 @@
     - for_each_line_item_in(section) do |item|
       %li= render :partial => "events/reallocation_item", :object => item, :locals => { :section => section }
 
-  %p= link_to_function "More buckets, please!", "Events.addLineItemTo('#{section}', true)"
+  %p= link_to "More buckets, please!", "#", onclick: "Events.addLineItemTo('#{section}', true)"

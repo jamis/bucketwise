@@ -2,8 +2,8 @@ module EventsHelper
   def emit_account_data_assignments
     update_page do |page|
       page.events.accounts = accounts_with_buckets
-      page.events.tags     = subscription.tags(:reload).map(&:name).sort
-      page.events.actors   = subscription.actors(:reload).sort_by(&:sort_name).map(&:name)
+      page.events.tags     = subscription.reload.tags.map(&:name).sort
+      page.events.actors   = subscription.reload.actors.sort_by(&:sort_name).map(&:name)
     end
   end
 
