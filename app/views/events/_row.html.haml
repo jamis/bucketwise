@@ -6,7 +6,8 @@
     .nubbin{:id => dom_id(event, :nubbin), :style => "display: none"}
       = link_to("&#x270e;".html_safe, "#", onclick: "Events.edit(#{edit_event_path(event).to_json})")
       = link_to("&#x2716;".html_safe, "#", onclick: "Events.deleteEvent(#{event_path(event).to_json}, #{form_authenticity_token.to_json})")
-      = link_to("&#x24d8;".html_safe, event_path(event), :method => :get, onclick: "Events.expand(#{event.id})", :html => { :class => "zoom" }, remote: true)
+      = link_to("&#x24d8;".html_safe, '#', onclick: "new Ajax.Request('#{event_path(event)}', {asynchronous:true, evalScripts:true, method:'get'}); return false;")
+
       %span.zooming &#x231b;
       = link_to("&#x2713;".html_safe, "#", onclick: "Events.collapse(#{event.id})", :class => "zoomed")
     &= event.actor_name

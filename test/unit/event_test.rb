@@ -10,7 +10,7 @@ class EventTest < ActiveSupport::TestCase
     @event_base[:line_items][0][:account_id] = 12345
     assert_no_difference "Event.count" do
       assert_raise(ActiveRecord::RecordNotFound) do
-        subscriptions(:john).events.create(@event_base, :user => users(:john))
+        subscriptions(:john).events.where(:user => users(:john)).create(@event_base)
       end
     end
   end
@@ -19,7 +19,7 @@ class EventTest < ActiveSupport::TestCase
     @event_base[:line_items][0][:account_id] = accounts(:tim_checking).id
     assert_no_difference "Event.count" do
       assert_raise(ActiveRecord::RecordNotFound) do
-        subscriptions(:john).events.create(@event_base, :user => users(:john))
+        subscriptions(:john).events.where(user: users(:john)).create(@event_base)
       end
     end
   end
@@ -29,7 +29,7 @@ class EventTest < ActiveSupport::TestCase
     @event_base[:line_items][0][:bucket_id] = 12345
     assert_no_difference "Event.count" do
       assert_raise(ActiveRecord::RecordNotFound) do
-        subscriptions(:john).events.create(@event_base, :user => users(:john))
+        subscriptions(:john).events.where(user: users(:john)).create(@event_base)
       end
     end
   end
@@ -38,7 +38,7 @@ class EventTest < ActiveSupport::TestCase
     @event_base[:line_items][0][:bucket_id] = buckets(:tim_checking_general).id
     assert_no_difference "Event.count" do
       assert_raise(ActiveRecord::RecordNotFound) do
-        subscriptions(:john).events.create(@event_base, :user => users(:john))
+        subscriptions(:john).events.where(user: users(:john)).create(@event_base)
       end
     end
   end
@@ -46,48 +46,48 @@ class EventTest < ActiveSupport::TestCase
   test "create without actor should not pass validation" do
     @event_base.delete(:actor_name)
     assert_no_difference "Event.count" do
-      event = subscriptions(:john).events.create(@event_base, :user => users(:john))
-      assert event.errors.on(:actor_name)
+      event = subscriptions(:john).events.where(user: users(:john)).create(@event_base)
+      assert event.errors.include?(:actor_name)
     end
   end
 
   test "create with blank actor should not pass validation" do
     @event_base[:actor_name] = ""
     assert_no_difference "Event.count" do
-      event = subscriptions(:john).events.create(@event_base, :user => users(:john))
-      assert event.errors.on(:actor_name)
+      event = subscriptions(:john).events.where(user: users(:john)).create(@event_base)
+      assert event.errors.include?(:actor_name)
     end
   end
 
   test "create without occurred_on should not pass validation" do
     @event_base.delete(:occurred_on)
     assert_no_difference "Event.count" do
-      event = subscriptions(:john).events.create(@event_base, :user => users(:john))
-      assert event.errors.on(:occurred_on)
+      event = subscriptions(:john).events.where(user: users(:john)).create(@event_base)
+      assert event.errors.include?(:occurred_on)
     end
   end
 
   test "create without line items should not pass validation" do
     @event_base.delete(:line_items)
     assert_no_difference "Event.count" do
-      event = subscriptions(:john).events.create(@event_base, :user => users(:john))
-      assert event.errors.on(:line_items)
+      event = subscriptions(:john).events.where(user: users(:john)).create(@event_base)
+      assert event.errors.include?(:line_items)
     end
   end
 
   test "create with empty line items should not pass validation" do
     @event_base[:line_items] = []
     assert_no_difference "Event.count" do
-      event = subscriptions(:john).events.create(@event_base, :user => users(:john))
-      assert event.errors.on(:line_items)
+      event = subscriptions(:john).events.where(user: users(:john)).create(@event_base)
+      assert event.errors.include?(:line_items)
     end
   end
 
   test "create with unrecognized event role should fail validation" do
     @event_base[:line_items][0][:role] = "bogus"
     assert_no_difference "Event.count" do
-      event = subscriptions(:john).events.create(@event_base, :user => users(:john))
-      assert event.errors.on(:line_item)
+      event = subscriptions(:john).events.where(user: users(:john)).create(@event_base)
+      assert event.errors.include?(:line_item)
     end
   end
 
@@ -104,8 +104,8 @@ class EventTest < ActiveSupport::TestCase
     ]
 
     assert_no_difference "Event.count" do
-      event = subscriptions(:john).events.create(@event_base, :user => users(:john))
-      assert event.errors.on(:line_items)
+      event = subscriptions(:john).events.where(user: users(:john)).create(@event_base)
+      assert event.errors.include?(:line_items)
     end
   end
 
@@ -122,8 +122,8 @@ class EventTest < ActiveSupport::TestCase
     ]
 
     assert_no_difference "Event.count" do
-      event = subscriptions(:john).events.create(@event_base, :user => users(:john))
-      assert event.errors.on(:line_items)
+      event = subscriptions(:john).events.where(user: users(:john)).create(@event_base)
+      assert event.errors.include?(:line_items)
     end
   end
 
@@ -140,8 +140,8 @@ class EventTest < ActiveSupport::TestCase
     ]
 
     assert_no_difference "Event.count" do
-      event = subscriptions(:john).events.create(@event_base, :user => users(:john))
-      assert event.errors.on(:line_items)
+      event = subscriptions(:john).events.where(user: users(:john)).create(@event_base)
+      assert event.errors.include?(:line_items)
     end
   end
 
@@ -158,8 +158,8 @@ class EventTest < ActiveSupport::TestCase
     ]
 
     assert_no_difference "Event.count" do
-      event = subscriptions(:john).events.create(@event_base, :user => users(:john))
-      assert event.errors.on(:line_item)
+      event = subscriptions(:john).events.where(user: users(:john)).create(@event_base)
+      assert event.errors.include?(:line_item)
     end
   end
 
@@ -180,8 +180,8 @@ class EventTest < ActiveSupport::TestCase
     ]
 
     assert_no_difference "Event.count" do
-      event = subscriptions(:john).events.create(@event_base, :user => users(:john))
-      assert event.errors.on(:line_items)
+      event = subscriptions(:john).events.where(user: users(:john)).create(@event_base)
+      assert event.errors.include?(:line_items)
     end
   end
 
@@ -198,8 +198,8 @@ class EventTest < ActiveSupport::TestCase
     ]
 
     assert_no_difference "Event.count" do
-      event = subscriptions(:john).events.create(@event_base, :user => users(:john))
-      assert event.errors.on(:line_items)
+      event = subscriptions(:john).events.where(user: users(:john)).create(@event_base)
+      assert event.errors.include?(:line_items)
     end
   end
 
@@ -212,8 +212,8 @@ class EventTest < ActiveSupport::TestCase
     ]
 
     assert_no_difference "Event.count" do
-      event = subscriptions(:john).events.create(@event_base, :user => users(:john))
-      assert event.errors.on(:line_items)
+      event = subscriptions(:john).events.where(user: users(:john)).create(@event_base)
+      assert event.errors.include?(:line_items)
     end
   end
 
@@ -234,8 +234,8 @@ class EventTest < ActiveSupport::TestCase
     ]
 
     assert_no_difference "Event.count" do
-      event = subscriptions(:john).events.create(@event_base, :user => users(:john))
-      assert event.errors.on(:line_items)
+      event = subscriptions(:john).events.where(user: users(:john)).create(@event_base)
+      assert event.errors.include?(:line_items)
     end
   end
 
@@ -256,8 +256,8 @@ class EventTest < ActiveSupport::TestCase
     ]
 
     assert_no_difference "Event.count" do
-      event = subscriptions(:john).events.create(@event_base, :user => users(:john))
-      assert event.errors.on(:line_items)
+      event = subscriptions(:john).events.where(user: users(:john)).create(@event_base)
+      assert event.errors.include?(:line_items)
     end
   end
 
@@ -270,8 +270,8 @@ class EventTest < ActiveSupport::TestCase
     ]
 
     assert_no_difference "Event.count" do
-      event = subscriptions(:john).events.create(@event_base, :user => users(:john))
-      assert event.errors.on(:line_items)
+      event = subscriptions(:john).events.where(user: users(:john)).create(@event_base)
+      assert event.errors.include?(:line_items)
     end
   end
 
@@ -288,8 +288,8 @@ class EventTest < ActiveSupport::TestCase
     ]
 
     assert_no_difference "Event.count" do
-      event = subscriptions(:john).events.create(@event_base, :user => users(:john))
-      assert event.errors.on(:line_items)
+      event = subscriptions(:john).events.where(user: users(:john)).create(@event_base)
+      assert event.errors.include?(:line_items)
     end
   end
 
@@ -306,13 +306,13 @@ class EventTest < ActiveSupport::TestCase
     ]
 
     assert_no_difference "Event.count" do
-      event = subscriptions(:john).events.create(@event_base, :user => users(:john))
-      assert event.errors.on(:line_items)
+      event = subscriptions(:john).events.where(user: users(:john)).create(@event_base)
+      assert event.errors.include?(:line_items)
     end
   end
 
   test "create with existing buckets should associate line items with those buckets" do
-    event = subscriptions(:john).events.create(@event_base, :user => users(:john))
+    event = subscriptions(:john).events.where(user: users(:john)).create(@event_base)
     assert_equal [-25_75, -15_25], event.line_items.map(&:amount)
     assert_equal [buckets(:john_checking_groceries), buckets(:john_checking_household)], event.line_items.map(&:bucket)
     assert buckets(:john_checking_groceries, :reload).updated_at > 1.second.ago.utc
@@ -323,7 +323,7 @@ class EventTest < ActiveSupport::TestCase
     @event_base[:line_items][0][:bucket_id] = "n:Dining"
     @event_base[:line_items][1][:bucket_id] = "n:Gambling"
     assert_difference "accounts(:john_checking).buckets.count" do
-      event = subscriptions(:john).events.create(@event_base, :user => users(:john))
+      event = subscriptions(:john).events.where(user: users(:john)).create(@event_base)
       assert_equal [-25_75, -15_25], event.line_items.map(&:amount)
       gambling = accounts(:john_checking).buckets.detect { |b| b.name == "Gambling" }
       assert gambling
@@ -336,7 +336,7 @@ class EventTest < ActiveSupport::TestCase
     @event_base[:line_items][0][:bucket_id] = "r:default"
     @event_base[:line_items][1][:bucket_id] = "r:custom"
     assert_difference "accounts(:john_checking).buckets.count" do
-      event = subscriptions(:john).events.create(@event_base, :user => users(:john))
+      event = subscriptions(:john).events.where(user: users(:john)).create(@event_base)
       assert_equal [-25_75, -15_25], event.line_items.map(&:amount)
       custom = accounts(:john_checking).buckets.for_role("custom", users(:john))
       assert custom
@@ -361,25 +361,23 @@ class EventTest < ActiveSupport::TestCase
         :role       => 'aside' }
     ]
 
-    event = subscriptions(:john).events.create(@event_base, :user => users(:john))
+    event = subscriptions(:john).events.where(user: users(:john)).create(@event_base)
     assert_equal [["Checking", 0], ["Mastercard", -25_00]],
       event.account_items.map { |i| [i.account.name, i.amount] }.sort
   end
 
   test "create with tagged_items should generate tagged_items for event" do
-    event = subscriptions(:john).events.create(@event_base.merge(
-        :tagged_items => [ { :tag_id => tags(:john_lunch).id, :amount => 500 } ]),
-      :user => users(:john))
+    event = subscriptions(:john).events.where(:user => users(:john)).create(@event_base.merge(
+        :tagged_items => [ { :tag_id => tags(:john_lunch).id, :amount => 500 } ]))
     assert_equal 1, event.tagged_items.length
     assert_equal [500], event.tagged_items.map(&:amount)
     assert_equal [tags(:john_lunch)], event.tagged_items.map(&:tag)
   end
 
   test "create with named tagged_items should find or create tagged_items" do
-    event = subscriptions(:john).events.create(@event_base.merge(
+    event = subscriptions(:john).events.where(:user => users(:john)).create(@event_base.merge(
         :tagged_items => [ { :tag_id => "n:milk", :amount => 500 },
-                           { :tag_id => "n:fruit", :amount => 750 } ]),
-      :user => users(:john))
+                           { :tag_id => "n:fruit", :amount => 750 } ]))
     assert_equal 2, event.tagged_items.length
     assert_equal [500, 750], event.tagged_items.map(&:amount)
     milk = subscriptions(:john).tags.detect { |t| t.name == "milk" }
@@ -388,7 +386,7 @@ class EventTest < ActiveSupport::TestCase
   end
 
   test "update without line items should leave exising line items alone" do
-    events(:john_lunch).update_attributes :actor_name => "Somebody Else"
+    events(:john_lunch).update :actor_name => "Somebody Else"
     assert_equal "Somebody Else", events(:john_lunch, :reload).actor_name
     assert events(:john_lunch).line_items.any?
   end
@@ -396,7 +394,7 @@ class EventTest < ActiveSupport::TestCase
   test "update with line items should replace all line items with those given" do
     items = events(:john_lunch).line_items.to_a
 
-    events(:john_lunch).update_attributes :actor_name => "Somebody Else",
+    events(:john_lunch).update :actor_name => "Somebody Else",
       :line_items => [
         { :account_id => accounts(:john_savings).id,
           :bucket_id => buckets(:john_savings_general).id,
@@ -408,7 +406,7 @@ class EventTest < ActiveSupport::TestCase
   end
 
   test "update without tagged items should leave exising tagged items alone" do
-    events(:john_lunch).update_attributes :actor_name => "Somebody Else"
+    events(:john_lunch).update :actor_name => "Somebody Else"
     assert_equal "Somebody Else", events(:john_lunch, :reload).actor_name
     assert events(:john_lunch).tagged_items.any?
   end
@@ -416,7 +414,7 @@ class EventTest < ActiveSupport::TestCase
   test "update with tagged items should replace tagged line items with those given" do
     items = events(:john_lunch).tagged_items.to_a
 
-    events(:john_lunch).update_attributes :actor_name => "Somebody Else",
+    events(:john_lunch).update :actor_name => "Somebody Else",
       :tagged_items => [{ :tag_id => "n:testing", :amount => 311}]
 
     assert !items.any? { |item| TaggedItem.exists?(item.id) }

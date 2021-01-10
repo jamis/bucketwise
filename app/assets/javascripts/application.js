@@ -2,6 +2,7 @@
 // This file is automatically included by javascript_include_tag :defaults
 //= require_self
 //= require prototype
+//= require effects
 //= require money
 //= require events
 //= require accounts
@@ -10,6 +11,5 @@
 //= require controls
 //= require statements
 //= require tags
-//= require effects
 //= require dragdrop
 

@@ -1,7 +1,7 @@
 class Event < ActiveRecord::Base
   belongs_to :subscription
   belongs_to :user
-  belongs_to :actor
+  belongs_to :actor, optional: true
 
   has_many :line_items, :dependent => :destroy do
     def for_role(name)
@@ -30,7 +30,7 @@ class Event < ActiveRecord::Base
   # attr_accessible :occurred_on, :actor_name, :check_number, :memo
   # attr_accessible :line_items, :tagged_items, :role
 
-  before_validation :normalize_actor_name
+  before_save :normalize_actor_name
   after_save :realize_line_items, :realize_tagged_items
 
   validates_presence_of :actor_name, :occurred_on
@@ -175,7 +175,7 @@ class Event < ActiveRecord::Base
 
           bucket_id = item.delete(:bucket_id)
           item[:bucket] = if bucket_id =~ /^n:(.*)/
-            account.buckets.find_by_name($1) || account.buckets.create({:name => $1}, :author => user)
+            account.buckets.find_by_name($1) || account.buckets.where(:author => user).create({:name => $1})
           elsif bucket_id =~ /^r:(.*)/
             account.buckets.for_role($1, user)
           else
@@ -201,12 +201,12 @@ class Event < ActiveRecord::Base
 
         @tagged_items_to_realize.each do |item|
           if item[:tag_id] =~ /^n:(.*)/
-            item[:tag_id] = subscription.tags.find_or_create_by_name($1).id
+            item[:tag_id] = subscription.tags.find_or_create_by(name: $1).id
           else
             subscription.tags.find(item[:tag_id])
           end
 
-          tagged_items.create(item, :occurred_on => occurred_on)
+          tagged_items.where(:occurred_on => occurred_on).create(item)
         end
 
         @tagged_items_to_realize = nil

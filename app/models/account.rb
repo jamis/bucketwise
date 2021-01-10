@@ -22,7 +22,7 @@ class Account < ActiveRecord::Base
   has_many :buckets do
     def for_role(role, user)
       role = role.downcase
-      find_by_role(role) || create({:name => role.capitalize, :role => role}, :author => user)
+      find_by_role(role) || where(:author => user).create({:name => role.capitalize, :role => role})
     end
 
     def sorted

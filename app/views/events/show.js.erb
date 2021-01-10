@@ -1,0 +1,4 @@
+<%= update_page do |page|
+  page.events.expanded(event.id)
+  page.insert_html :after, dom_id(event), :partial => "events/expand"
+end %>

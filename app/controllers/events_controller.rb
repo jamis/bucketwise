@@ -1,6 +1,4 @@
 class EventsController < ApplicationController
-  # acceptable_includes :line_items, :user, :tagged_items
-
   before_action :find_container, :find_events, :only => :index
   before_action :find_subscription, :only => %w(new create)
   before_action :find_event, :except => %w(index new create)
@@ -40,7 +38,7 @@ class EventsController < ApplicationController
   end
 
   def create
-    @event = subscription.events.create!(params[:event], :user => user)
+    @event = subscription.events.where(user: user).create!(event_params)
     respond_to do |format|
       format.js
       format.xml do
@@ -79,57 +77,65 @@ class EventsController < ApplicationController
 
   protected
 
-    attr_reader :event, :container, :account, :bucket, :tag, :events
-    helper_method :event, :container, :account, :bucket
+  attr_reader :event, :container, :account, :bucket, :tag, :events
+  helper_method :event, :container, :account, :bucket
 
-    def find_event
-      @event = Event.find(params[:id])
-      @subscription = user.subscriptions.find(@event.subscription_id)
+  def find_event
+    @event = Event.find(params[:id])
+    @subscription = user.subscriptions.find(@event.subscription_id)
+  end
+
+  def find_container
+    if params[:subscription_id]
+      @container = find_subscription
+    elsif params[:account_id]
+      @container = @account = Account.find(params[:account_id])
+      @subscription = user.subscriptions.find(@account.subscription_id)
+    elsif params[:bucket_id]
+      @container = @bucket = Bucket.find(params[:bucket_id])
+      @subscription = user.subscriptions.find(@bucket.account.subscription_id)
+    elsif params[:tag_id]
+      @container = @tag = Tag.find(params[:tag_id])
+      @subscription = user.subscriptions.find(@tag.subscription_id)
+    else
+      raise ArgumentError, "no container specified for event listing"
+    end
+  end
+
+  def find_events
+    method = :page
+
+    case container
+    when Subscription then
+      association = :events
+      method = :recent
+    when Account
+      association = :account_items
+    when Bucket
+      association = :line_items
+    when Tag
+      association = :tagged_items
+    else
+      raise ArgumentError, "unsupported container type #{container.class}"
     end
 
-    def find_container
-      if params[:subscription_id]
-        @container = find_subscription
-      elsif params[:account_id]
-        @container = @account = Account.find(params[:account_id])
-        @subscription = user.subscriptions.find(@account.subscription_id)
-      elsif params[:bucket_id]
-        @container = @bucket = Bucket.find(params[:bucket_id])
-        @subscription = user.subscriptions.find(@bucket.account.subscription_id)
-      elsif params[:tag_id]
-        @container = @tag = Tag.find(params[:tag_id])
-        @subscription = user.subscriptions.find(@tag.subscription_id)
-      else
-        raise ArgumentError, "no container specified for event listing"
+    more_pages, list = container.send(association).send(method, params[:page], :size => params[:size], :actor => params[:actor])
+    unless list.first.is_a?(Event)
+      list = list.map do |item|
+        event = item.event
+        event.amount = item.amount
+        event
       end
     end
 
-    def find_events
-      method = :page
+    @events = list
+  end
 
-      case container
-      when Subscription then
-        association = :events
-        method = :recent
-      when Account
-        association = :account_items
-      when Bucket
-        association = :line_items
-      when Tag
-        association = :tagged_items
-      else
-        raise ArgumentError, "unsupported container type #{container.class}"
-      end
-
-      more_pages, list = container.send(association).send(method, params[:page], :size => params[:size], :actor => params[:actor])
-      unless list.first.is_a?(Event)
-        list = list.map do |item| 
-          event = item.event
-          event.amount = item.amount
-          event
-        end
-      end
-
-      @events = list
+  def event_params
+    params.require(:event).permit(:occurred_on, :actor_name, :memo, :check_number).tap do |whitelisted|
+      whitelisted[:line_items] = JSON.parse(params[:event][:line_item])
+      whitelisted[:tagged_items] = JSON.parse(params[:event][:tagged_item])
     end
+  end
+
 end

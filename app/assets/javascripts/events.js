@@ -320,6 +320,7 @@ var Events = {
     request['event'] = {};
     request['event']['line_item'] = [];
     request['event']['tagged_item'] = [];
+    request['authenticity_token'] = parent.querySelector("input[name=authenticity_token]").value;
 
     if(Events.available('general_information'))
       Events.serializeGeneralInformation(request);
@@ -468,8 +469,8 @@ var Events = {
       var action = form.readAttribute('action');
 
       options.method = "post";
-      options.contentType = "application/xml";
-      options.postBody = Events.buildXMLStringFor(Events.serialize(form));
+      options.contentType = "application/json";
+      options.postBody = JSON.stringify(Events.serialize(form));
 
       return new Ajax.Request(action, options);
     } catch(e) {

@@ -3,7 +3,6 @@ class Actor < ActiveRecord::Base
   has_many :events
 
   validates_presence_of :name, :sort_name
-  # attr_accessible :name, :sort_name
 
   def self.normalize_name(name)
     name.strip.upcase
