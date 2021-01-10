@@ -30,7 +30,7 @@ class Event < ActiveRecord::Base
   # attr_accessible :occurred_on, :actor_name, :check_number, :memo
   # attr_accessible :line_items, :tagged_items, :role
 
-  before_save :normalize_actor_name
+  before_validation :normalize_actor_name
   after_save :realize_line_items, :realize_tagged_items
 
   validates_presence_of :actor_name, :occurred_on
@@ -182,12 +182,12 @@ class Event < ActiveRecord::Base
             account.buckets.find(bucket_id)
           end
 
-          item = line_items.create(item.merge(:occurred_on => occurred_on))
+          item = line_items.create!(item.merge(:occurred_on => occurred_on))
           summaries[account] += item.amount
         end
 
         summaries.each do |account, amount|
-          account_items.create(:account => account,
+          account_items.create!(:account => account,
             :amount => amount, :occurred_on => occurred_on)
         end
 

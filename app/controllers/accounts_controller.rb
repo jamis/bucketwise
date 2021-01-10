@@ -1,8 +1,8 @@
 class AccountsController < ApplicationController
-  acceptable_includes :author, :buckets
+  # acceptable_includes :author, :buckets
 
-  before_filter :find_account, :except => %w(index create new)
-  before_filter :find_subscription, :only => %w(index create new)
+  before_action :find_account, :except => %w(index create new)
+  before_action :find_subscription, :only => %w(index create new)
 
   def index
     respond_to do |format|
@@ -29,7 +29,7 @@ class AccountsController < ApplicationController
   end
 
   def create
-    @account = subscription.accounts.create!(params[:account], :author => user)
+    @account = subscription.accounts.where(author: user).create!(account_params)
     respond_to do |format|
       format.html { redirect_to(subscription_url(subscription)) }
       format.xml  { render :xml => @account.to_xml, :status => :created, :location => account_url(@account) }
@@ -66,19 +66,25 @@ class AccountsController < ApplicationController
 
   protected
 
-    attr_reader :account
-    helper_method :account
+  attr_reader :account
+  helper_method :account
 
-    def find_account
-      @account = Account.find(params[:id])
-      @subscription = user.subscriptions.find(@account.subscription_id)
-    end
+  def find_account
+    @account = Account.find(params[:id])
+    @subscription = user.subscriptions.find(@account.subscription_id)
+  end
 
-    def current_location
-      if account
-        "accounts/%d" % account.id
-      else
-        super
-      end
+  def current_location
+    if account
+      "accounts/%d" % account.id
+    else
+      super
     end
+  end
+
+  def account_params
+    params.require(:account)
+          .permit(:name, :role, :limit, :current_balance, :subscription_id,
+                  starting_balance: [ :amount, :occurred_on ] )
+  end
 end

@@ -1,12 +1,12 @@
 class BucketsController < ApplicationController
-  acceptable_includes :author
+  # acceptable_includes :author
 
-  before_filter :find_account, :only => %w(index new create)
-  before_filter :find_bucket, :except => %w(index new create)
+  before_action :find_account, :only => %w(index new create)
+  before_action :find_bucket, :except => %w(index new create)
 
   def index
     @filter = QueryFilter.new(params)
-    @buckets = account.buckets.filter(@filter)
+    @buckets = account.buckets.apply_filter(@filter)
 
     respond_to do |format|
       format.html

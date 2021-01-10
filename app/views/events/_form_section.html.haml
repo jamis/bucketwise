@@ -2,7 +2,7 @@
   %legend= title
 
   %p
-    = account_prompt
+    = account_prompt.html_safe
     = select_account(section, accounts, selected_account && selected_account.id)
     - if section_wants_check_options?(section)
       %span{:id => "#{section}.check_options", :style => visible?(check_options_visible_for?(section))}
@@ -13,7 +13,7 @@
 
   - if section_has_single_bucket?(section)
     %p{:id => "#{section}.single_bucket"}
-      = single_bucket_prompt
+      = single_bucket_prompt.html_safe
       = select_bucket(section, :line_item => line_item_for_section(section))
       - if section == :credit_options
         %br/
@@ -21,7 +21,7 @@
 
   %div{:id => "#{section}.multiple_buckets", :style => multi_bucket_visibility_for(section)}
     %p
-      = multi_bucket_prompt
+      = multi_bucket_prompt.html_safe
       %span{:id => "#{section}.unassigned"}
     %ol{:id => "#{section}.line_items"}
       - for_each_line_item_in(section) do |item|

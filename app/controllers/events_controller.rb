@@ -1,9 +1,9 @@
 class EventsController < ApplicationController
-  acceptable_includes :line_items, :user, :tagged_items
+  # acceptable_includes :line_items, :user, :tagged_items
 
-  before_filter :find_container, :find_events, :only => :index
-  before_filter :find_subscription, :only => %w(new create)
-  before_filter :find_event, :except => %w(index new create)
+  before_action :find_container, :find_events, :only => :index
+  before_action :find_subscription, :only => %w(new create)
+  before_action :find_event, :except => %w(index new create)
 
   def index
     respond_to do |format|

@@ -5,8 +5,8 @@ class Statement < ActiveRecord::Base
   before_create :initialize_starting_balance
   after_save :associate_account_items_with_self
 
-  named_scope :pending, :conditions => { :balanced_at => nil }
-  named_scope :balanced, :conditions => "balanced_at IS NOT NULL"
+  scope :pending, ->{ where(:balanced_at => nil) }
+  scope :balanced, ->{ where("balanced_at IS NOT NULL") }
 
   # attr_accessible :occurred_on, :ending_balance, :cleared
 
@@ -64,14 +64,14 @@ class Statement < ActiveRecord::Base
 
       account_items.clear
 
-      ids = connection.select_values(sanitize_sql([<<-SQL.squish, account_id, ids_to_clear]))
+      ids = ActiveRecord::Base.connection.select_values(sanitize_sql([<<-SQL.squish, account_id, ids_to_clear]))
         SELECT ai.id
           FROM account_items ai
          WHERE ai.account_id = ?
            AND ai.id IN (?)
       SQL
 
-      connection.update(sanitize_sql([<<-SQL.squish, id, ids]))
+      ActiveRecord::Base.connection.update(sanitize_sql([<<-SQL.squish, id, ids]))
         UPDATE account_items
            SET statement_id = ?
          WHERE id IN (?)

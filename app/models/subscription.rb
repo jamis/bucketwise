@@ -60,6 +60,7 @@ class Subscription < ActiveRecord::Base
 
   # removes everything from the subscription, without deleting the subscription
   def clean
+    connection = ActiveRecord::Base.connection
     transaction do
       connection.delete "DELETE FROM line_items WHERE event_id IN (SELECT id FROM events WHERE subscription_id = #{id})"
       connection.delete "DELETE FROM account_items WHERE event_id IN (SELECT id FROM events WHERE subscription_id = #{id})"

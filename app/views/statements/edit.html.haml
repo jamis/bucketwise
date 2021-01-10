@@ -13,7 +13,9 @@
         %tr
           %td.occurred_on= form.calendar_date_select :occurred_on, :size => 10
           %td#starting_balance.starting_balance.number= format_cents(statement.starting_balance)
-          %td.ending_balance= "$" + form.text_field(:ending_balance, :size => 8, :class => "number", :value => format_cents(statement.ending_balance, :unit => ""), :onchange => "Statements.updateBalances()")
+          %td.ending_balance
+            = "$"
+            = form.text_field(:ending_balance, :size => 8, :class => "number", :value => format_cents(statement.ending_balance, :unit => ""), :onchange => "Statements.updateBalances()")
         
       - if uncleared.deposits.any?
         %fieldset#deposits

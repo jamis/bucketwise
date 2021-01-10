@@ -16,7 +16,7 @@ class Tag < ActiveRecord::Base
     raise ActiveRecord::RecordNotSaved, "cannot assimilate self" if tag == self
 
     transaction do
-      connection.update <<-SQL.squish
+      ActiveRecord::Base.connection.update <<-SQL.squish
         UPDATE tagged_items
            SET tag_id = #{id}
          WHERE tag_id = #{tag.id}

@@ -28,4 +28,21 @@ class ApplicationController < ActionController::Base
   def via_api?
     request.format == Mime::XML
   end
+
+  private
+
+  def self.acceptable_includes(*list)
+    includes = read_inheritable_attribute(:acceptable_includes) || []
+
+    if list.any?
+      includes = Set.new(list.map(&:to_s)) + includes
+      write_inheritable_attribute(:acceptable_includes, includes)
+    end
+
+    includes
+  end
+
+  def acceptable_includes
+    self.class.acceptable_includes
+  end
 end

@@ -34,7 +34,7 @@ module EventsHelper
       link_to(h(item.account.name), item.account)
     end
 
-    links.join(", ")
+    links.join(", ").html_safe
   end
 
   def form_sections

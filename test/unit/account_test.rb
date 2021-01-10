@@ -74,19 +74,19 @@ class AccountTest < ActiveSupport::TestCase
   test "destroy should remove all line items referencing this account" do
     accounts(:john_mastercard).destroy
     assert !Account.exists?(accounts(:john_mastercard).id)
-    assert LineItem.find(:all, :conditions => { :account_id => accounts(:john_mastercard).id }).empty?
+    assert LineItem.where(:account_id => accounts(:john_mastercard).id).empty?
   end
 
   test "destroy should remove all account items referencing this account" do
     accounts(:john_mastercard).destroy
     assert !Account.exists?(accounts(:john_mastercard).id)
-    assert AccountItem.find(:all, :conditions => { :account_id => accounts(:john_mastercard).id }).empty?
+    assert AccountItem.where(:account_id => accounts(:john_mastercard).id).empty?
   end
 
   test "destroy should remove all buckets referencing this account" do
     accounts(:john_mastercard).destroy
     assert !Account.exists?(accounts(:john_mastercard).id)
-    assert Bucket.find(:all, :conditions => { :account_id => accounts(:john_mastercard).id }).empty?
+    assert Bucket.where(:account_id => accounts(:john_mastercard).id).empty?
   end
 
   test "destroy should translate orphaned transfer_to line items to deposit" do
@@ -144,6 +144,6 @@ class AccountTest < ActiveSupport::TestCase
                  :role => "credit-card",
                  :limit => 5000}.merge(options)
 
-      subscription.accounts.create(options, :author => users(:john))
+      subscription.accounts.where(author: users(:john)).create(options)
     end
 end

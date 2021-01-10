@@ -10,10 +10,10 @@ module Pageable
       n = n.to_i
       size = (options[:size] || DEFAULT_PAGE_SIZE).to_i
 
-      records = find(:all, :include => { :event => :line_items },
-        :order => "occurred_on DESC",
-        :limit => size + 1,
-        :offset => n * size)
+      records = includes(:event => :line_items)
+        .order("occurred_on DESC")
+        .limit(size + 1)
+        .offset(n * size)
 
       [records.length > size, records[0,size]]
     end

@@ -13,7 +13,7 @@ class Bucket < ActiveRecord::Base
   validates_presence_of :name
   validates_uniqueness_of :name, :scope => :account_id, :case_sensitive => false
 
-  # scope :filter, lambda { |filter| Bucket.options_for_filter(filter) }
+  scope :apply_filter, lambda { |filter| Bucket.options_for_filter(filter) }
   
   def self.options_for_filter(filter)
     return {} unless filter.any?

@@ -1,6 +1,6 @@
 class TagsController < ApplicationController
-  before_filter :find_subscription, :only => %w(index new create)
-  before_filter :find_tag, :except => %w(index new create)
+  before_action :find_subscription, :only => %w(index new create)
+  before_action :find_tag, :except => %w(index new create)
 
   def index
     respond_to do |format|

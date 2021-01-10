@@ -10,12 +10,15 @@ class AccountItem < ActiveRecord::Base
 
   belongs_to :event
   belongs_to :account
-  belongs_to :statement
+  belongs_to :statement, optional: true
 
   after_create :increment_balance
   before_destroy :decrement_balance
 
-  named_scope :uncleared, lambda { |*args| AccountItem.options_for_uncleared(*args) }
+  scope :uncleared, lambda { |*args| AccountItem.options_for_uncleared(*args) }
+  scope :deposits, ->{ where('amount > 0') }
+  scope :checks, ->{ joins(:event).where('amount < 0 AND events.check_number IS NOT NULL') }
+  scope :expenses, ->{ joins(:event).where('amount < 0 AND events.check_number IS NULL') }
   
   def self.options_for_uncleared(*args)
     raise ArgumentError, "too many arguments #{args.length} for 1" if args.length > 1
@@ -32,7 +35,8 @@ class AccountItem < ActiveRecord::Base
       parameters << options[:with]
     end
 
-    { :conditions => [conditions, *parameters], :include => options[:include] }
+    includes(options[:include]).where(conditions, *parameters)
+    # { :conditions => [conditions, *parameters], :include => options[:include] }
   end
 
   protected

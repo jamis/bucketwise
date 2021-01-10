@@ -1,6 +1,6 @@
 class TaggedItemsController < ApplicationController
-  before_filter :find_event, :only => :create
-  before_filter :find_tagged_item, :only => :destroy
+  before_action :find_event, :only => :create
+  before_action :find_tagged_item, :only => :destroy
 
   def create
     @tagged_item = event.tagged_items.create!(params[:tagged_item])

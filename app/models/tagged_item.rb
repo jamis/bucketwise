@@ -43,10 +43,10 @@ class TaggedItem < ActiveRecord::Base
     end
 
     def increment_tag_balance
-      Tag.connection.update "UPDATE tags SET balance = balance + #{amount} WHERE id = #{tag_id}"
+      ActiveRecord::Base.connection.update "UPDATE tags SET balance = balance + #{amount} WHERE id = #{tag_id}"
     end
 
     def decrement_tag_balance
-      Tag.connection.update "UPDATE tags SET balance = balance - #{amount} WHERE id = #{tag_id}"
+      ActiveRecord::Base.connection.update "UPDATE tags SET balance = balance - #{amount} WHERE id = #{tag_id}"
     end
 end

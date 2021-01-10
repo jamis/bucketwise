@@ -98,18 +98,18 @@ class Account < ActiveRecord::Base
   protected
 
     def create_default_buckets
-      buckets.create({:name => DEFAULT_BUCKET_NAME, :role => "default"}, :author => author)
+      buckets.where(author: author).create({:name => DEFAULT_BUCKET_NAME, :role => "default"})
     end
 
     def set_starting_balance
       if starting_balance && !starting_balance[:amount].to_i.zero?
         amount = starting_balance[:amount].to_i
         role = amount > 0 ? "deposit" : "payment_source"
-        subscription.events.create({:occurred_on => starting_balance[:occurred_on],
+        subscription.events.where(user: author).create!({:occurred_on => starting_balance[:occurred_on],
             :actor_name => "Starting balance",
             :line_items => [{:account_id => id, :bucket_id => buckets.default.id,
               :amount => amount, :role => role}]
-          }, :user => author)
+          })
         reload # make sure the balance is set correctly
       end
     end
@@ -117,11 +117,12 @@ class Account < ActiveRecord::Base
   private
 
     def cleanup_line_items
-      LineItem.delete_all :account_id => id
+      LineItem.where(account_id: id).delete_all
     end
 
     def cleanup_account_items
-      items = account_items.find(:all, :include => { :event => [:line_items, :account_items] })
+      items = account_items.includes(:event => [:line_items, :account_items])
+                # .find(:all, :include => { :event => [:line_items, :account_items] })
 
       items.each do |item|
         event = item.event
@@ -139,17 +140,17 @@ class Account < ActiveRecord::Base
           # but if the payment_source account is being deleted, then we need to convert the
           # credit_options items to a bucket reallocation.
           if event.account_for(:payment_source) == self
-            event.line_items.update_all({:role => 'primary'}, :role => 'aside')
-            event.line_items.update_all({:role => 'reallocate_to'}, :role => 'credit_options')
+            event.line_items.where(role: 'aside').update_all({:role => 'primary'})
+            event.line_items.where(role: 'credit_options').update_all({:role => 'reallocate_to'})
           end
         end
       end
 
-      AccountItem.delete_all :account_id => id
+      AccountItem.where(account_id: id).delete_all
     end
 
     def cleanup_buckets
-      Bucket.delete_all :account_id => id
+      Bucket.where(account_id: id).delete_all
     end
 
     def cleanup_tagged_items
@@ -164,7 +165,7 @@ class Account < ActiveRecord::Base
     end
 
     def cleanup_events
-      connection.delete(<<-SQL.squish)
+      ActiveRecord::Base.connection.delete(<<-SQL.squish)
         DELETE FROM events
          WHERE subscription_id = #{subscription_id}
            AND NOT EXISTS (
