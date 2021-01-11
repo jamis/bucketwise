@@ -8,8 +8,6 @@ class Bucket < ActiveRecord::Base
 
   has_many :line_items
 
-  # attr_accessible :name, :role
-
   validates_presence_of :name
   validates_uniqueness_of :name, :scope => :account_id, :case_sensitive => false
 
@@ -57,10 +55,10 @@ class Bucket < ActiveRecord::Base
       parameters << roles.uniq
     end
 
-    { :joins => "LEFT OUTER JOIN line_items ON line_items.bucket_id = buckets.id",
-      :select => "buckets.*, SUM(line_items.amount) as computed_balance",
-      :conditions => [conditions.join(" AND "), *parameters],
-      :group => "buckets.id" }
+    joins("LEFT OUTER JOIN line_items ON line_items.bucket_id = buckets.id")
+      .select("buckets.*, SUM(line_items.amount) as computed_balance")
+      .where([conditions.join(" AND "), *parameters])
+      .group("buckets.id")
   end
 
   def self.default
@@ -96,7 +94,7 @@ class Bucket < ActiveRecord::Base
     old_id = bucket.id
 
     Bucket.transaction do
-      LineItem.update_all(["bucket_id = ?", id], :bucket_id => old_id)
+      LineItem.where(:bucket_id => old_id).update_all(["bucket_id = ?", id])
       update_attribute :balance, balance + bucket.balance
       bucket.destroy
     end

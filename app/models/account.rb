@@ -92,7 +92,7 @@ class Account < ActiveRecord::Base
       end
     end
 
-    super(options)
+    JSON.parse(to_json).to_xml(options.merge(root: 'account'))
   end
 
   protected

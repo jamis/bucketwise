@@ -5,7 +5,7 @@
 
       %p The account could not be saved because of the following error(s):
       %ul
-        - form.object.errors.each_full do |message|
+        - form.object.errors.full_messages do |message|
           %li&= message
 
   %fieldset

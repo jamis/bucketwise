@@ -45,7 +45,7 @@ class TagTest < ActiveSupport::TestCase
   test "duplicates should be forbidden within a subscription" do
     assert_no_difference "Tag.count" do
       tag = subscriptions(:john).tags.create(:name => "lunch")
-      assert tag.errors.on(:name)
+      assert tag.errors.include?(:name)
     end
   end
 end

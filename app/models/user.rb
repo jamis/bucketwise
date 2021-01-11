@@ -25,8 +25,8 @@ class User < ActiveRecord::Base
   end
 
   def to_xml(options={})
-    append_to_options(options, :except, [:password_hash, :salt])
-    super(options)
+    # append_to_options(options, :except, [:password_hash, :salt])
+    JSON.parse(to_json).except("password_hash", "salt").to_xml(options.merge(root: 'user'))
   end
 
   protected

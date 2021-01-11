@@ -4,6 +4,8 @@ class ApplicationController < ActionController::Base
   attr_reader :subscription, :user
   helper_method :subscription, :user
 
+  rescue_from ActiveRecord::RecordNotFound, :with => :render_404
+
   def current_location
     controller_name
   end
@@ -25,6 +27,13 @@ class ApplicationController < ActionController::Base
     @subscription = user.subscriptions.find(params[:subscription_id] || params[:id])
   end
 
+  def render_404
+    respond_to do |format|
+      format.html { render :file => "#{Rails.root.join('public', '404.html')}", :status => :not_found, layout: false }
+      format.xml  { head :not_found }
+    end
+  end
+
   def via_api?
     request.format == Mime::XML
   end
@@ -44,5 +53,14 @@ class ApplicationController < ActionController::Base
 
   def acceptable_includes
     self.class.acceptable_includes
+  end
+
+  def eager_options(options={})
+    if params[:include]
+      list = acceptable_includes & params[:include].split(/,/)
+      append_to_options(options, :include, list.map(&:to_sym)) if list.any?
+    end
+
+    options
   end
 end

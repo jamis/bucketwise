@@ -51,7 +51,7 @@ class AccountsController < ApplicationController
   end
 
   def update
-    account.update_attributes!(params[:account])
+    account.update!(account_params)
 
     respond_to do |format|
       format.js
@@ -75,7 +75,7 @@ class AccountsController < ApplicationController
   end
 
   def current_location
-    if account
+    if account && !account.new_record?
       "accounts/%d" % account.id
     else
       super

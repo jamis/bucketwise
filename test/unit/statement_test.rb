@@ -54,7 +54,7 @@ class StatementTest < ActiveSupport::TestCase
 
     assert_not_nil statement.reload.balanced_at
 
-    statement.update_attributes :cleared => items
+    statement.update :cleared => items
     assert_nil statement.reload.balanced_at
   end
 
@@ -73,8 +73,7 @@ class StatementTest < ActiveSupport::TestCase
 
   test "balanced should be true when unsettled balance is zero" do
     assert statements(:john).balanced?
-    statements(:john).update_attributes :ending_balance => 1234_56,
-      :cleared => statements(:john).account_items.map(&:id)
+    statements(:john).update :ending_balance => 1234_56, :cleared => statements(:john).account_items.map(&:id)
     assert !statements(:john).balanced?(true)
   end
   

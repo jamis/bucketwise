@@ -40,7 +40,7 @@ class UserTest < ActiveSupport::TestCase
         :email => "james.johnson@domain.test", :user_name => "jjohnson",
         :password => "ponies!")
     rescue ActiveRecord::RecordInvalid => error
-      assert error.record.errors.on(:user_name)
+      assert error.record.errors.include?(:user_name)
     else
       flunk "expected create to fail"
     end

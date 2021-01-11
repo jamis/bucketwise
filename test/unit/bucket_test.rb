@@ -38,37 +38,37 @@ class BucketTest < ActiveSupport::TestCase
 
   test "blank names should be disallowed" do
     assert_no_difference "Bucket.count" do
-      bucket = accounts(:john_checking).buckets.create(
-        { :name => "", :role => "" },
-        :author => users(:john))
+      bucket = accounts(:john_checking).buckets.where(:author => users(:john)).create(
+        { :name => "", :role => "" }
+      )
 
-      assert bucket.errors.on(:name)
+      assert bucket.errors.include?(:name)
     end
   end
 
   test "duplicate names are allowed for different accounts" do
     assert_difference "Bucket.count" do
-      bucket = accounts(:john_savings).buckets.create(
-        { :name => buckets(:john_checking_dining).name, :role => "" },
-        :author => users(:john))
+      bucket = accounts(:john_savings).buckets.where(:author => users(:john)).create(
+        { :name => buckets(:john_checking_dining).name, :role => "" }
+      )
 
-      assert bucket.errors.on(:name).blank?
+      assert !bucket.errors.include?(:name)
     end
   end
 
   test "duplicate names are disallowed within the same account" do
     assert_no_difference "Bucket.count" do
-      bucket = accounts(:john_checking).buckets.create(
-        { :name => buckets(:john_checking_dining).name, :role => "" },
-        :author => users(:john))
+      bucket = accounts(:john_checking).buckets.where(:author => users(:john)).create(
+        { :name => buckets(:john_checking_dining).name, :role => "" }
+      )
 
-      assert bucket.errors.on(:name)
+      assert bucket.errors.include?(:name)
     end
   end
 
   test "balance should read computed_balance if that value is set" do
     filter = QueryFilter.new(:expenses => true)
-    dining = accounts(:john_checking).buckets.filter(filter).find(:first, :conditions => { :name => "Dining" })
+    dining = accounts(:john_checking).buckets.apply_filter(filter).where(:name => "Dining").first
     assert dining[:computed_balance]
     assert_not_equal dining[:balance], dining[:computed_balance]
     assert_equal dining[:computed_balance].to_i, dining.balance

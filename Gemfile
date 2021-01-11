@@ -35,6 +35,7 @@ gem 'highline'
 # gem 'prototype-rails'
 # gem 'reccenterhq-jquery-rjs'
 gem 'calendar_date_select'
+gem 'rails-controller-testing'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
