@@ -32,8 +32,6 @@ gem 'haml'
 gem 'haml-rails'
 gem 'rexml'
 gem 'highline'
-# gem 'prototype-rails'
-# gem 'reccenterhq-jquery-rjs'
 gem 'calendar_date_select'
 gem 'rails-controller-testing'
 
