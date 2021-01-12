@@ -23,7 +23,7 @@ class SessionsController < ApplicationController
     end
   end
 
-  def destroy
+  def logout
     flash[:logged_out] = true
     session[:user_id] = nil
     redirect_to(new_session_url)

@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
-  resource :session
+  resource :session do
+    get :logout, on: :member
+  end
 
   resources :events do
     get :show, on: :member
