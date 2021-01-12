@@ -318,8 +318,8 @@ var Events = {
     var request = {};
 
     request['event'] = {};
-    request['event']['line_item'] = [];
-    request['event']['tagged_item'] = [];
+    request['event']['line_items'] = [];
+    request['event']['tagged_items'] = [];
     request['authenticity_token'] = parent.querySelector("input[name=authenticity_token]").value;
 
     if(Events.available('general_information'))
@@ -436,12 +436,12 @@ var Events = {
 
   addTaggedItemRecord: function(request, amount, tag_id) {
     var item = { amount: amount, tag_id: tag_id };
-    request['event']['tagged_item'].push(item);
+    request['event']['tagged_items'].push(item);
   },
 
   addLineItem: function(request, account_id, bucket_id, amount, role) {
     var item = { account_id: account_id, bucket_id: bucket_id, amount: amount, role: role };
-    request['event']['line_item'].push(item);
+    request['event']['line_items'].push(item);
   },
 
   addLineItems: function(request, account_id, section, options) {
@@ -470,7 +470,7 @@ var Events = {
 
       options.method = "post";
       options.contentType = "application/json";
-      options.postBody = JSON.stringify(Events.serialize(form));
+      options.postBody = Object.toJSON(Events.serialize(form));
 
       return new Ajax.Request(action, options);
     } catch(e) {
