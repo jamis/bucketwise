@@ -93,7 +93,7 @@ module EventsHelper
     if @event.nil? || @event.new_record?
       subscription_events_path(subscription, :source => event_form_source)
     else
-      update_event_path(@event)
+      event_path(@event)
     end
   end
 

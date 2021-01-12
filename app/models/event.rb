@@ -14,11 +14,11 @@ class Event < ActiveRecord::Base
 
   has_many :tagged_items, :dependent => :destroy do
     def partial
-      @partial ||= to_a.select { |item| item.amount != @owner.value }
+      @partial ||= to_a.select { |item| item.amount != item.event.value }
     end
 
     def whole
-      @whole ||= to_a.select { |item| item.amount == @owner.value }
+      @whole ||= to_a.select { |item| item.amount == item.event.value }
     end
   end
 
@@ -26,9 +26,6 @@ class Event < ActiveRecord::Base
 
   alias_method :original_line_items_assignment, :line_items=
   alias_method :original_tagged_items_assignment, :tagged_items=
-
-  # attr_accessible :occurred_on, :actor_name, :check_number, :memo
-  # attr_accessible :line_items, :tagged_items, :role
 
   before_save :normalize_actor_name
   after_save :realize_line_items, :realize_tagged_items
@@ -127,7 +124,7 @@ class Event < ActiveRecord::Base
       end
     end
 
-    super(options.merge(:methods => methods, :except => except))
+    JSON.parse(ActiveRecord::Base.instance_method(:to_json).bind(self).call(options)).to_xml(root: 'event')
   end
 
   def to_json(options={})

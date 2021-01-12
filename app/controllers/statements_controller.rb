@@ -54,6 +54,6 @@ class StatementsController < ApplicationController
 
   def statement_params
     params.require(:statement)
-          .permit(:occurred_on, :ending_balance)
+          .permit(:occurred_on, :ending_balance, cleared: [])
   end
 end

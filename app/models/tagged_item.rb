@@ -2,7 +2,7 @@ class TaggedItem < ActiveRecord::Base
   include OptionHandler, Pageable
 
   belongs_to :event
-  belongs_to :tag
+  belongs_to :tag, optional: true
 
   before_create :ensure_consistent_tag, :increment_tag_balance, :ensure_occurred_on
   before_destroy :decrement_tag_balance
@@ -24,14 +24,14 @@ class TaggedItem < ActiveRecord::Base
     options[:except] << :tag_id unless new_record?
 
     append_to_options(options, :include, :tag => { :except => :subscription_id })
-    super(options)
+    JSON.parse(to_json(options)).to_xml(root: 'tagged_item')
   end
 
   protected
 
     def ensure_consistent_tag
       if @tag_to_translate =~ /^n:(.*)/
-        self.tag_id = event.subscription.tags.find_or_create_by_name($1).id
+        self.tag_id = event.subscription.tags.find_or_create_by(name: $1).id
       else
         # make sure the given tag id exists in the given subscription
         event.subscription.tags.find(tag_id)

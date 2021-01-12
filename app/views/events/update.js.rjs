@@ -1,7 +1,0 @@
-if !event.valid?
-  errors = event.errors.full_messages.join("\n")
-  page.alert("This transaction could not be saved:\n\n" + errors)
-
-else
-  page.events.return_to_caller
-end

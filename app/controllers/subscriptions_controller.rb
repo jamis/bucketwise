@@ -17,7 +17,7 @@ class SubscriptionsController < ApplicationController
   def show
     respond_to do |format|
       format.html
-      format.xml { render :xml => subscription }
+      format.xml { render :xml => JSON.parse(subscription.to_json).to_xml(root: 'subscription') }
     end
   end
 end

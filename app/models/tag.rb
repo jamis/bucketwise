@@ -30,6 +30,6 @@ class Tag < ActiveRecord::Base
 
   def to_xml(options={})
     options[:only] = Array(options[:only]) + [:name] if new_record?
-    super(options)
+    JSON.parse(to_json(options)).to_xml(root: 'tag')
   end
 end

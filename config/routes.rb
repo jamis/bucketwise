@@ -2,14 +2,19 @@ Rails.application.routes.draw do
   resource :session
 
   resources :subscriptions do
-    resources :events, :member => { :update => :post }, shallow: true do
+    resources :events, shallow: true do
       resources :tagged_items
     end
-    resources :accounts, shallow: true do #, :has_many => [:buckets, :events, :statements]
-      resources :buckets, :has_many => :events
+    resources :accounts, shallow: true do
+      resources :buckets, shallow: true do
+        resources :events
+      end
+      resources :events
       resources :statements
     end
-    resources :tags, :has_many => :events
+    resources :tags, shallow: true do
+      resources :events
+    end
   end
 
 

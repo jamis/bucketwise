@@ -1,0 +1,9 @@
+<% update_page do |page|
+  if bucket.valid?
+    page[dom_id(bucket, :name)].replace_html :partial => "buckets/bucket_name_for_#{source_view}",
+      :locals => { :bucket => bucket }
+  else
+    errors = bucket.errors.full_messages.join("\n")
+    page.alert("The bucket could not be updated:\n\n" + errors);
+  end
+end %>

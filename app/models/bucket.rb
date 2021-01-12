@@ -11,11 +11,7 @@ class Bucket < ActiveRecord::Base
   validates_presence_of :name
   validates_uniqueness_of :name, :scope => :account_id, :case_sensitive => false
 
-  scope :apply_filter, lambda { |filter| Bucket.options_for_filter(filter) }
-  
-  def self.options_for_filter(filter)
-    return {} unless filter.any?
-
+  scope :apply_filter, ->(filter) do
     conditions = []
     parameters = []
 
@@ -75,7 +71,7 @@ class Bucket < ActiveRecord::Base
   end
 
   def self.recent(n=RECENT_WINDOW_SIZE)
-    find(:all, :limit => n, :order => "updated_at DESC").sort_by(&:name)
+    limit(n).order("updated_at DESC").sort_by(&:name)
   end
 
   def balance
@@ -102,6 +98,6 @@ class Bucket < ActiveRecord::Base
 
   def to_xml(options={})
     options[:only] = %w(name role) if new_record?
-    super(options)
+    JSON.parse(to_json).to_xml(options.merge(root: 'bucket'))
   end
 end

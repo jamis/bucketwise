@@ -1,10 +1,14 @@
 class ApplicationController < ActionController::Base
+  include OptionHandler
+
   before_action :authenticate
 
   attr_reader :subscription, :user
   helper_method :subscription, :user
 
   rescue_from ActiveRecord::RecordNotFound, :with => :render_404
+
+  class_attribute :acceptable_includes, default: []
 
   def current_location
     controller_name
@@ -14,10 +18,10 @@ class ApplicationController < ActionController::Base
   def authenticate
     if session[:user_id]
       @user = User.find(session[:user_id])
-    # elsif via_api?
-    #   authenticate_or_request_with_http_basic do |user_name, password|
-    #     @user = User.authenticate(user_name, password)
-    #   end
+    elsif via_api?
+      authenticate_or_request_with_http_basic do |user_name, password|
+        @user = User.authenticate(user_name, password)
+      end
     else
       redirect_to(new_session_url)
     end
@@ -35,30 +39,15 @@ class ApplicationController < ActionController::Base
   end
 
   def via_api?
-    request.format == Mime::XML
+    request.format == Mime[:xml]
   end
 
   private
 
-  def self.acceptable_includes(*list)
-    includes = read_inheritable_attribute(:acceptable_includes) || []
-
-    if list.any?
-      includes = Set.new(list.map(&:to_s)) + includes
-      write_inheritable_attribute(:acceptable_includes, includes)
-    end
-
-    includes
-  end
-
-  def acceptable_includes
-    self.class.acceptable_includes
-  end
-
   def eager_options(options={})
     if params[:include]
-      list = acceptable_includes & params[:include].split(/,/)
-      append_to_options(options, :include, list.map(&:to_sym)) if list.any?
+      list = acceptable_includes & params[:include].split(/,/).map(&:to_sym)
+      append_to_options(options, :include, list) if list.any?
     end
 
     options

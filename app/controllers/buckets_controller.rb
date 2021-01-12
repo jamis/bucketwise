@@ -6,7 +6,11 @@ class BucketsController < ApplicationController
 
   def index
     @filter = QueryFilter.new(params)
-    @buckets = account.buckets.apply_filter(@filter)
+    if @filter.any?
+      @buckets = account.buckets.apply_filter(@filter)
+    else
+      @buckets = account.buckets
+    end
 
     respond_to do |format|
       format.html
@@ -32,7 +36,7 @@ class BucketsController < ApplicationController
   def create
     respond_to do |format|
       format.xml do
-        @bucket = account.buckets.create!(params[:bucket], :author => user)
+        @bucket = account.buckets.where(:author => user).create!(bucket_params)
         render :status => :created, :xml => @bucket.to_xml, :location => bucket_url(@bucket)
       end
     end
@@ -44,7 +48,7 @@ class BucketsController < ApplicationController
   end
 
   def update
-    bucket.update_attributes!(params[:bucket])
+    bucket.update!(bucket_params)
 
     respond_to do |format|
       format.js
@@ -69,25 +73,30 @@ class BucketsController < ApplicationController
 
   protected
 
-    attr_reader :account, :bucket, :buckets, :filter
-    helper_method :account, :bucket, :buckets, :filter
+  attr_reader :account, :bucket, :buckets, :filter
+  helper_method :account, :bucket, :buckets, :filter
 
-    def find_account
-      @account = Account.find(params[:account_id])
-      @subscription = user.subscriptions.find(@account.subscription_id)
-    end
+  def find_account
+    @account = Account.find(params[:account_id])
+    @subscription = user.subscriptions.find(@account.subscription_id)
+  end
 
-    def find_bucket
-      @bucket = Bucket.find(params[:id])
-      @account = @bucket.account
-      @subscription = user.subscriptions.find(@account.subscription_id)
-    end
+  def find_bucket
+    @bucket = Bucket.find(params[:id])
+    @account = @bucket.account
+    @subscription = user.subscriptions.find(@account.subscription_id)
+  end
 
-    def current_location
-      if bucket
-        "buckets/%d" % bucket.id
-      else
-        super
-      end
+  def current_location
+    if bucket
+      "buckets/%d" % bucket.id
+    else
+      super
     end
+  end
+
+  def bucket_params
+    params.require(:bucket)
+          .permit(:name, :role)
+  end
 end

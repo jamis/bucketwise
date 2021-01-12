@@ -25,7 +25,7 @@ class TagsController < ApplicationController
   def create
     respond_to do |format|
       format.xml do
-        @tag_ref = subscription.tags.create!(params[:tag])
+        @tag_ref = subscription.tags.create!(tags_params)
         render :xml => @tag_ref, :status => :created, :location => tag_url(@tag_ref)
       end
     end
@@ -36,7 +36,7 @@ class TagsController < ApplicationController
   end
 
   def update
-    tag_ref.update_attributes!(params[:tag])
+    tag_ref.update!(tags_params)
     respond_to do |format|
       format.js
       format.xml { render :xml => tag_ref }
@@ -66,21 +66,25 @@ class TagsController < ApplicationController
 
   protected
 
-    # can't call it 'tag' because that conflicts with the Rails 'tag()'
-    # helper method. 'tag_ref' is lame, but sufficient.
-    attr_reader :tag_ref
-    helper_method :tag_ref
+  # can't call it 'tag' because that conflicts with the Rails 'tag()'
+  # helper method. 'tag_ref' is lame, but sufficient.
+  attr_reader :tag_ref
+  helper_method :tag_ref
 
-    def find_tag
-      @tag_ref = Tag.find(params[:id])
-      @subscription = user.subscriptions.find(@tag_ref.subscription_id)
-    end
+  def find_tag
+    @tag_ref = Tag.find(params[:id])
+    @subscription = user.subscriptions.find(@tag_ref.subscription_id)
+  end
 
-    def current_location
-      if tag_ref
-        "tags/%d" % tag_ref.id
-      else
-        super
-      end
+  def current_location
+    if tag_ref
+      "tags/%d" % tag_ref.id
+    else
+      super
     end
+  end
+
+  def tags_params
+    params.require(:tag).permit(:name, :balance)
+  end
 end

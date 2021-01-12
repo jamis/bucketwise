@@ -3,7 +3,7 @@ class TaggedItemsController < ApplicationController
   before_action :find_tagged_item, :only => :destroy
 
   def create
-    @tagged_item = event.tagged_items.create!(params[:tagged_item])
+    @tagged_item = event.tagged_items.create!(tagged_items_params)
     respond_to do |format|
       format.xml do
         render :status => :created, :location => tagged_item_url(@tagged_item),
@@ -23,17 +23,21 @@ class TaggedItemsController < ApplicationController
 
   protected
 
-    attr_reader :event, :tagged_item
-    helper_method :event, :tagged_item
+  attr_reader :event, :tagged_item
+  helper_method :event, :tagged_item
 
-    def find_event
-      @event = Event.find(params[:event_id])
-      @subscription = user.subscriptions.find(@event.subscription_id)
-    end
+  def find_event
+    @event = Event.find(params[:event_id])
+    @subscription = user.subscriptions.find(@event.subscription_id)
+  end
 
-    def find_tagged_item
-      @tagged_item = TaggedItem.find(params[:id])
-      @event = @tagged_item.event
-      @subscription = user.subscriptions.find(@event.subscription_id)
-    end
+  def find_tagged_item
+    @tagged_item = TaggedItem.find(params[:id])
+    @event = @tagged_item.event
+    @subscription = user.subscriptions.find(@event.subscription_id)
+  end
+
+  def tagged_items_params
+    params.require(:tagged_item).permit(:amount, :tag_id, :occurred_on)
+  end
 end

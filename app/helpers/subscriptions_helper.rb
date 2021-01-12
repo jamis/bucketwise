@@ -17,7 +17,7 @@ module SubscriptionsHelper
     if container.is_a?(Account) && container.credit_card? && !container.limit.blank?
       percentage_used = container.limit.abs.to_i == 0 ? 100 :
         ((container.balance.abs.to_f / container.limit.abs.to_f) * 100).to_i
-      classes = if percentage_used >= Account::DEFAULT_LIMIT_VALUES[:critical]
+      classes << if percentage_used >= Account::DEFAULT_LIMIT_VALUES[:critical]
                   "critical"
                 elsif percentage_used >= Account::DEFAULT_LIMIT_VALUES[:high]
                   "high"

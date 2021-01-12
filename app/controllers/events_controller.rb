@@ -3,6 +3,8 @@ class EventsController < ApplicationController
   before_action :find_subscription, :only => %w(new create)
   before_action :find_event, :except => %w(index new create)
 
+  self.acceptable_includes = [:line_items, :user, :tagged_items]
+
   def index
     respond_to do |format|
       format.js do
@@ -13,7 +15,7 @@ class EventsController < ApplicationController
         end
       end
       format.xml do
-        render :xml => events.to_xml(eager_options(:root => "events"))
+        render :xml => JSON.parse(events.to_json(eager_options)).to_xml(:root => "events")
       end
     end
   end
@@ -29,7 +31,7 @@ class EventsController < ApplicationController
   end
 
   def new
-    @event = subscription.events.prepare(params)
+    @event = subscription.events.prepare(new_event_params)
 
     respond_to do |format|
       format.html
@@ -55,7 +57,7 @@ class EventsController < ApplicationController
   end
 
   def update
-    event.update_attributes!(params[:event])
+    event.update!(event_params)
     respond_to do |format|
       format.js
       format.xml { render :xml => event.to_xml(:include => [:line_items, :tagged_items]) }
@@ -131,11 +133,11 @@ class EventsController < ApplicationController
     @events = list
   end
 
-  def event_params
-    params.require(:event).permit(:occurred_on, :actor_name, :memo, :check_number).tap do |whitelisted|
-      whitelisted[:line_items] = JSON.parse(params[:event][:line_item])
-      whitelisted[:tagged_items] = JSON.parse(params[:event][:tagged_item])
-    end
+  def new_event_params
+    params.permit(:from, :to, :role)
   end
 
+  def event_params
+    params.require(:event).permit(:occurred_on, :actor_name, :memo, :check_number, :from, :to, :tagged_items, line_items: [:account_id, :bucket_id, :amount, :role])
+  end
 end

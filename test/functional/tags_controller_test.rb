@@ -5,39 +5,39 @@ class TagsControllerTest < ActionController::TestCase
 
   test "show should 404 for invalid tag" do
     assert !Tag.exists?(1)
-    get :show, :id => 1
+    get :show, params: { :id => 1 }
     assert_response :missing
   end
 
   test "show should 404 for inaccessible tag" do
-    get :show, :id => tags(:tim_milk).id
+    get :show, params: { :id => tags(:tim_milk).id }
     assert_response :missing
   end
 
   test "show should display tag perma page for requested tag" do
-    get :show, :id => tags(:john_lunch).id
+    get :show, params: { :id => tags(:john_lunch).id }
     assert_response :success
     assert_template "tags/show"
     assert_equal tags(:john_lunch), assigns(:tag_ref)
   end
 
   test "update should 404 for inaccessible tag" do
-    xhr :put, :update, :id => tags(:tim_milk).id, :tag => { :name => "hijacked!" }
+    post :update, params: { :method => :put, :id => tags(:tim_milk).id, :tag => { :name => "hijacked!" }}, xhr: true
     assert_response :missing
     assert_equal "milk", tags(:tim_milk, :reload).name
   end
 
   test "update should change tag name and render javascript response" do
-    xhr :put, :update, :id => tags(:john_lunch).id, :tag => { :name => "hijacked!" }
+    post :update, params: { :method => :put, :id => tags(:john_lunch).id, :tag => { :name => "hijacked!" }}, xhr: true
     assert_response :success
-    assert_template "tags/update.js.rjs"
+    assert_template "tags/update"
     assert_equal "hijacked!", tags(:john_lunch, :reload).name
   end
 
   test "destroy should 404 for inaccessible tag" do
     assert_no_difference "Tag.count" do
       assert_no_difference "TaggedItem.count" do
-        delete :destroy, :id => tags(:tim_milk).id
+        delete :destroy, params: { :id => tags(:tim_milk).id }
         assert_response :missing
       end
     end
@@ -46,7 +46,7 @@ class TagsControllerTest < ActionController::TestCase
   test "destroy should remove tag and all associated tagged items" do
     item = tagged_items(:john_lunch_lunch)
 
-    delete :destroy, :id => tags(:john_lunch).id
+    delete :destroy, params: { :id => tags(:john_lunch).id }
     assert_redirected_to subscription_url(subscriptions(:john))
 
     assert !Tag.exists?(tags(:john_lunch).id)
@@ -56,7 +56,7 @@ class TagsControllerTest < ActionController::TestCase
   test "merge should 404 when target tag is inaccessible" do
     assert_no_difference "Tag.count" do
       assert_no_difference "TaggedItem.count" do
-        delete :destroy, :id => tags(:john_lunch).id, :receiver_id => tags(:tim_milk).id
+        delete :destroy, params: { :id => tags(:john_lunch).id, :receiver_id => tags(:tim_milk).id }
         assert_response :missing
       end
     end
@@ -65,7 +65,7 @@ class TagsControllerTest < ActionController::TestCase
   test "merge should 422 when target tag is same as deleted tag" do
     assert_no_difference "Tag.count" do
       assert_no_difference "TaggedItem.count" do
-        delete :destroy, :id => tags(:john_lunch).id, :receiver_id => tags(:john_lunch).id
+        delete :destroy, params: { :id => tags(:john_lunch).id, :receiver_id => tags(:john_lunch).id }
         assert_response :unprocessable_entity
       end
     end
@@ -74,7 +74,7 @@ class TagsControllerTest < ActionController::TestCase
   test "merge should remove tag and move all associated tagged items to target tag" do
     balance = tags(:john_fuel).balance
 
-    delete :destroy, :id => tags(:john_lunch).id, :receiver_id => tags(:john_fuel).id
+    delete :destroy, params: { :id => tags(:john_lunch).id, :receiver_id => tags(:john_fuel).id }
     assert_redirected_to(tag_url(tags(:john_fuel)))
 
     assert !Tag.exists?(tags(:john_lunch).id)
@@ -85,26 +85,26 @@ class TagsControllerTest < ActionController::TestCase
   # == API tests ========================================================================
 
   test "index via API for inaccessible subscription should 404" do
-    get :index, :subscription_id => subscriptions(:tim).id, :format => "xml"
+    get :index, params: { :subscription_id => subscriptions(:tim).id }, :format => "xml"
     assert_response :missing
   end
 
   test "index via API should return list of all tags for given subscription" do
-    get :index, :subscription_id => subscriptions(:john).id, :format => "xml"
+    get :index, params: { :subscription_id => subscriptions(:john).id }, :format => "xml"
     assert_response :success
     xml = Hash.from_xml(@response.body)
     assert xml.key?("tags")
   end
 
   test "show via API should return record for the given tag" do
-    get :show, :id => tags(:john_tip).id, :format => "xml"
+    get :show, params: { :id => tags(:john_tip).id }, :format => "xml"
     assert_response :success
     xml = Hash.from_xml(@response.body)
     assert_equal tags(:john_tip).id, xml["tag"]["id"]
   end
 
   test "new via API should return template record" do
-    get :new, :subscription_id => subscriptions(:john).id, :format => "xml"
+    get :new, params: { :subscription_id => subscriptions(:john).id }, :format => "xml"
     assert_response :success
     xml = Hash.from_xml(@response.body)
     assert xml.key?("tag")
@@ -112,16 +112,17 @@ class TagsControllerTest < ActionController::TestCase
 
   test "create via API for inaccessible subscription should 404" do
     assert_no_difference "Tag.count" do
-      post :create, :subscription_id => subscriptions(:tim).id, :format => "xml",
-        :tag => { :name => "testing" }
+      post :create, params: { :subscription_id => subscriptions(:tim).id, :tag => { :name => "testing" } },
+           :format => "xml"
       assert_response :missing
     end
   end
 
   test "create via API should return 201 and set location header" do
     assert_difference "Tag.count" do
-      post :create, :subscription_id => subscriptions(:john).id, :format => "xml",
-        :tag => { :name => "testing" }
+      post :create, params: { :subscription_id => subscriptions(:john).id, :tag => { :name => "testing" } },
+           :format => "xml"
+
       assert_response :success
       assert @response.headers['Location']
       xml = Hash.from_xml(@response.body)
@@ -131,8 +132,9 @@ class TagsControllerTest < ActionController::TestCase
 
   test "create via API should return 422 with errors if validations fail" do
     assert_no_difference "Tag.count" do
-      post :create, :subscription_id => subscriptions(:john).id, :format => "xml",
-        :tag => { :name => "tip" }
+      post :create, params: { :subscription_id => subscriptions(:john).id, :tag => { :name => "tip" } },
+           :format => "xml"
+
       assert_response :unprocessable_entity
       xml = Hash.from_xml(@response.body)
       assert xml.key?("errors")
@@ -140,13 +142,13 @@ class TagsControllerTest < ActionController::TestCase
   end
 
   test "update via API for inaccessible tag should 404" do
-    put :update, :id => tags(:tim_milk).id, :tag => { :name => "milkshake" }, :format => "xml"
+    put :update, params: { :id => tags(:tim_milk).id, :tag => { :name => "milkshake" } }, :format => "xml"
     assert_response :missing
     assert_equal "milk", tags(:tim_milk, :reload).name
   end
 
   test "update via API should change tag name and return 200" do
-    put :update, :id => tags(:john_tip).id, :tag => { :name => "gratuity" }, :format => "xml"
+    put :update, params: { :id => tags(:john_tip).id, :tag => { :name => "gratuity" } }, :format => "xml"
     assert_response :success
     xml = Hash.from_xml(@response.body)
     assert xml.key?("tag")
@@ -154,7 +156,7 @@ class TagsControllerTest < ActionController::TestCase
   end
 
   test "update via API should return 422 with errors if validations fail" do
-    put :update, :id => tags(:john_tip).id, :tag => { :name => "lunch" }, :format => "xml"
+    put :update, params: { :id => tags(:john_tip).id, :tag => { :name => "lunch" } }, :format => "xml"
     assert_response :unprocessable_entity
     xml = Hash.from_xml(@response.body)
     assert xml.key?("errors")
@@ -163,7 +165,7 @@ class TagsControllerTest < ActionController::TestCase
 
   test "destroy via API should remove tag and return 200" do
     assert_difference "Tag.count", -1 do
-      delete :destroy, :id => tags(:john_tip).id, :format => "xml"
+      delete :destroy, params: { :id => tags(:john_tip).id }, :format => "xml"
       assert_response :success
     end
   end

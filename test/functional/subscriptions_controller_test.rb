@@ -25,17 +25,17 @@ class SubscriptionsControllerTest < ActionController::TestCase
 
   test "show should 404 for invalid subscription" do
     assert !Subscription.exists?(1)
-    get :show, :id => 1
+    get :show, params: { :id => 1 }
     assert_response :missing
   end
 
   test "show should 404 for inaccessible subscription" do
-    get :show, :id => subscriptions(:tim).id
+    get :show, params: { :id => subscriptions(:tim).id }
     assert_response :missing
   end
 
   test "show should display dashboard for selected subscription" do
-    get :show, :id => subscriptions(:john).id
+    get :show, params: { :id => subscriptions(:john).id }
     assert_response :success
     assert_template "subscriptions/show"
     assert_equal subscriptions(:john), assigns(:subscription)
@@ -51,12 +51,12 @@ class SubscriptionsControllerTest < ActionController::TestCase
   end
 
   test "show via API should return 404 for inaccessible subscription" do
-    get :show, :id => subscriptions(:tim).id, :format => "xml"
+    get :show, params: { :id => subscriptions(:tim).id }, :format => "xml"
     assert_response :missing
   end
 
   test "show should return requested subscription record" do
-    get :show, :id => subscriptions(:john).id, :format => "xml"
+    get :show, params: { :id => subscriptions(:john).id }, :format => "xml"
     assert_response :success
     xml = Hash.from_xml(@response.body)
     assert xml.key?("subscription")

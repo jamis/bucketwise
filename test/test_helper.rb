@@ -25,7 +25,7 @@ class ActiveSupport::TestCase
     def api_login!(who, password)
       logout!
       @user = Symbol === who ? users(who) : who
-      token = Base64.encode64("#{@user.user_name}:#{password}")
-      @request.env['HTTP_AUTHORIZATION'] = "Basic: #{token}"
+      authorization = ActionController::HttpAuthentication::Basic.encode_credentials(@user.user_name, password)
+      @request.env['HTTP_AUTHORIZATION'] = authorization
     end
 end

@@ -1,0 +1,19 @@
+<%= update_page do |page|
+  page.events.destroy(event.id)
+
+  case params[:from]
+  when "subscriptions", "events" then
+    page['accounts_summary'].replace_html(:partial => "accounts/account",
+      :collection => subscription.accounts(:reload))
+  when /accounts\/(\d+)/ then
+    account = subscription.accounts.find($1)
+    page['balance'].replace(balance_cell(account, :classes => %w(total balance), :tag => "span", :id => "balance"))
+  when /buckets\/(\d+)/ then
+    bucket = Bucket.find($1)
+    subscription.accounts.find(bucket.account_id)
+    page['balance'].replace(balance_cell(bucket, :classes => %w(total balance), :tag => "span", :id => "balance"))
+  when /tags\/(\d+)/ then
+    tag = subscription.tags.find($1)
+    page['balance'].replace(balance_cell(tag, :classes => %w(total balance), :tag => "span", :id => "balance"))
+  end
+end %>

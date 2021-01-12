@@ -40,12 +40,12 @@ class Subscription < ActiveRecord::Base
         event.actor_name = "Bucket reallocation"
         if attrs[:from]
           bucket = Bucket.find(attrs[:from])
-          account = @owner.accounts.find(bucket.account_id)
+          account = first.subscription.accounts.find(bucket.account_id)
           event.line_items.build(:role => "primary", :account => account, :bucket => bucket)
           event.line_items.build(:role => "reallocate_from", :account => account, :bucket => account.buckets.default)
         elsif attrs[:to]
           bucket = Bucket.find(attrs[:to])
-          account = @owner.accounts.find(bucket.account_id)
+          account = first.subscription.accounts.find(bucket.account_id)
           event.line_items.build(:role => "primary", :account => account, :bucket => bucket)
           event.line_items.build(:role => "reallocate_to", :account => account, :bucket => account.buckets.default)
         end
