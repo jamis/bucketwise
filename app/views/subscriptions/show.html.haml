@@ -1,8 +1,8 @@
 #links.header{:style => visible?(!blank_slate?)}
   %h2
-    == Record a new | #{link_to 'expense', '#', onclick: "Events.revealExpenseForm()", id: "expense_link"}
-    == #{link_to "deposit", '#', onclick: "Events.revealDepositForm()", :id => "deposit_link"}, or |
-    == #{link_to "transfer", '#', onclick: "Events.revealTransferForm()", :id => "transfer_link"} |
+    == Record a new #{link_to 'expense', '#', onclick: "Events.revealExpenseForm()", id: "expense_link"}
+    == #{link_to "deposit", '#', onclick: "Events.revealDepositForm()", :id => "deposit_link"}, or
+    == #{link_to "transfer", '#', onclick: "Events.revealTransferForm()", :id => "transfer_link"}
 
 #new_event.transaction.form{:style => "display: none"}= render :partial => "events/form"
 

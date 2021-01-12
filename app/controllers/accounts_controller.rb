@@ -29,16 +29,17 @@ class AccountsController < ApplicationController
   end
 
   def create
-    @account = subscription.accounts.where(author: user).create!(account_params)
-    respond_to do |format|
-      format.html { redirect_to(subscription_url(subscription)) }
-      format.xml  { render :xml => @account.to_xml, :status => :created, :location => account_url(@account) }
-    end
-  rescue ActiveRecord::RecordInvalid => error
-    @account = error.record
-    respond_to do |format|
-      format.html { render :action => "new" }
-      format.xml  { render :status => :unprocessable_entity, :xml => @account.errors.to_xml }
+    @account = subscription.accounts.where(author: user).create(account_params)
+    if @account.errors.empty?
+      respond_to do |format|
+        format.html { redirect_to(subscription_url(subscription)) }
+        format.xml  { render :xml => @account.to_xml, :status => :created, :location => account_url(@account) }
+      end
+    else
+      respond_to do |format|
+        format.html { render :action => "new" }
+        format.xml  { render :status => :unprocessable_entity, :xml => @account.errors.to_xml }
+      end
     end
   end
 

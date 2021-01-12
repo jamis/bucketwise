@@ -30,7 +30,8 @@ module SubscriptionsHelper
 
     content = format_amount(balance)
     if real_balance != balance
-      content = "<span class='real_balance'>(" << format_amount(real_balance) << ")</span> #{content}"
+      content = content_tag(:span, "(#{format_amount(real_balance)})",
+                            class: :real_balance)
     end
 
     content_tag(options.fetch(:tag, "td"), content, :class => classes.join(" "), :id => options[:id])
