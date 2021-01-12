@@ -1,5 +1,5 @@
 :javascript
-  Events.return_to = #{(params[:return_to] || subscription_path(subscription)).to_json};
+  Events.return_to = "#{(params[:return_to] || subscription_path(subscription))}"
   Events.defaultActor = "Bucket reallocation";
   Events.defaultDate = #{Date.today.to_json};
 

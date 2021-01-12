@@ -10,7 +10,7 @@
             %td.negative.number= item.amount < 0 ? format_amount(item.amount) : ""
 
       - if event.tags.any?
-        %p.tags= "&#x2713; " + tag_links_for(event)
+        %p.tags= ("&#x2713; " + tag_links_for(event)).html_safe
 
       - if event.memo.present?
         %p.memo&= event.memo

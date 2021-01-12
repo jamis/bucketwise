@@ -4,6 +4,7 @@ class EventsController < ApplicationController
   before_action :find_event, :except => %w(index new create)
 
   self.acceptable_includes = [:line_items, :user, :tagged_items]
+  skip_before_action :verify_authenticity_token
 
   def index
     respond_to do |format|
@@ -138,6 +139,6 @@ class EventsController < ApplicationController
   end
 
   def event_params
-    params.require(:event).permit(:occurred_on, :actor_name, :memo, :check_number, :from, :to, :tagged_items, line_items: [:account_id, :bucket_id, :amount, :role])
+    params.require(:event).permit(:occurred_on, :actor_name, :memo, :check_number, :from, :to, tagged_items: [:amount, :tag_id], line_items: [:account_id, :bucket_id, :amount, :role])
   end
 end

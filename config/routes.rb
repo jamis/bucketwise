@@ -1,6 +1,11 @@
 Rails.application.routes.draw do
   resource :session
 
+  resources :events do
+    get :show, on: :member
+    post :update, on: :member
+  end
+
   resources :subscriptions do
     resources :events, shallow: true do
       resources :tagged_items
