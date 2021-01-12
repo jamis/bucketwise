@@ -67,8 +67,6 @@ GEM
       msgpack (~> 1.0)
     builder (3.2.4)
     byebug (11.1.3)
-    calendar_date_select (2.1.2)
-      rails (>= 3.1)
     capybara (3.34.0)
       addressable
       mini_mime (>= 0.1.3)
@@ -233,7 +231,6 @@ PLATFORMS
 DEPENDENCIES
   bootsnap (>= 1.4.4)
   byebug
-  calendar_date_select
   capybara (>= 3.26)
   haml
   haml-rails

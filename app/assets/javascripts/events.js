@@ -508,7 +508,6 @@ var Events = {
     $('transfer_to').hide();
     $('reallocate_from').hide();
     $('reallocate_to').hide();
-    $('event_occurred_on').activate();
   },
 
   revealExpenseForm: function() {

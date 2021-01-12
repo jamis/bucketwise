@@ -11,7 +11,7 @@
           %th.starting_balance Starting balance
           %th.ending_balance Ending balance
         %tr
-          %td.occurred_on= form.calendar_date_select :occurred_on, :size => 10
+          %td.occurred_on= form.date_select :occurred_on, :size => 10
           %td#starting_balance.starting_balance.number= format_cents(statement.starting_balance)
           %td.ending_balance
             = "$"

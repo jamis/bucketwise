@@ -30,10 +30,10 @@
       %p
         %label
           From:
-          = calendar_date_select_tag :from, filter.from, :size => 9
+          = date_field_tag :from, filter.from, :size => 9
         %label
           To:
-          = calendar_date_select_tag :to, filter.to, :size => 9
+          = date_field_tag :to, filter.to, :size => 9
 
       %p.actions
         = submit_tag "Apply these criteria", :name => nil

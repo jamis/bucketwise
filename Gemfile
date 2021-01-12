@@ -32,7 +32,6 @@ gem 'haml'
 gem 'haml-rails'
 gem 'rexml'
 gem 'highline'
-gem 'calendar_date_select'
 gem 'rails-controller-testing'
 
 group :development, :test do

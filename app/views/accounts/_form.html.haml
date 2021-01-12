@@ -44,7 +44,7 @@
       %p
         %label
           <strong>When</strong> was the statement issued:
-          = calendar_date_select_tag "account[starting_balance][occurred_on]", account_starting_balance_occurred_on, :size => 9
+          = date_field_tag "account[starting_balance][occurred_on]", account_starting_balance_occurred_on, :size => 9
 
   %p
     = submit_tag "Create this account"
